@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+while ! nc -z postgres 5432; do
+  sleep 0.1
+done
+
+>&2 echo "Database is up - executing command"
+
+
+>&2 echo --- composer install ---
+composer install
+>&2 echo --- php artisan key:generate ---
+php artisan key:generate
+>&2 echo --- php artisan storage:link ---
+php artisan storage:link
+echo --- php artisan migrate ---
+php artisan migrate
+#>&2 echo --- php artisan migrate:refresh --seed ---
+#php artisan migrate:refresh --seed
+#>&2 echo --- php artisan schedule:run ---
+#php artisan schedule:run
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+        set -- php-fpm "$@"
+fi
+
+exec "$@"
