@@ -3,26 +3,27 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Client extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Client::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'phone_number';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -30,7 +31,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'phone_number',
+        'id',
     ];
 
     /**
@@ -42,18 +43,10 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Text::make('Phone number')
-                ->sortable()
-                ->rules('required', 'string', 'max:254')
-                ->creationRules('unique:users')
-                ->updateRules('unique:users,{{resourceId}}'),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
+            ID::make(__('ID'), 'id')->sortable(),
+            BelongsTo::make('User'),
+            Text::make('Name'),
+            Avatar::make('Avatar')
         ];
     }
 
