@@ -17,33 +17,47 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('signup', [AuthController::class, 'signup'])
+// Auth routes
+Route::controller(AuthController::class)
+    ->prefix('auth')->group(function() {
+
+    Route::post('signup', 'signup')
         ->name('auth.signup');
 
-    Route::post('signin', [AuthController::class, 'signin'])
+    Route::post('signin', 'signin')
         ->name('auth.signin');
 
-    Route::post('sendVerificationCode', [AuthController::class, 'sendVerificationCode'])
+    Route::post('sendVerificationCode', 'sendVerificationCode')
         ->name('auth.sendVerificationCode');
 
-    Route::post('verification', [AuthController::class, 'verification'])
+    Route::post('verification', 'verification')
         ->name('auth.verification');
 
-    Route::post('logout', [AuthController::class, 'logout'])
+    Route::post('logout',  'logout')
         ->middleware('auth:sanctum')
         ->name('auth.logout');
 });
 
-Route::group(['prefix' => 'specialist', 'middleware' => 'auth:sanctum'], function () {
-    Route::post('profile', [SpecialistController::class, 'create'])
+// Specialist routes
+Route::controller(SpecialistController::class)
+    ->prefix('specialist')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('profile','create')
         ->name('specialist.create');
-    Route::get('profile/{id}', [SpecialistController::class, 'get'])
+
+    Route::get('profile/{id}', 'get')
         ->name('specialist.get');
 });
-Route::group(['prefix' => 'client', 'middleware' => 'auth:sanctum'], function () {
+
+// Client routes
+Route::controller(ClientController::class)
+    ->prefix('client')
+    ->middleware('auth:sanctum')->group(function () {
+
     Route::post('profile', [ClientController::class, 'create'])
         ->name('client.create');
+
     Route::get('profile/{id}', [ClientController::class, 'get'])
         ->name('client.get');
 });

@@ -49,6 +49,9 @@ class Specialist extends Resource
             Text::make('Name')
                 ->creationRules('required')
                 ->updateRules('required,{{resourceId}}'),
+            Text::make('Surname')
+                ->creationRules('required')
+                ->updateRules('required,{{resourceId}}'),
             Avatar::make('Avatar')
                 ->prunable(),
             Text::make('Card Title')

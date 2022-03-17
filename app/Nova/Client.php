@@ -46,6 +46,7 @@ class Client extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('User'),
             Text::make('Name'),
+            Text::make('Surname'),
             Avatar::make('Avatar')
         ];
     }
