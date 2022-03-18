@@ -9,6 +9,7 @@ use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\VerificationRequest;
 use App\Models\User;
+use App\Services\SMSService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +18,8 @@ use Nette\Utils\Random;
 class AuthController extends Controller
 {
     public function __construct(
-        protected UserService $service
+        protected UserService $service,
+        protected SMSService $SMSService
     ) {}
 
     public function signin(SignInRequest $request): \Illuminate\Http\JsonResponse
@@ -45,6 +47,7 @@ class AuthController extends Controller
         $verification_code = Random::generate(4, '0-9');
 
         $user = $this->service->searchByPhoneNumber($request->phone_number);
+        $phone_number = str($user->phone_number)->replace('+', '')->value();
 
         if (is_null($user)) {
             return $this->error('User not found', 404);
@@ -56,6 +59,10 @@ class AuthController extends Controller
 
         $user->verification_code = $verification_code;
         $user->save();
+        $status = $this->SMSService->sendSms("Your verification code: $verification_code", $phone_number);
+        if (isset($status['error'])) {
+            $this->error('Something went wrong', 400);
+        }
 
         return $this->success(null, 'Verification code sent');
     }

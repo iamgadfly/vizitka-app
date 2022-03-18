@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SpecialistController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,3 +62,5 @@ Route::controller(ClientController::class)
     Route::get('profile/{id}', [ClientController::class, 'get'])
         ->name('client.get');
 });
+
+Route::post('/test', [TestController::class, 'test']);

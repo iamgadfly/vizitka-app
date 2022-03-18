@@ -45,7 +45,8 @@ class Specialist extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('User'),
-            BelongsTo::make('Activity kind'),
+            BelongsTo::make('Activity kind')
+                ->sortable(),
             Text::make('Name')
                 ->creationRules('required')
                 ->updateRules('required,{{resourceId}}'),
@@ -56,19 +57,28 @@ class Specialist extends Resource
                 ->prunable(),
             Text::make('Card Title')
                 ->creationRules('required')
-                ->updateRules('required,{{resourceId}}'),
+                ->updateRules('required,{{resourceId}}')
+                ->hideFromIndex(),
             Text::make('About')
                 ->creationRules('required')
-                ->updateRules('required,{{resourceId}}'),
+                ->updateRules('required,{{resourceId}}')
+                ->hideFromIndex(),
             Text::make('Address')
                 ->creationRules('required')
-                ->updateRules('required,{{resourceId}}'),
-            Text::make('Placement'),
-            Text::make('Floor'),
-            Text::make('Instagram Account'),
-            Text::make('VK Account'),
-            Text::make('Youtube Account'),
-            Text::make('TikTok Account'),
+                ->updateRules('required,{{resourceId}}')
+                ->hideFromIndex(),
+            Text::make('Placement')
+                ->hideFromIndex(),
+            Text::make('Floor')
+                ->hideFromIndex(),
+            Text::make('Instagram Account')
+                ->hideFromIndex(),
+            Text::make('VK Account')
+                ->hideFromIndex(),
+            Text::make('Youtube Account')
+                ->hideFromIndex(),
+            Text::make('TikTok Account')
+                ->hideFromIndex(),
         ];
     }
 
