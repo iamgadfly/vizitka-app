@@ -20,7 +20,7 @@ class ClientController extends Controller
         $client = $this->service->findByUserId($request->user_id);
 
         if (!is_null($client)) {
-            return $this->error('Client is already exists', 400);
+            return $this->error('Client is already existing', 400);
         }
 
         $body = $request->validated();
@@ -43,5 +43,10 @@ class ClientController extends Controller
     public function get(GetClientRequest $request)
     {
         return ClientResource::make($this->service->getClientData($request->id));
+    }
+
+    public function me()
+    {
+        return ClientResource::make($this->service->getMe());
     }
 }

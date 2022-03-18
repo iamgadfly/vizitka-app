@@ -19,6 +19,7 @@ class SpecialistResource extends JsonResource
         return [
             'id' => $this['id'],
             'name' => $this['name'],
+            'surname' => $this['surname'],
             'phone' => $this['phone'],
             'about' => $this['about'],
             'avatar' => $this['avatar'],

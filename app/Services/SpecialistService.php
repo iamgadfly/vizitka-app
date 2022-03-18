@@ -26,10 +26,20 @@ class SpecialistService
 
     public function getSpecialistData($id)
     {
-        $item = $this->repository->getById($id)->toArray();
+        if (is_null($id)) {
+            $item = $this->repository->findByUserId(auth()->id())->toArray();
+        } else {
+            $item = $this->repository->getById($id)->toArray();
+        }
+
         $item['phone'] = $this->userRepository->getById($item['user_id'])->phone_number;
         $item['activity_kind'] = ActivityKind::fromInt($item['activity_kind_id']);
 
         return $item;
+    }
+
+    public function getMe()
+    {
+        return $this->getSpecialistData(null);
     }
 }

@@ -49,6 +49,9 @@ Route::controller(SpecialistController::class)
 
     Route::get('profile/{id}', 'get')
         ->name('specialist.get');
+
+    Route::get('profile', 'me')
+        ->name('specialist.me');
 });
 
 // Client routes
@@ -61,6 +64,9 @@ Route::controller(ClientController::class)
 
     Route::get('profile/{id}', [ClientController::class, 'get'])
         ->name('client.get');
+
+    Route::get('profile', [ClientController::class, 'me'])
+        ->name('client.me');
 });
 
 Route::post('/test', [TestController::class, 'test']);

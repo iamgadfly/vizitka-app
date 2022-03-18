@@ -24,9 +24,18 @@ class ClientService
 
     public function getClientData($id)
     {
-        $client = $this->repository->getById($id)->toArray();
+        if (is_null($id)) {
+            $client = $this->repository->findByUserId(auth()->id())->toArray();
+        } else {
+            $client = $this->repository->getById($id)->toArray();
+        }
         $client['phone'] = $this->userRepository->getById($client['user_id'])->phone_number;
 
         return $client;
+    }
+
+    public function getMe()
+    {
+        return $this->getClientData(null);
     }
 }

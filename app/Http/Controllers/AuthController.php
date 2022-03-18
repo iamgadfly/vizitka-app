@@ -47,7 +47,6 @@ class AuthController extends Controller
         $verification_code = Random::generate(4, '0-9');
 
         $user = $this->service->searchByPhoneNumber($request->phone_number);
-        $phone_number = str($user->phone_number)->replace('+', '')->value();
 
         if (is_null($user)) {
             return $this->error('User not found', 404);
@@ -56,6 +55,8 @@ class AuthController extends Controller
         if (!is_null($user->phone_number_verified_at)) {
             return $this->error('User has already been verified', 400);
         }
+
+        $phone_number = str($user->phone_number)->replace('+', '')->value();
 
         $user->verification_code = $verification_code;
         $user->save();
@@ -71,6 +72,10 @@ class AuthController extends Controller
     {
         $user = $this->service->searchByPhoneNumber($request->phone_number);
 
+        if (is_null($user)) {
+            return $this->error('User not found', 404);
+        }
+
         if (!is_null($user->phone_number_verified_at)) {
             return $this->error('User has already been verified', 400);
         }
@@ -82,7 +87,7 @@ class AuthController extends Controller
             return $this->success(null, 'User is verified');
         }
 
-        return $this->error('Verification code is not valid', 401);
+        return $this->error('Verification code is not valid', 400);
     }
 
     public function signup(SignUpRequest $request): \Illuminate\Http\JsonResponse

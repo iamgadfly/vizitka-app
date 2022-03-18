@@ -20,7 +20,7 @@ class SpecialistController extends Controller
         $specialist = $this->service->findByUserId($request->user_id);
 
         if (!is_null($specialist)) {
-            return $this->error('Specialist is already exists', 400);
+            return $this->error('Specialist is already existing', 400);
         }
 
         $body = $request->validated();
@@ -43,5 +43,10 @@ class SpecialistController extends Controller
     public function get(GetSpecialistRequest $request)
     {
         return SpecialistResource::make($this->service->getSpecialistData($request->id));
+    }
+
+    public function me()
+    {
+        return SpecialistResource::make($this->service->getMe());
     }
 }
