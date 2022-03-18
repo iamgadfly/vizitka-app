@@ -9,12 +9,14 @@ class SMSService
     protected ?string $hostSmsUrl;
     protected ?string $login;
     protected ?string $password;
+    protected ?string $sender;
 
     public function __construct()
     {
         $this->hostSmsUrl = env('SMS_SERVICE_HOST');
         $this->login = env('SMS_SERVICE_LOGIN');
         $this->password = env('SMS_SERVICE_PASSWORD');
+        $this->sender = env('SMS_SERVICE_SENDER');
     }
 
     public function sendSms(string $text, string $phone)
@@ -28,7 +30,7 @@ class SMSService
             'type' => 'sms',
             'message' => [[
                 'type' => 'sms',
-                'sender' => 'Test Sender',
+                'sender' => $this->sender,
                 'text' => $text,
                 'abonent' => [[
                     'phone' => $phone,
