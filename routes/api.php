@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Specialist\AuthController as SpecialistAuthController;
+use App\Http\Controllers\Client\AuthController as ClientAuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,25 +18,57 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Auth routes
-Route::controller(AuthController::class)
-    ->prefix('auth')->group(function() {
+// Specialist auth routes
+Route::controller(SpecialistAuthController::class)
+    ->prefix('specialist/auth')->group(function() {
 
     Route::post('signup', 'signup')
-        ->name('auth.signup');
+        ->name('specialist.auth.signup');
 
     Route::post('signin', 'signin')
-        ->name('auth.signin');
+        ->name('specialist.auth.signin');
+
+    Route::post('setPin', 'setPin')
+        ->middleware('auth:sanctum')
+        ->name('specialist.auth.setpin');
+
+    Route::post('attemptPin', 'attemptPin')
+        ->middleware('auth:sanctum')
+        ->name('specialist.auth.attemptPin');
 
     Route::post('sendVerificationCode', 'sendVerificationCode')
-        ->name('auth.sendVerificationCode');
+        ->name('specialist.auth.sendVerificationCode');
 
     Route::post('verification', 'verification')
-        ->name('auth.verification');
+        ->name('specialist.auth.verification');
 
     Route::post('logout',  'logout')
         ->middleware('auth:sanctum')
-        ->name('auth.logout');
+        ->name('specialist.auth.logout');
+});
+
+// Client auth routes
+Route::controller(ClientAuthController::class)
+    ->prefix('client/auth')->group(function () {
+
+        Route::post('signup', 'signup')
+            ->name('client.auth.signup');
+
+        Route::post('signin', 'signin')
+            ->name('client.auth.signin');
+
+        Route::post('sendPassword', 'sendPassword')
+            ->name('client.auth.sendPassword');
+
+        Route::post('sendVerificationCode', 'sendVerificationCode')
+            ->name('client.auth.sendVerificationCode');
+
+        Route::post('verification', 'verification')
+            ->name('client.auth.verification');
+
+        Route::post('logout',  'logout')
+            ->middleware('auth:sanctum')
+            ->name('client.auth.logout');
 });
 
 // Specialist routes

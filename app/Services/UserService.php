@@ -13,7 +13,6 @@ class UserService
 
     public function create(array $data)
     {
-        $data['password'] = Hash::make($data['password']);
         return $this->repository->create($data);
     }
 

@@ -25,7 +25,6 @@ class SignUpRequest extends FormRequest
     {
         return [
             'phone_number' => 'required|string|max:15|unique:users',
-            'password' => 'required|string|min:6|confirmed',
         ];
     }
 }

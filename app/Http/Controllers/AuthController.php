@@ -5,14 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\CreateSpecialistRequest;
 use App\Http\Requests\SendVerificationCodeRequest;
-use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\VerificationRequest;
-use App\Models\User;
 use App\Services\SMSService;
 use App\Services\UserService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Nette\Utils\Random;
 
 class AuthController extends Controller
@@ -21,26 +18,6 @@ class AuthController extends Controller
         protected UserService $service,
         protected SMSService $SMSService
     ) {}
-
-    public function signin(SignInRequest $request): \Illuminate\Http\JsonResponse
-    {
-        $user = $this->attempt(
-            $request->phone_number,
-            $request->password
-        );
-        if (!$user) {
-            return $this->error('Invalid login or password', 401);
-        }
-
-        if (is_null($user->phone_number_verified_at)) {
-            return $this->error('User is not verified ', 401);
-        }
-
-        return $this->success(
-            $user->createToken("Token for user #$user->id")->plainTextToken,
-            'Authenticated'
-        );
-    }
 
     public function sendVerificationCode(SendVerificationCodeRequest $request): \Illuminate\Http\JsonResponse
     {
@@ -84,19 +61,13 @@ class AuthController extends Controller
             $user->phone_number_verified_at = Carbon::now();
             $user->save();
 
-            return $this->success(null, 'User is verified');
+            return $this->success(
+                $user->createToken("Token for user #$user->id")->plainTextToken,
+                'User is verified'
+            );
         }
 
         return $this->error('Verification code is not valid', 400);
-    }
-
-    public function signup(SignUpRequest $request): \Illuminate\Http\JsonResponse
-    {
-        return $this->success(
-            $this->service->create($request->validated()),
-            'User created',
-            201
-        );
     }
 
     public function logout()
@@ -106,13 +77,12 @@ class AuthController extends Controller
         return $this->success(null, 'Tokens revoked');
     }
 
-    protected function attempt(string $number, string $password): ?User
+    public function signup(SignUpRequest $request): \Illuminate\Http\JsonResponse
     {
-        $user = $this->service->searchByPhoneNumber($number);
-        if (Hash::check($password, $user->password)) {
-            return $user;
-        }
-
-        return null;
+        return $this->success(
+            $this->service->create($request->validated()),
+            'User created',
+            201
+        );
     }
 }

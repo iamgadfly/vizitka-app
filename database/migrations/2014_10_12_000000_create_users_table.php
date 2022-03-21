@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('phone_number')->unique();
+            $table->string('pin')->nullable();
             $table->string('verification_code')->nullable();
             $table->timestamp('phone_number_verified_at')->nullable();
-            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
