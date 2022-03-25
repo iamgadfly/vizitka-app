@@ -66,6 +66,6 @@ class AuthController extends Controller
             $this->error('Something went wrong', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(null, 'Verfication code sent', Response::HTTP_CREATED);
+        return $this->success(null, 'Verification code sent', Response::HTTP_CREATED);
     }
 }
