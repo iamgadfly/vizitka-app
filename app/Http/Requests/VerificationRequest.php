@@ -28,4 +28,11 @@ class VerificationRequest extends FormRequest
             'verification_code' => 'required|max:4'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'phone_number.exists' => __('users.auth.validation.phone_number.exists')
+        ];
+    }
 }

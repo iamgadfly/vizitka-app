@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\UserPinException;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class UserService
 {
@@ -19,5 +20,22 @@ class UserService
     public function searchByPhoneNumber(string $number)
     {
         return $this->repository->searchByPhoneNumber($number);
+    }
+
+    public function searchByPhoneNumberNotNull(string $number)
+    {
+        return $this->repository->searchByPhoneNumberNotNull($number);
+    }
+
+    /**
+     * @throws UserPinException
+     */
+    public function attemptPIN(Authenticatable $user, string $pin): bool
+    {
+        if ($user->pin == $pin) {
+            return true;
+        }
+
+        throw new UserPinException();
     }
 }

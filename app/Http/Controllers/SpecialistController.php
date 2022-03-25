@@ -8,6 +8,7 @@ use App\Http\Resources\SpecialistResource;
 use App\Services\SpecialistService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 
 class SpecialistController extends Controller
 {
@@ -20,7 +21,7 @@ class SpecialistController extends Controller
         $specialist = $this->service->findByUserId($request->user_id);
 
         if (!is_null($specialist)) {
-            return $this->error('Specialist is already existing', 400);
+            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
         }
 
         $body = $request->validated();
@@ -37,16 +38,24 @@ class SpecialistController extends Controller
             $body['avatar'] = $file_path;
         }
         $body['user_id'] = auth()->id();
-        return $this->success($this->service->create($body), 'Specialist created', 201);
+        return $this->success($this->service->create($body), 'Specialist created', Response::HTTP_CREATED);
     }
 
     public function get(GetSpecialistRequest $request)
     {
-        return SpecialistResource::make($this->service->getSpecialistData($request->id));
+        return $this->success(
+            SpecialistResource::make($this->service->getSpecialistData($request->id)),
+            null,
+            Response::HTTP_OK
+        );
     }
 
     public function me()
     {
-        return SpecialistResource::make($this->service->getMe());
+        return $this->success(
+            SpecialistResource::make($this->service->getMe()),
+            null,
+            Response::HTTP_OK
+        );
     }
 }

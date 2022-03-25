@@ -8,6 +8,7 @@ use App\Http\Resources\ClientResource;
 use App\Services\ClientService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 
 class ClientController extends Controller
 {
@@ -20,7 +21,7 @@ class ClientController extends Controller
         $client = $this->service->findByUserId($request->user_id);
 
         if (!is_null($client)) {
-            return $this->error('Client is already existing', 400);
+            return $this->error('Client is already existing', Response::HTTP_BAD_REQUEST);
         }
 
         $body = $request->validated();
@@ -37,16 +38,24 @@ class ClientController extends Controller
             $body['avatar'] = $file_path;
         }
         $body['user_id'] = auth()->id();
-        return $this->success($this->service->create($body), 'Client created', 201);
+        return $this->success($this->service->create($body), 'Client created', Response::HTTP_CREATED);
     }
 
     public function get(GetClientRequest $request)
     {
-        return ClientResource::make($this->service->getClientData($request->id));
+        return $this->success(
+            ClientResource::make($this->service->getClientData($request->id)),
+            null,
+            Response::HTTP_OK
+        );
     }
 
     public function me()
     {
-        return ClientResource::make($this->service->getMe());
+        return $this->success(
+            ClientResource::make($this->service->getMe()),
+            null,
+            Response::HTTP_OK
+        );
     }
 }

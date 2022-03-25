@@ -27,4 +27,11 @@ class SignUpRequest extends FormRequest
             'phone_number' => 'required|string|max:15|unique:users',
         ];
     }
+
+    public function messages()
+    {
+        return [
+          'phone_number.unique' => __('users.auth.validation.phone_number.unique')
+        ];
+    }
 }
