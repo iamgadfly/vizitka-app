@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Orlyapps\NovaBelongsToDepend\NovaBelongsToDepend;
 
 class Client extends Resource
 {
@@ -44,10 +45,18 @@ class Client extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('User'),
+
+            NovaBelongsToDepend::make('Phone', 'user', User::class)
+                ->placeholder('Enter phone number...')
+                ->options(\App\Models\User::all()),
+
             Text::make('Name'),
+
             Text::make('Surname'),
+
             Avatar::make('Avatar')
+                ->prunable()
+                ->path('images/client')
         ];
     }
 

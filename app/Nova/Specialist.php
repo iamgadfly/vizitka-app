@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Orlyapps\NovaBelongsToDepend\NovaBelongsToDepend;
 
 class Specialist extends Resource
 {
@@ -44,39 +45,52 @@ class Specialist extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('User'),
-            BelongsTo::make('Activity kind')
+
+            NovaBelongsToDepend::make('Phone', 'user', User::class)
+                ->options(\App\Models\User::all())
+                ->placeholder('Enter phone number...'),
+
+            NovaBelongsToDepend::make('Activity kind')
+                ->options(\App\Models\ActivityKind::all())
                 ->sortable(),
+
             Text::make('Name')
-                ->creationRules('required')
-                ->updateRules('required,{{resourceId}}'),
+                ->rules('required'),
+
             Text::make('Surname')
-                ->creationRules('required')
-                ->updateRules('required,{{resourceId}}'),
+                ->rules('required'),
+
             Avatar::make('Avatar')
+                ->path('images/specialist')
                 ->prunable(),
+
             Text::make('Card Title')
-                ->creationRules('required')
-                ->updateRules('required,{{resourceId}}')
+                ->rules('required')
                 ->hideFromIndex(),
+
             Text::make('About')
-                ->creationRules('required')
-                ->updateRules('required,{{resourceId}}')
+                ->rules('required')
                 ->hideFromIndex(),
+
             Text::make('Address')
-                ->creationRules('required')
-                ->updateRules('required,{{resourceId}}')
+                ->rules('required')
                 ->hideFromIndex(),
+
             Text::make('Placement')
                 ->hideFromIndex(),
+
             Text::make('Floor')
                 ->hideFromIndex(),
+
             Text::make('Instagram Account')
                 ->hideFromIndex(),
+
             Text::make('VK Account')
                 ->hideFromIndex(),
+
             Text::make('Youtube Account')
                 ->hideFromIndex(),
+
             Text::make('TikTok Account')
                 ->hideFromIndex(),
         ];

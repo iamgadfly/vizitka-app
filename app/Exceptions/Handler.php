@@ -7,6 +7,14 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    protected function getJsonError(string $message, int $code): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'status' => 'Error',
+            'message' => $message,
+            'data' => null
+        ], $code);
+    }
     /**
      * A list of the exception types that are not reported.
      *
@@ -34,8 +42,8 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (BaseAuthException $e, $request) {
+           return $this->getJsonError($e->getMessage(), $e->getCode());
         });
     }
 }

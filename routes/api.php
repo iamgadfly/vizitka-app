@@ -32,13 +32,6 @@ Route::controller(SpecialistAuthController::class)
         ->middleware('auth:sanctum')
         ->name('specialist.auth.setpin');
 
-    Route::post('attemptPin', 'attemptPin')
-        ->middleware('auth:sanctum')
-        ->name('specialist.auth.attemptPin');
-
-    Route::post('sendVerificationCode', 'sendVerificationCode')
-        ->name('specialist.auth.sendVerificationCode');
-
     Route::post('verification', 'verification')
         ->name('specialist.auth.verification');
 
@@ -59,9 +52,6 @@ Route::controller(ClientAuthController::class)
 
         Route::post('sendPassword', 'sendPassword')
             ->name('client.auth.sendPassword');
-
-        Route::post('sendVerificationCode', 'sendVerificationCode')
-            ->name('client.auth.sendVerificationCode');
 
         Route::post('verification', 'verification')
             ->name('client.auth.verification');

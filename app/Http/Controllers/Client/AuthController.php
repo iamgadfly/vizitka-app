@@ -21,14 +21,8 @@ class AuthController extends Controller
 
     public function signin(SignInRequest $request): \Illuminate\Http\JsonResponse
     {
-        $user = $this->service->searchByPhoneNumber($request->phone_number);
-        if (!$user) {
-            return $this->error('Invalid login', 401);
-        }
+        $user = $this->service->searchByPhoneNumberNotNull($request->phone_number);
 
-        if (is_null($user->phone_number_verified_at)) {
-            return $this->error('User is not verified ', 401);
-        }
         $verification_code = Random::generate(4, '0-9');
 
 

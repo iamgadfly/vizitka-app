@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateClientRequest;
-use App\Http\Requests\CreateSpecialistRequest;
-use App\Http\Requests\SendVerificationCodeRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\VerificationRequest;
 use App\Services\SMSService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Nette\Utils\Random;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
@@ -19,42 +17,16 @@ class AuthController extends Controller
         protected SMSService $SMSService
     ) {}
 
-    public function sendVerificationCode(SendVerificationCodeRequest $request): \Illuminate\Http\JsonResponse
-    {
-        $verification_code = Random::generate(4, '0-9');
-
-        $user = $this->service->searchByPhoneNumber($request->phone_number);
-
-        if (is_null($user)) {
-            return $this->error('User not found', 404);
-        }
-
-        if (!is_null($user->phone_number_verified_at)) {
-            return $this->error('User has already been verified', 400);
-        }
-
-        $phone_number = str($user->phone_number)->replace('+', '')->value();
-
-        $user->verification_code = $verification_code;
-        $user->save();
-        $status = $this->SMSService->sendSms("Your verification code: $verification_code", $phone_number);
-        if (isset($status['error'])) {
-            $this->error('Something went wrong', 400);
-        }
-
-        return $this->success(null, 'Verification code sent');
-    }
-
     public function verification(VerificationRequest $request): \Illuminate\Http\JsonResponse
     {
         $user = $this->service->searchByPhoneNumber($request->phone_number);
 
         if (is_null($user)) {
-            return $this->error('User not found', 404);
+            return $this->error('User not found', Response::HTTP_NOT_FOUND);
         }
 
         if (!is_null($user->phone_number_verified_at)) {
-            return $this->error('User has already been verified', 400);
+            return $this->error('User has already been verified', Response::HTTP_BAD_REQUEST);
         }
 
         if ($user->verification_code == $request->verification_code) {
@@ -63,26 +35,37 @@ class AuthController extends Controller
 
             return $this->success(
                 $user->createToken("Token for user #$user->id")->plainTextToken,
-                'User is verified'
+                'User is verified',
+                Response::HTTP_OK
             );
         }
 
-        return $this->error('Verification code is not valid', 400);
+        return $this->error('Verification code is not valid', Response::HTTP_BAD_REQUEST);
     }
 
     public function logout()
     {
         auth()->user()->tokens()->delete();
 
-        return $this->success(null, 'Tokens revoked');
+        return $this->success(null, 'Tokens revoked', Response::HTTP_OK);
     }
 
     public function signup(SignUpRequest $request): \Illuminate\Http\JsonResponse
     {
-        return $this->success(
-            $this->service->create($request->validated()),
-            'User created',
-            201
-        );
+        $verification_code = Random::generate(4, '0-9');
+
+        $phone_number = str($request->phone_number)->replace('+', '')->value();
+
+        $user = $this->service->create($request->validated());
+
+        $user->verification_code = $verification_code;
+        $user->save();
+
+        $status = $this->SMSService->sendSms("Your verification code: $verification_code", $phone_number);
+        if (isset($status['sms'][0]['error'])) {
+            $this->error('Something went wrong', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->success(null, 'Verfication code sent', Response::HTTP_CREATED);
     }
 }
