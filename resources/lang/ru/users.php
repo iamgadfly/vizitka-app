@@ -18,4 +18,11 @@ return [
           ]
       ]
   ],
+    'geocoder' => [
+        'validation' => [
+            'coordinates' => [
+                'required' => 'Параметр coordinates обязателен'
+            ]
+        ]
+    ]
 ];
