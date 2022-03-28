@@ -23,7 +23,7 @@ class GeocoderService
     {
         $data = $this->geocoder->reverse($latitude, $longitude)->first();
         return [
-            'country' => $data->getCountry(),
+            'country' => $data->getCountry()->getName(),
             'city' => $data->getLocality(),
             'street' => $data->getStreetName(),
             'streetNumber' => $data->getStreetNumber()
