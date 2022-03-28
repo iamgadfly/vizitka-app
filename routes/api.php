@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\GeocoderController;
 use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
@@ -90,5 +91,7 @@ Route::controller(ClientController::class)
     Route::get('profile', [ClientController::class, 'me'])
         ->name('client.me');
 });
+
+Route::post('/geocode', [GeocoderController::class, 'geocode']);
 
 Route::post('/test', [TestController::class, 'test']);
