@@ -27,13 +27,6 @@ class AuthController extends BaseAuthController
             return $this->error('User is not verified ', 401);
         }
 
-        return $this->success(null, 'Provide PIN');
-    }
-
-    public function attemptPin(SetPinRequest $request)
-    {
-        $user = auth()->user();
-
         if (!$this->attempt($user, $request->pin)) {
             return $this->error('PIN is invalid', 401);
         }

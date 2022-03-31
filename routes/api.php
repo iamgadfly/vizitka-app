@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BusinessCardController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\GeocoderController;
 use App\Http\Controllers\SpecialistController;
@@ -75,6 +76,17 @@ Route::controller(SpecialistController::class)
 
     Route::get('profile', 'me')
         ->name('specialist.me');
+});
+
+// Business card routes
+Route::controller(BusinessCardController::class)
+    ->prefix('card')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('create', 'create')
+        ->name('card.create');
+    Route::get('{id}', 'get')
+        ->name('card.get');
 });
 
 // Client routes

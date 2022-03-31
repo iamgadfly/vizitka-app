@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
@@ -49,6 +50,9 @@ class User extends Resource
                 ->rules('required', 'string', 'max:254')
                 ->creationRules('unique:users')
                 ->updateRules('unique:users,{{resourceId}}'),
+
+            DateTime::make('Phone verified at')
+                ->onlyOnForms(),
 
             Password::make('Password')
                 ->onlyOnForms()

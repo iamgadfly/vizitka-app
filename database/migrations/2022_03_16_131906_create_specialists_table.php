@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('surname');
             $table->foreignId('activity_kind_id')->constrained('activity_kinds');
             $table->string('card_title');
-            $table->string('about');
-            $table->string('address');
+            $table->string('about')->nullable();
+            $table->string('address')->nullable();
             $table->string('placement')->nullable();
             $table->string('floor')->nullable();
             $table->string('instagram_account')->nullable();
