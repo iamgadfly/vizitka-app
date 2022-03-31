@@ -83,8 +83,6 @@ Route::controller(BusinessCardController::class)
     ->prefix('card')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::post('create', 'create')
-        ->name('card.create');
     Route::get('{id}', 'get')
         ->name('card.get');
 });

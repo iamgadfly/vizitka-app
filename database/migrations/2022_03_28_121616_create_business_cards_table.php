@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('business_cards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('specialist_id')->constrained('specialists')->onDelete('cascade');
-            $table->string('card_title');
-            $table->string('about')->nullable();
-            $table->string('phone_number');
+            $table->foreignId('specialist_id')->unique()->constrained('specialists')->onDelete('cascade');
             $table->string('background_image');
+            $table->string('title');
+            $table->string('about')->nullable();
+            $table->string('address')->nullable();
+            $table->string('placement')->nullable();
+            $table->string('floor')->nullable();
             $table->timestamps();
         });
     }

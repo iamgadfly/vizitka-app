@@ -64,23 +64,7 @@ class Specialist extends Resource
                 ->path('images/specialist')
                 ->prunable(),
 
-            Text::make('Card Title')
-                ->rules('required')
-                ->hideFromIndex(),
 
-            Text::make('About')
-                ->rules('required')
-                ->hideFromIndex(),
-
-            Text::make('Address')
-                ->rules('required')
-                ->hideFromIndex(),
-
-            Text::make('Placement')
-                ->hideFromIndex(),
-
-            Text::make('Floor')
-                ->hideFromIndex(),
 
             Text::make('Instagram Account')
                 ->hideFromIndex(),

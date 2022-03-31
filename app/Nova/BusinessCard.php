@@ -46,9 +46,25 @@ class BusinessCard extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             NovaBelongsToDepend::make('Specialist', 'specialist', Specialist::class)
                 ->options(\App\Models\Specialist::all()),
-            Text::make('Card Title'),
-            Text::make('About'),
-            Text::make('Phone number'),
+
+            Text::make('Title')
+                ->rules('required')
+                ->hideFromIndex(),
+
+            Text::make('About')
+                ->rules('required')
+                ->hideFromIndex(),
+
+            Text::make('Address')
+                ->rules('required')
+                ->hideFromIndex(),
+
+            Text::make('Placement')
+                ->hideFromIndex(),
+
+            Text::make('Floor')
+                ->hideFromIndex(),
+
             Image::make('Background Image',)
         ];
     }

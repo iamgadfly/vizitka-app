@@ -24,7 +24,7 @@ class BusinessCardController extends Controller
     public function get(BusinessCardGetRequest $request)
     {
         return $this->success(
-            BusinessCardResource::make($this->service->get($request->id))
+            new BusinessCardResource($this->service->get($request->id))
         );
     }
 }

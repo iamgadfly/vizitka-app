@@ -16,12 +16,13 @@ class BusinessCardResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this['id'],
-            'card_title' => $this['card_title'],
-            'specialist' => $this['specialist'],
-            'about' => $this['about'],
-            'phone_number' => $this['phone_number'],
-            'specialist_avatar' => $this['specialist_avatar']
+            'id' => $this->id,
+            'title' => $this->title,
+            'about' => $this->about,
+            'address' => $this->address,
+            'placement' => $this->placement,
+            'floor' => $this->floor,
+            'specialist' => SpecialistResource::make($this->specialist)
         ];
     }
 }
