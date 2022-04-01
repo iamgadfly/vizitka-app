@@ -20,4 +20,9 @@ class Specialist extends Model
     {
         return $this->belongsTo(ActivityKind::class, 'activity_kind_id', 'id');
     }
+
+    public function card()
+    {
+        return $this->hasOne(BusinessCard::class, 'specialist_id', 'id');
+    }
 }

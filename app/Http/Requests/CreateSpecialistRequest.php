@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\CardBackgroundHelper;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateSpecialistRequest extends FormRequest
 {
@@ -34,7 +36,7 @@ class CreateSpecialistRequest extends FormRequest
             'surname' => 'required|string|max:255',
             'avatar' => 'image',
             'activity_kind_id' => 'required|int|exists:activity_kinds,id',
-            'card_title' => 'required|string',
+            'title' => 'required|string',
             'about' => 'required|string',
             'address' => 'required|string',
             'placement' => 'string',
@@ -43,6 +45,7 @@ class CreateSpecialistRequest extends FormRequest
             'youtube_account' => 'string',
             'vk_account' => 'string',
             'tiktok_account' => 'string',
+            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
         ];
     }
 }

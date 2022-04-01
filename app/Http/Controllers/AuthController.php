@@ -35,8 +35,8 @@ class AuthController extends Controller
 
             return $this->success(
                 $user->createToken("Token for user #$user->id")->plainTextToken,
+                Response::HTTP_OK,
                 'User is verified',
-                Response::HTTP_OK
             );
         }
 
@@ -66,6 +66,6 @@ class AuthController extends Controller
             $this->error('Something went wrong', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(null, 'Verification code sent', Response::HTTP_CREATED);
+        return $this->success(null, Response::HTTP_CREATED ,'Verification code sent');
     }
 }

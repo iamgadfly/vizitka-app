@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SendPasswordRequest;
-use App\Http\Requests\SetPinRequest;
 use App\Http\Requests\SignInRequest;
 use App\Services\SMSService;
 use App\Services\UserService;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Nette\Utils\Random;
 
 class AuthController extends Controller
@@ -35,7 +34,7 @@ class AuthController extends Controller
             $this->error('Something went wrong', 400);
         }
 
-        return $this->success(null, 'Provide password from SMS');
+        return $this->success(null,Response::HTTP_OK, 'Provide password from SMS');
     }
 
     public function sendPassword(SendPasswordRequest $request): \Illuminate\Http\JsonResponse
@@ -50,6 +49,7 @@ class AuthController extends Controller
 
         return $this->success(
             $user->createToken("Token for user #$user->id")->plainTextToken,
+            Response::HTTP_OK,
             'Authenticated'
         );
     }

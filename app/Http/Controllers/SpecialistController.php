@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CardBackgroundHelper;
 use App\Http\Requests\CreateSpecialistRequest;
 use App\Http\Requests\GetSpecialistRequest;
 use App\Http\Resources\SpecialistResource;
@@ -38,15 +39,15 @@ class SpecialistController extends Controller
             $body['avatar'] = $file_path;
         }
         $body['user_id'] = auth()->id();
-        return $this->success($this->service->create($body), 'Specialist created', Response::HTTP_CREATED);
+        $body['background_image'] = CardBackgroundHelper::filenameFromActivityKind($request->background_image);
+        return $this->success($this->service->create($body), Response::HTTP_CREATED,'Specialist created');
     }
 
     public function get(GetSpecialistRequest $request)
     {
         return $this->success(
             SpecialistResource::make($this->service->getSpecialistData($request->id)),
-            null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
         );
     }
 
@@ -54,8 +55,12 @@ class SpecialistController extends Controller
     {
         return $this->success(
             SpecialistResource::make($this->service->getMe()),
-            null,
             Response::HTTP_OK
         );
+    }
+
+    public function update()
+    {
+        //TODO: implement this, спросить Олега про таблицу с изображениями
     }
 }

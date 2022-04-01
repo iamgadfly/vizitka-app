@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Repositories\{{ repository }};
+
+
+class {{ class }}
+{
+    public function __construct(
+        protected {{ repository }} $repository
+    ) {}
+}
