@@ -8,6 +8,7 @@ use App\Services\SMSService;
 use App\Services\UserService;
 use App\Http\Controllers\AuthController as BaseAuthController;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Response;
 
 class AuthController extends BaseAuthController
 {
@@ -33,6 +34,7 @@ class AuthController extends BaseAuthController
 
         return $this->success(
             $user->createToken("Token for user #$user->id")->plainTextToken,
+            Response::HTTP_OK,
             'Authenticated'
         );
     }
@@ -46,7 +48,11 @@ class AuthController extends BaseAuthController
         $user->pin = $request->pin;
         $user->save();
 
-        return $this->success(null, 'PIN set successfully');
+        return $this->success(
+            null,
+            Response::HTTP_OK,
+            'PIN set successfully'
+        );
     }
 
     protected function attempt(Authenticatable $user, string $pin): bool

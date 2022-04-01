@@ -18,7 +18,7 @@ class CardBackgroundHelper
         'resnizi', 'visagiste'
     ];
 
-    private static function getAssetFromFilename(string $filename)
+    public static function getAssetFromFilename(string $filename)
     {
         return asset(Storage::url($filename));
     }

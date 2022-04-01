@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GeocodeRequest;
 use App\Services\GeocoderService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class GeocoderController extends Controller
 {
@@ -18,7 +19,8 @@ class GeocoderController extends Controller
         return $this->success(
             $this->service->fromCoordinates(
                 $coords[0], $coords[1]
-            )
+            ),
+            Response::HTTP_OK
         );
     }
 }

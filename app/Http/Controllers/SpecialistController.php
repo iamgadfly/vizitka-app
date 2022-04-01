@@ -40,15 +40,14 @@ class SpecialistController extends Controller
         }
         $body['user_id'] = auth()->id();
         $body['background_image'] = CardBackgroundHelper::filenameFromActivityKind($request->background_image);
-        return $this->success($this->service->create($body), 'Specialist created', Response::HTTP_CREATED);
+        return $this->success($this->service->create($body), Response::HTTP_CREATED,'Specialist created');
     }
 
     public function get(GetSpecialistRequest $request)
     {
         return $this->success(
             SpecialistResource::make($this->service->getSpecialistData($request->id)),
-            null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
         );
     }
 
@@ -56,8 +55,12 @@ class SpecialistController extends Controller
     {
         return $this->success(
             SpecialistResource::make($this->service->getMe()),
-            null,
             Response::HTTP_OK
         );
+    }
+
+    public function update()
+    {
+        //TODO: implement this, спросить Олега про таблицу с изображениями
     }
 }

@@ -4,21 +4,23 @@ namespace App\Traits;
 
 trait JsonResponsive
 {
-    protected function success(mixed $data, string $message = null, int $code = 200): \Illuminate\Http\JsonResponse
+    protected function success(mixed $data, int $code = 200, string $message = null): \Illuminate\Http\JsonResponse
     {
-        return response()->json([
+        $response = [
             'status' => 'Success',
-            'message' => $message,
             'data' => $data
-        ], $code);
+        ];
+
+        if (!is_null($message)) $response['message'] = $message;
+
+        return response()->json($response, $code);
     }
 
-    protected function error(string $message, int $code, $data = null): \Illuminate\Http\JsonResponse
+    protected function error(string $message, int $code): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'status' => 'Error',
             'message' => $message,
-            'data' => $data
         ], $code);
     }
 }

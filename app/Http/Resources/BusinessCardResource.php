@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\CardBackgroundHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BusinessCardResource extends JsonResource
@@ -22,6 +23,7 @@ class BusinessCardResource extends JsonResource
             'address' => $this->address,
             'placement' => $this->placement,
             'floor' => $this->floor,
+            'background_image' => CardBackgroundHelper::getAssetFromFilename($this->background_image),
             'specialist' => SpecialistResource::make($this->specialist)
         ];
     }

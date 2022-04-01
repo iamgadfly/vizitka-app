@@ -38,15 +38,14 @@ class ClientController extends Controller
             $body['avatar'] = $file_path;
         }
         $body['user_id'] = auth()->id();
-        return $this->success($this->service->create($body), 'Client created', Response::HTTP_CREATED);
+        return $this->success($this->service->create($body), Response::HTTP_CREATED ,'Client created');
     }
 
     public function get(GetClientRequest $request)
     {
         return $this->success(
             ClientResource::make($this->service->getClientData($request->id)),
-            null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
         );
     }
 
@@ -54,8 +53,7 @@ class ClientController extends Controller
     {
         return $this->success(
             ClientResource::make($this->service->getMe()),
-            null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
         );
     }
 }
