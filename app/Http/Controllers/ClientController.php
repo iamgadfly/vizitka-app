@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateClientRequest;
+use App\Http\Requests\Client\CreateClientRequest;
 use App\Http\Requests\GetClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Services\ClientService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 

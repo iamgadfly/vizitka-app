@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\BusinessCardController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\GeocoderController;
@@ -63,21 +64,6 @@ Route::controller(ClientAuthController::class)
             ->name('client.auth.logout');
 });
 
-// Specialist routes
-Route::controller(SpecialistController::class)
-    ->prefix('specialist')
-    ->middleware('auth:sanctum')->group(function () {
-
-    Route::post('profile','create')
-        ->name('specialist.create');
-
-    Route::get('profile/{id}', 'get')
-        ->name('specialist.get');
-
-    Route::get('profile', 'me')
-        ->name('specialist.me');
-});
-
 // Business card routes
 Route::controller(BusinessCardController::class)
     ->prefix('card')
@@ -87,18 +73,51 @@ Route::controller(BusinessCardController::class)
         ->name('card.get');
 });
 
+// Image requests
+Route::controller(ImageController::class)
+    ->prefix('image')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('', 'upload')
+        ->name('image.upload');
+
+    Route::get('{id}', 'get')
+        ->name('image.get');
+
+    Route::delete('{id}', 'delete')
+        ->name('image.delete');
+});
+
+// Specialist routes
+Route::controller(SpecialistController::class)
+    ->prefix('specialist')
+    ->middleware('auth:sanctum')->group(function () {
+
+        Route::post('profile','create')
+            ->name('specialist.create');
+
+        Route::get('profile/{id}', 'get')
+            ->name('specialist.get');
+
+        Route::put('profile/{id}', 'update')
+            ->name('specialist.update');
+
+        Route::get('profile', 'me')
+            ->name('specialist.me');
+    });
+
 // Client routes
 Route::controller(ClientController::class)
     ->prefix('client')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::post('profile', [ClientController::class, 'create'])
+    Route::post('profile', 'create')
         ->name('client.create');
 
-    Route::get('profile/{id}', [ClientController::class, 'get'])
+    Route::get('profile/{id}', 'get')
         ->name('client.get');
 
-    Route::get('profile', [ClientController::class, 'me'])
+    Route::get('profile', 'me')
         ->name('client.me');
 });
 

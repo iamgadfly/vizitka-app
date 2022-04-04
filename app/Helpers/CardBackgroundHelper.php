@@ -18,7 +18,7 @@ class CardBackgroundHelper
         'resnizi', 'visagiste'
     ];
 
-    public static function getAssetFromFilename(string $filename)
+    private static function getAssetFromFilename(string $filename): string
     {
         return asset(Storage::url($filename));
     }
@@ -32,7 +32,7 @@ class CardBackgroundHelper
         return null;
     }
 
-    public static function getAll()
+    public static function getAll(): \Illuminate\Support\Collection
     {
         return collect(Storage::disk('public')->files('/images/card_backgrounds'))->map(function ($file) {
             return self::getAssetFromFilename($file);

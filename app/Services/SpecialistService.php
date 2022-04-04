@@ -36,6 +36,11 @@ class SpecialistService
         }
     }
 
+    public function update($data)
+    {
+        return $this->repository->update($data['id'], $data);
+    }
+
     public function findByUserId(int $id)
     {
         return $this->repository->findByUserId($id);
@@ -44,13 +49,10 @@ class SpecialistService
     public function getSpecialistData($id)
     {
         if (is_null($id)) {
-            $item = $this->repository->findByUserId(auth()->id())->toArray();
+            $item = $this->repository->findByUserId(auth()->id());
         } else {
-            $item = $this->repository->getById($id)->toArray();
+            $item = $this->repository->getById($id);
         }
-
-        $item['phone'] = $this->userRepository->getById($item['user_id'])->phone_number;
-        $item['activity_kind'] = ActivityKind::fromInt($item['activity_kind_id']);
 
         return $item;
     }

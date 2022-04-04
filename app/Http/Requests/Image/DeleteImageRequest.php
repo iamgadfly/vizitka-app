@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateClientRequest extends FormRequest
+class DeleteImageRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['user_id' => auth()->id()]);
+        $this->merge(['id' => $this->route('id')]);
     }
 
     /**
@@ -29,10 +29,7 @@ class CreateClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|int|exists:users,id',
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'avatar' => 'image'
+            'id' => 'required|exists:images,id'
         ];
     }
 }

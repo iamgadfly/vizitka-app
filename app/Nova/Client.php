@@ -3,11 +3,8 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Avatar;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Orlyapps\NovaBelongsToDepend\NovaBelongsToDepend;
 
 class Client extends Resource
@@ -54,9 +51,6 @@ class Client extends Resource
 
             Text::make('Surname'),
 
-            Avatar::make('Avatar')
-                ->prunable()
-                ->path('images/client')
         ];
     }
 
