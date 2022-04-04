@@ -3,8 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Avatar;
-use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -60,15 +59,6 @@ class Specialist extends Resource
             Text::make('Surname')
                 ->rules('required'),
 
-            Avatar::make('Avatar')
-                ->path('images/specialist')
-                ->prunable(),
-
-
-
-            Text::make('Instagram Account')
-                ->hideFromIndex(),
-
             Text::make('VK Account')
                 ->hideFromIndex(),
 
@@ -77,6 +67,8 @@ class Specialist extends Resource
 
             Text::make('TikTok Account')
                 ->hideFromIndex(),
+
+            HasOne::make('Card', 'card', BusinessCard::class)
         ];
     }
 

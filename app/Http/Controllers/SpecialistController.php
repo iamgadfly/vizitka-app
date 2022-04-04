@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\CardBackgroundHelper;
-use App\Http\Requests\CreateSpecialistRequest;
 use App\Http\Requests\GetSpecialistRequest;
+use App\Http\Requests\Specialist\CreateSpecialistRequest;
 use App\Http\Resources\SpecialistResource;
+use App\Services\ImageService;
 use App\Services\SpecialistService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpecialistController extends Controller
 {
     public function __construct(
-       protected SpecialistService $service
+        protected SpecialistService $service,
+        protected ImageService $imageService
     ) {}
 
     public function create(CreateSpecialistRequest $request)
@@ -25,22 +25,14 @@ class SpecialistController extends Controller
             return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
         }
 
-        $body = $request->validated();
-        if (!is_null($body['avatar'])) {
-            $image = $body['avatar'];
-
-            $ext = $image->extension();
-            $filename = date('H:i:s') . '-' . md5(auth()->id()) . '.' . $ext;
-            $file_path = config('custom.specialist_photo_path') . '/' . $filename;
-
-            $image = file_get_contents($image);
-            Storage::disk('public')->put($file_path, $image);
-
-            $body['avatar'] = $file_path;
+        if (!is_null($request->avatar_id)) {
+            $image = $this->imageService->get($request->avatar_id);
+            $this->imageService->removeTemporary($image); // make 'deleted_at' field null
         }
-        $body['user_id'] = auth()->id();
-        $body['background_image'] = CardBackgroundHelper::filenameFromActivityKind($request->background_image);
-        return $this->success($this->service->create($body), Response::HTTP_CREATED,'Specialist created');
+
+        $request->merge(['background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image)]);
+
+        return $this->success($this->service->create($request->toArray()), Response::HTTP_CREATED,'Specialist created');
     }
 
     public function get(GetSpecialistRequest $request)
@@ -51,16 +43,24 @@ class SpecialistController extends Controller
         );
     }
 
+    public function update(CreateSpecialistRequest $request)
+    {
+        if (!is_null($request->avatar_id)) {
+            $image = $this->imageService->get(
+                $this->service->getMe()->avatar_id
+            );
+            $this->imageService->makeTemporary($image);
+        }
+        return $this->success(
+            $this->service->update($request->validated())
+        );
+    }
+
     public function me()
     {
         return $this->success(
             SpecialistResource::make($this->service->getMe()),
             Response::HTTP_OK
         );
-    }
-
-    public function update()
-    {
-        //TODO: implement this, спросить Олега про таблицу с изображениями
     }
 }
