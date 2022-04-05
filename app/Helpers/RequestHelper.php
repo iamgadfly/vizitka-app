@@ -7,6 +7,19 @@ use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
+    public static function getBusinessCardRules(FormRequest $request): array
+    {
+        if ($request->method() == 'POST') {
+            return [
+                'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
+            ];
+        }
+        return [
+            'id' => 'required|exists:business_cards,id',
+            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
+        ];
+    }
+
     public static function getSpecialistCreateOrUpdateRules(FormRequest $request): array
     {
         if ($request->method() == 'POST') {

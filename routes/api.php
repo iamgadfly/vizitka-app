@@ -71,6 +71,9 @@ Route::controller(BusinessCardController::class)
 
     Route::get('{id}', 'get')
         ->name('card.get');
+
+    Route::put('{id}', 'update')
+        ->name('card.update');
 });
 
 // Image requests
