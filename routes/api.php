@@ -1,15 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\GeocoderController;
 use App\Http\Controllers\Api\ImageController;
-use App\Http\Controllers\BusinessCardController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\GeocoderController;
-use App\Http\Controllers\SpecialistController;
-use App\Http\Controllers\TestController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Specialist\AuthController as SpecialistAuthController;
+use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\Specialist\AuthController as SpecialistAuthController;
+use App\Http\Controllers\Specialist\BusinessCardController;
+use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

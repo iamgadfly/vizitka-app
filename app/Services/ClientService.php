@@ -17,6 +17,11 @@ class ClientService
         return $this->repository->create($data);
     }
 
+    public function update(array $data)
+    {
+        return $this->repository->update($data['id'], $data);
+    }
+
     public function findByUserId($id)
     {
         return $this->repository->findByUserId($id);
@@ -25,13 +30,9 @@ class ClientService
     public function getClientData($id)
     {
         if (is_null($id)) {
-            $client = $this->repository->findByUserId(auth()->id())->toArray();
-        } else {
-            $client = $this->repository->getById($id)->toArray();
+            return $this->repository->findByUserId(auth()->id());
         }
-        $client['phone'] = $this->userRepository->getById($client['user_id'])->phone_number;
-
-        return $client;
+        return $this->repository->getById($id);
     }
 
     public function getMe()

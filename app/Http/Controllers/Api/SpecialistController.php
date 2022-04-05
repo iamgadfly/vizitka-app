@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Helpers\CardBackgroundHelper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSpecialistRequest;
 use App\Http\Requests\Specialist\CreateSpecialistRequest;
 use App\Http\Resources\SpecialistResource;
