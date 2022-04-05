@@ -7,6 +7,25 @@ use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
+    public static function getClientRules(FormRequest $request): array
+    {
+        if ($request->method() == 'POST') {
+            return [
+                'user_id' => 'required|int|exists:users,id',
+                'name' => 'required|string|max:255',
+                'surname' => 'required|string|max:255',
+                'avatar_id' => 'exists:images,id'
+            ];
+        }
+
+        return [
+            'id' => 'required|int|exists:clients,id',
+            'name' => 'string|max:255',
+            'surname' => 'string|max:255',
+            'avatar_id' => 'exists:images,id'
+        ];
+    }
+
     public static function getBusinessCardRules(FormRequest $request): array
     {
         if ($request->method() == 'POST') {

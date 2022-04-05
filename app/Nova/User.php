@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Gravatar;
@@ -11,6 +12,7 @@ use Laravel\Nova\Fields\Text;
 
 class User extends Resource
 {
+    use SoftDeletes;
     /**
      * The model the resource corresponds to.
      *

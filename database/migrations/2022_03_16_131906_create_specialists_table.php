@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('vk_account')->nullable();
             $table->string('youtube_account')->nullable();
             $table->string('tiktok_account')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

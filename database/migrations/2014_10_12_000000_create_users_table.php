@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->string('phone_number')->unique();
             $table->string('pin')->nullable();
             $table->string('verification_code')->nullable();

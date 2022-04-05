@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Client;
 
+use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use function auth;
 
@@ -9,7 +10,11 @@ class CreateClientRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['user_id' => auth()->id()]);
+        if ($this->method() == 'POST'){
+            $this->merge(['user_id' => auth()->id()]);
+        } else {
+            $this->merge(['id' => $this->route('id')]);
+        }
     }
 
     /**
@@ -29,11 +34,6 @@ class CreateClientRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'user_id' => 'required|int|exists:users,id',
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'avatar' => 'image'
-        ];
+        return RequestHelper::getClientRules($this);
     }
 }

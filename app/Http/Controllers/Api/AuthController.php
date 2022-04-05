@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\VerificationRequest;
 use App\Services\SMSService;
@@ -9,6 +10,8 @@ use App\Services\UserService;
 use Carbon\Carbon;
 use Nette\Utils\Random;
 use Symfony\Component\HttpFoundation\Response;
+use function auth;
+use function str;
 
 class AuthController extends Controller
 {

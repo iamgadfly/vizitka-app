@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Specialist;
 
+use App\Http\Controllers\Api\AuthController as BaseAuthController;
 use App\Http\Requests\SetPinRequest;
 use App\Http\Requests\SignInRequest;
 use App\Services\SMSService;
 use App\Services\UserService;
-use App\Http\Controllers\AuthController as BaseAuthController;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 
