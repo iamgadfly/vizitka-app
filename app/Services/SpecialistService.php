@@ -30,7 +30,7 @@ class SpecialistService
             DB::commit();
 
             return true;
-        } catch (\PDOException $e) {
+        } catch (\PDOException) {
             DB::rollBack();
             return false;
         }
@@ -38,7 +38,18 @@ class SpecialistService
 
     public function update($data)
     {
-        return $this->repository->update($data['id'], $data);
+        try {
+            DB::beginTransaction();
+            $this->repository->update($data['id'], $data);
+            $data['card_id'] = $this->repository->getById($data['id'])->card->id;
+            $this->businessCardRepository->update($data['card_id'], $data);
+            DB::commit();
+
+            return true;
+        } catch (\PDOException) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function findByUserId(int $id)

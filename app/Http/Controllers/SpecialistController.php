@@ -45,12 +45,16 @@ class SpecialistController extends Controller
 
     public function update(CreateSpecialistRequest $request)
     {
-        if (!is_null($request->avatar_id)) {
+        if (
+            !is_null($request->avatar_id)
+            && !is_null($this->service->getMe()->avatar_id)
+        ) {
             $image = $this->imageService->get(
                 $this->service->getMe()->avatar_id
             );
             $this->imageService->makeTemporary($image);
         }
+
         return $this->success(
             $this->service->update($request->validated())
         );

@@ -3,11 +3,19 @@
 namespace App\Http\Requests;
 
 use App\Helpers\CardBackgroundHelper;
+use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class BusinessCardCreateRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        if ($this->method() == 'PUT') {
+            $this->merge(['id' => $this->route('id')]);
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,8 +33,6 @@ class BusinessCardCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
-        ];
+        return RequestHelper::getBusinessCardRules($this);
     }
 }

@@ -15,19 +15,18 @@ class BusinessCardController extends Controller
         protected BusinessCardService $service
     ) {}
 
-    public function create(BusinessCardCreateRequest $request)
-    {
-        return $this->success(
-            $this->service->create($request->validated()),
-            Response::HTTP_CREATED
-        );
-    }
-
     public function get(BusinessCardGetRequest $request)
     {
         return $this->success(
             new BusinessCardResource($this->service->get($request->id)),
             Response::HTTP_OK
+        );
+    }
+
+    public function update(BusinessCardCreateRequest $request)
+    {
+        return $this->success(
+            $this->service->update($request->validated())
         );
     }
 }
