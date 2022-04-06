@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SendPasswordRequest;
@@ -10,6 +10,7 @@ use App\Services\UserService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Nette\Utils\Random;
+use function str;
 
 class AuthController extends Controller
 {
@@ -27,12 +28,13 @@ class AuthController extends Controller
 
         $phone_number = str($user->phone_number)->replace('+', '')->value();
 
-        $user->verification_code = $verification_code;
-        $user->save();
         $status = $this->SMSService->sendSms("Your password: $verification_code", $phone_number);
         if (isset($status['error'])) {
-            $this->error('Something went wrong', 400);
+            $this->error('Something went wrong', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        $user->verification_code = $verification_code;
+        $user->save();
 
         return $this->success(null,Response::HTTP_OK, 'Provide password from SMS');
     }
@@ -41,10 +43,13 @@ class AuthController extends Controller
     {
         $user = $this->service->searchByPhoneNumber($request->phone_number);
         if (!$user) {
-            return $this->error('Invalid login', 401);
+            return $this->error('Invalid login', Response::HTTP_UNAUTHORIZED);
+        }
+        if (is_null($user->phone_number_verified_at)) {
+            return $this->error('User is not verified ', Response::HTTP_UNAUTHORIZED);
         }
         if (!$this->attempt($user, $request->pin)) {
-            return $this->error('Password is invalid', 401);
+            return $this->error('Password is invalid', Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->success(

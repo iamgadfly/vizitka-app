@@ -13,18 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('business_cards', function (Blueprint $table) {
+        Schema::create('business_card_holders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('specialist_id')
+            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('business_card_id')
                 ->unique()
-                ->constrained('specialists')
+                ->constrained('business_cards')
                 ->onDelete('cascade');
-            $table->string('background_image');
-            $table->string('title');
-            $table->string('about')->nullable();
-            $table->string('address')->nullable();
-            $table->string('placement')->nullable();
-            $table->string('floor')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('business_cards');
+        Schema::dropIfExists('business_card_holders');
     }
 };
