@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'phone_number_verified_at' => 'datetime',
     ];
+
+    public function specialist(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Specialist::class, 'user_id', 'id');
+    }
+
+    public function client()
+    {
+        return $this->hasOne(Client::class, 'user_id', 'id');
+    }
 }

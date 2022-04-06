@@ -33,7 +33,11 @@ class SpecialistController extends Controller
 
         $request->merge(['background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image)]);
 
-        return $this->success($this->service->create($request->toArray()), Response::HTTP_CREATED,'Specialist created');
+        return $this->success(
+            SpecialistResource::make(
+                $this->service->create($request->toArray())
+            ),
+            Response::HTTP_CREATED,'Specialist created');
     }
 
     public function get(GetSpecialistRequest $request)
@@ -57,7 +61,8 @@ class SpecialistController extends Controller
         }
 
         return $this->success(
-            $this->service->update($request->validated())
+            $this->service->update($request->validated()),
+            Response::HTTP_OK
         );
     }
 

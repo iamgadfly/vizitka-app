@@ -7,10 +7,10 @@ trait JsonResponsive
     protected function success(mixed $data, int $code = 200, string $message = null): \Illuminate\Http\JsonResponse
     {
         $response = [
-            'status' => 'Success',
-            'data' => $data
+            'status' => 'Success'
         ];
 
+        if (!is_null($data)) $response['data'] = $data;
         if (!is_null($message)) $response['message'] = $message;
 
         return response()->json($response, $code);

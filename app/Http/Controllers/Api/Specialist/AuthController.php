@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Specialist;
+namespace App\Http\Controllers\Api\Specialist;
 
 use App\Http\Controllers\Api\AuthController as BaseAuthController;
 use App\Http\Requests\SetPinRequest;
@@ -9,6 +9,7 @@ use App\Services\SMSService;
 use App\Services\UserService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
+use function auth;
 
 class AuthController extends BaseAuthController
 {
@@ -21,15 +22,15 @@ class AuthController extends BaseAuthController
     {
         $user = $this->service->searchByPhoneNumber($request->phone_number);
         if (!$user) {
-            return $this->error('Invalid login', 401);
+            return $this->error('Invalid login', Response::HTTP_UNAUTHORIZED);
         }
 
         if (is_null($user->phone_number_verified_at)) {
-            return $this->error('User is not verified ', 401);
+            return $this->error('User is not verified ', Response::HTTP_UNAUTHORIZED);
         }
 
         if (!$this->attempt($user, $request->pin)) {
-            return $this->error('PIN is invalid', 401);
+            return $this->error('PIN is invalid', Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->success(
@@ -43,7 +44,7 @@ class AuthController extends BaseAuthController
     {
         $user = auth()->user();
         if (is_null($user)) {
-            return $this->error('Unauthorized', 401);
+            return $this->error('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
         $user->pin = $request->pin;
         $user->save();

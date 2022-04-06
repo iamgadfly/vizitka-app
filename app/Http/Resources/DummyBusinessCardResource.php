@@ -6,9 +6,8 @@ use App\Helpers\CardBackgroundHelper;
 use App\Helpers\ImageHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BusinessCardResource extends JsonResource
+class DummyBusinessCardResource extends JsonResource
 {
-    public static $wrap = null;
     /**
      * Transform the resource into an array.
      *
@@ -19,15 +18,13 @@ class BusinessCardResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'avatar' => ImageResource::make($this->avatar),
             'title' => $this->title,
-            'about' => $this->about,
-            'address' => $this->address,
-            'placement' => $this->placement,
-            'floor' => $this->floor,
             'background_image' => ImageHelper::getAssetFromFilename(
-                $this->background_image
+                CardBackgroundHelper::filenameFromActivityKind('default')
             ),
-            'specialist' => SpecialistResource::make($this->specialist)
         ];
     }
 }

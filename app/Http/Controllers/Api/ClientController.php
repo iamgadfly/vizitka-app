@@ -31,7 +31,7 @@ class ClientController extends Controller
         }
 
         return $this->success(
-            $this->service->create($request->toArray()),
+            ClientResource::make($this->service->create($request->toArray())),
             Response::HTTP_CREATED ,
             'Client created'
         );

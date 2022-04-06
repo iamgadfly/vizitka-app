@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Specialist;
+namespace App\Http\Controllers\Api\Specialist;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BusinessCardCreateRequest;
@@ -26,7 +26,8 @@ class BusinessCardController extends Controller
     public function update(BusinessCardCreateRequest $request)
     {
         return $this->success(
-            $this->service->update($request->validated())
+            $this->service->update($request->validated()),
+            Response::HTTP_OK
         );
     }
 }

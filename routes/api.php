@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\GeocoderController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\MiscController;
+use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
+use App\Http\Controllers\Api\Specialist\BusinessCardController;
 use App\Http\Controllers\Api\SpecialistController;
-use App\Http\Controllers\Client\AuthController as ClientAuthController;
-use App\Http\Controllers\Specialist\AuthController as SpecialistAuthController;
-use App\Http\Controllers\Specialist\BusinessCardController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -122,6 +124,30 @@ Route::controller(ClientController::class)
 
     Route::get('profile', 'me')
         ->name('client.me');
+});
+
+Route::controller(DummyBusinessCardController::class)
+    ->prefix('client/card')
+    ->middleware('auth:sanctum')->group(function() {
+
+    Route::get('{id}', 'get')
+        ->name('client.card.get');
+
+    Route::post('', 'create')
+        ->name('client.card.create');
+
+    Route::put('{id}', 'update')
+        ->name('client.card.update');
+
+    Route::delete('{id}', 'delete')
+        ->name('client.card.delete');
+});
+
+// Misc Routes
+
+Route::controller(MiscController::class)->group(function () {
+    Route::get('/getCountries', 'getCountries')
+        ->name('misc.countries');
 });
 
 Route::post('/geocode', [GeocoderController::class, 'geocode']);
