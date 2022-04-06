@@ -1,0 +1,27 @@
+before_script:
+    - env | sort
+
+
+.deploy:
+  stage: deploy
+  script:
+    - sudo rsync -a --delete /opt/vizitka/storage /tmp
+    - sudo rm -rf /opt/vizitka
+    - sudo rm -rf .git
+    - sudo mkdir -p /opt/vizitka
+    - sudo cp -rf . /opt/vizitka
+    - sudo rsync -a /tmp/storage/. /opt/vizitka/storage/
+    - sudo cp .env.${ENV} /opt/vizitka/.env
+    - cd /opt/vizitka
+    - sudo chown -R 1000:1000 /opt/vizitka
+    - docker-compose -f docker-compose-server.yml up -d --build --force-recreate
+    - echo 'Successfully deploy'
+
+deploy_dev:
+  extends: .deploy
+  variables:
+    ENV: dev
+  tags:
+    - viz-dev-shell
+  # only:
+  #   - develop
