@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: viz
+        uid: 1000
+      context: ./
+      dockerfile: .docker/nginx/Dockerfile
+    image: app
+    container_name: app
+    restart: unless-stopped
+    working_dir: /var/www/
+    environment:
+      - DB_HOST=postgres
+    volumes:
+      - ./:/var/www
+    networks:
+      - viz-net
+    ports:
+      - 127.0.0.1:9000:9000
+    links:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:14.2-bullseye
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: viz
+    networks:
+      - viz-net
+    restart: unless-stopped
+    volumes:
+      - vizitka-back-db:/var/lib/postgresql/data
+
+
+networks:
+  viz-net:
+    driver: bridge
+volumes:
+  vizitka-back-db:
