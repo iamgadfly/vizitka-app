@@ -10,11 +10,11 @@ services:
     image: app
     container_name: app
     restart: unless-stopped
-    working_dir: /var/www/
+    working_dir: /opt/vizitka
     environment:
       - DB_HOST=postgres
     volumes:
-      - ./:/var/www
+      - ./:/opt/vizitka
     networks:
       - viz-net
     ports:
