@@ -150,6 +150,4 @@ Route::controller(MiscController::class)->group(function () {
         ->name('misc.countries');
 });
 
-Route::post('/geocode', [GeocoderController::class, 'geocode']);
-
 Route::post('/test', [TestController::class, 'test']);
