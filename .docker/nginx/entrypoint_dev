@@ -7,7 +7,8 @@ done
 
 >&2 echo "Database is up - executing command"
 
-
+>&2 echo --- composer auth config ---
+composer config http-basic.nova.laravel.com admin@vizitka.bz mtDM9TlJgNdBqG9H
 >&2 echo --- composer install ---
 composer install
 >&2 echo --- php artisan key:generate ---
