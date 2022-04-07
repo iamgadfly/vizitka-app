@@ -28,7 +28,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: viz
+      POSTGRES_DB: vizitka
     networks:
       - viz-net
     restart: unless-stopped
