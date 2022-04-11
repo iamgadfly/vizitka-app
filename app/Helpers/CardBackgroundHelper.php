@@ -27,7 +27,7 @@ class CardBackgroundHelper
     public static function filenameFromActivityKind(string $activityKind): ?string
     {
         if (in_array($activityKind, self::$files)) {
-            return self::$imagePath . $activityKind . '.svg';
+            return self::$imagePath . $activityKind . '.png';
         }
 
         return null;
