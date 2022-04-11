@@ -22,7 +22,7 @@ php artisan migrate
 #>&2 echo --- php artisan schedule:run ---
 #php artisan schedule:run
 >&2 echo --- move images ---
-mkdir -p storage/images/cards_backgrounds
+mkdir -p storage/app/public/images/card_backgrounds/
 mv resources/images/* storage/app/public/images/card_backgrounds/
 
 # first arg is `-f` or `--some-option`
