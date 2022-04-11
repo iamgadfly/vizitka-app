@@ -36,7 +36,10 @@ class CardBackgroundHelper
     public static function getAll(): Collection
     {
         return collect(Storage::disk('public')->files('/images/card_backgrounds'))->map(function ($file) {
-            return [str(basename($file))->explode('.')[0] => self::getAssetFromFilename($file)];
+            return [
+                'name' => str(basename($file))->explode('.')[0],
+                'url' => self::getAssetFromFilename($file)
+            ];
         });
     }
 }

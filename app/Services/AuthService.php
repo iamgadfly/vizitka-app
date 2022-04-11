@@ -31,7 +31,7 @@ class AuthService
      * @throws UserAlreadyVerifiedException
      * @throws VerificationCodeIsntValidException
      */
-    public function verification(string $phoneNumber, string $verificationCode)
+    public function verification(string $phoneNumber, string $verificationCode): string
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new UserNotFoundException;
 
