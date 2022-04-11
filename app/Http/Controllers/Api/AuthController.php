@@ -18,7 +18,6 @@ use Illuminate\Http\JsonResponse;
 use Nette\Utils\Random;
 use Symfony\Component\HttpFoundation\Response;
 use function auth;
-use function str;
 
 class AuthController extends Controller
 {
@@ -39,7 +38,7 @@ class AuthController extends Controller
 
         return $this->success(
             $token,
-            \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+            Response::HTTP_OK,
             'User is verified',
         );
     }
@@ -61,6 +60,8 @@ class AuthController extends Controller
 
         $this->SMSService->sendSms("Your verification code: $user->verification_code", $request->phone_number);
 
-        return $this->success(null, Response::HTTP_CREATED ,'Verification code sent');
+        return $this->success([
+            'code' => $user->verification_code
+        ], Response::HTTP_CREATED ,'Verification code sent');
     }
 }

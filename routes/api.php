@@ -150,6 +150,9 @@ Route::controller(DummyBusinessCardController::class)
 Route::controller(MiscController::class)->group(function () {
     Route::get('/getCountries', 'getCountries')
         ->name('misc.countries');
+
+    Route::get('/getBackgrounds', 'getBackgrounds')
+        ->name('misc.backgrounds');
 });
 
 Route::post('/test', [TestController::class, 'test']);

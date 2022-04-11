@@ -2,15 +2,17 @@
 
 namespace App\Services;
 
+use App\Helpers\CardBackgroundHelper;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Collection;
 
 class MiscService
 {
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getCountries()
+    public function getCountries(): array
     {
         $cache = \Cache::get('countries');
 
@@ -47,5 +49,10 @@ class MiscService
         \Cache::put('countries', json_encode($output), Carbon::now()->addMonth());
 
         return $output;
+    }
+
+    public function getBackgrounds(): Collection
+    {
+        return CardBackgroundHelper::getAll();
     }
 }
