@@ -34,9 +34,7 @@ class SpecialistController extends Controller
         $request->merge(['background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image)]);
 
         return $this->success(
-            SpecialistResource::make(
-                $this->service->create($request->toArray())
-            ),
+            $this->service->create($request->toArray()),
             Response::HTTP_CREATED,'Specialist created');
     }
 
@@ -50,10 +48,7 @@ class SpecialistController extends Controller
 
     public function update(CreateSpecialistRequest $request)
     {
-        if (
-            !is_null($request->avatar_id)
-            && !is_null($this->service->getMe()->avatar_id)
-        ) {
+        if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
                 $this->service->getMe()->avatar_id
             );

@@ -11,12 +11,4 @@ class BusinessCardRepository extends Repository
     {
         parent::__construct($model);
     }
-
-    public function getCardInfo(): array
-    {
-        $card = null;
-        return [
-
-        ];
-    }
 }

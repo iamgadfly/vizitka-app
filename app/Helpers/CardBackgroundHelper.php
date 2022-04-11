@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class CardBackgroundHelper
@@ -23,7 +24,7 @@ class CardBackgroundHelper
         return asset(Storage::url($filename));
     }
 
-    public static function filenameFromActivityKind(string $activityKind): string|null
+    public static function filenameFromActivityKind(string $activityKind): ?string
     {
         if (in_array($activityKind, self::$files)) {
             return self::$imagePath . $activityKind . '.svg';
@@ -32,7 +33,7 @@ class CardBackgroundHelper
         return null;
     }
 
-    public static function getAll(): \Illuminate\Support\Collection
+    public static function getAll(): Collection
     {
         return collect(Storage::disk('public')->files('/images/card_backgrounds'))->map(function ($file) {
             return self::getAssetFromFilename($file);

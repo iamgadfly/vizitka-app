@@ -9,6 +9,8 @@ class BusinessCardHolder extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function client(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Client::class, 'client_id', 'id');

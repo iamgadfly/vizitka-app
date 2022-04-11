@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\UserPinException;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Nette\Utils\Random;
 
 class UserService
 {
@@ -14,6 +15,7 @@ class UserService
 
     public function create(array $data)
     {
+        $data['verification_code'] = Random::generate(4, '0-9');
         return $this->repository->create($data);
     }
 

@@ -20,7 +20,7 @@ class DummyBusinessCardResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
-            'avatar' => ImageResource::make($this->avatar),
+            'avatar' => ImageResource::make($this?->avatar),
             'title' => $this->title,
             'background_image' => ImageHelper::getAssetFromFilename(
                 CardBackgroundHelper::filenameFromActivityKind('default')

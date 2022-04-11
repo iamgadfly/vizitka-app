@@ -30,7 +30,7 @@ class MiscService
         foreach ($body as $item) {
             $country = [
                 'name' => $item->translations->rus->common,
-                'flag' => $item->flags->svg,
+                'flag' => $item->flags->png,
             ];
             if (count((array) $item->idd) > 0) {
                 if (count($item->idd->suffixes) > 1) {

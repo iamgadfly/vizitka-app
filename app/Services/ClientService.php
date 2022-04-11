@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\UserNotFoundException;
 use App\Repositories\ClientRepository;
 use App\Repositories\UserRepository;
 
@@ -35,8 +36,11 @@ class ClientService
         return $this->repository->getById($id);
     }
 
+    /**
+     * @throws UserNotFoundException
+     */
     public function getMe()
     {
-        return $this->getClientData(null);
+        return $this->getClientData(null) ?? throw new UserNotFoundException;
     }
 }
