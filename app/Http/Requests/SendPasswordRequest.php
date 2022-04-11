@@ -24,8 +24,8 @@ class SendPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|string|exists:users',
-            'pin' => 'required|string|size:4'
+            'phone_number' => 'required|string|exists:users|bail',
+            'pin' => 'required|string|size:4|bail'
         ];
     }
 }

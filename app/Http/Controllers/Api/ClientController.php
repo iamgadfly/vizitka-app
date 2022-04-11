@@ -31,7 +31,7 @@ class ClientController extends Controller
         }
 
         return $this->success(
-            ClientResource::make($this->service->create($request->toArray())),
+            $this->service->create($request->toArray()),
             Response::HTTP_CREATED ,
             'Client created'
         );
@@ -39,10 +39,7 @@ class ClientController extends Controller
 
     public function update(CreateClientRequest $request)
     {
-        if (
-            !is_null($request->avatar_id)
-            && !is_null($this->service->getMe()->avatar_id)
-        ) {
+        if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
                 $this->service->getMe()->avatar_id
             );

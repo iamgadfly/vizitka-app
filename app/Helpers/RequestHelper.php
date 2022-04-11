@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use Axiom\Rules\TelephoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,108 +9,98 @@ class RequestHelper
 {
     public static function getDummyBusinessCardRules(FormRequest $request): array
     {
+        $rules = [
+            'client_id' => ['exists:clients,id'],
+            'name' => ['string'],
+            'surname' => ['string'],
+            'title' => ['string'],
+            'about' => ['string'],
+            'avatar_id' => ['exists:images,id'],
+            'phone_number' => ['string|min:8|max:16']
+        ];
         if ($request->method() == 'POST') {
-            return [
-                'client_id' => 'required|exists:clients,id',
-                'name' => 'required|string',
-                'surname' => 'required|string',
-                'title' => 'required|string',
-                'about' => 'string',
-                'avatar_id' => 'exists:images,id',
-                'phone_number' => 'required|string|min:8|max:16'
-            ];
+            $rules['client_id'][] = 'required';
+            $rules['name'][] = 'required';
+            $rules['surname'][] = 'required';
+            $rules['title'][] = 'required';
+            $rules['phone_number'][] = 'required';
         } elseif ($request->method() == 'PUT') {
-            return [
-                'id' => 'required|exists:dummy_business_cards,id',
-                'name' => 'string',
-                'surname' => 'string',
-                'title' => 'string',
-                'about' => 'string',
-                'avatar_id' => 'exists:images,id',
-                'phone_number' => 'string|min:8|max:16'
+            $rules['id'] = ['required', 'exists:dummy_business_cards,id'];
+        } else {
+            $rules = [
+                'id' => ['required', 'exists:dummy_business_cards,id']
             ];
         }
-        return [
-            'id' => 'required|exists:dummy_business_cards,id'
-        ];
+
+        return $rules;
     }
 
     public static function getBusinessCardHolderRules(FormRequest $request): array
     {
         // TODO: implement this
-        return [
-        ];
+        return [];
     }
 
     public static function getClientRules(FormRequest $request): array
     {
+        $rules = [
+            'user_id' => ['int', 'exists:users,id'],
+            'name' => ['string', 'max:255'],
+            'surname' => ['string', 'max:255'],
+            'avatar_id' => ['exists:images,id']
+        ];
         if ($request->method() == 'POST') {
-            return [
-                'user_id' => 'required|int|exists:users,id',
-                'name' => 'required|string|max:255',
-                'surname' => 'required|string|max:255',
-                'avatar_id' => 'exists:images,id'
-            ];
+            $rules['user_id'][] = 'required';
+            $rules['name'][] = 'required';
+            $rules['surname'][] = 'required';
+        } else {
+            $rules['id'] = ['required','int', 'exists:clients,id'];
         }
 
-        return [
-            'id' => 'required|int|exists:clients,id',
-            'name' => 'string|max:255',
-            'surname' => 'string|max:255',
-            'avatar_id' => 'exists:images,id'
-        ];
+        return $rules;
     }
 
     public static function getBusinessCardRules(FormRequest $request): array
     {
-        if ($request->method() == 'POST') {
-            return [
-                'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
-            ];
-        }
-        return [
-            'id' => 'required|exists:business_cards,id',
+        $rules = [
             'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
         ];
+        if ($request->method() != 'POST') {
+            $rules['id'] = ['required', 'exists:business_cards,id'];
+        }
+        return $rules;
     }
 
     public static function getSpecialistCreateOrUpdateRules(FormRequest $request): array
     {
-        if ($request->method() == 'POST') {
-            return [
-                'user_id' => 'required|int|exists:users,id',
-                'name' => 'required|string|max:255',
-                'surname' => 'required|string|max:255',
-                'avatar_id' => 'exists:images,id',
-                'activity_kind_id' => 'required|int|exists:activity_kinds,id',
-                'title' => 'required|string',
-                'about' => 'required|string',
-                'address' => 'required|string',
-                'placement' => 'string',
-                'floor' => 'string',
-                'instagram_account' => 'string',
-                'youtube_account' => 'string',
-                'vk_account' => 'string',
-                'tiktok_account' => 'string',
-                'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
-            ];
-        }
-        return [
-            'id' => 'required|exists:specialists,id',
-            'name' => 'string|max:255',
-            'surname' => 'string|max:255',
-            'avatar_id' => 'exists:images,id',
-            'activity_kind_id' => 'int|exists:activity_kinds,id',
-            'title' => 'string',
-            'about' => 'string',
-            'address' => 'string',
-            'placement' => 'string',
-            'floor' => 'string',
-            'instagram_account' => 'string',
-            'youtube_account' => 'string',
-            'vk_account' => 'string',
-            'tiktok_account' => 'string',
+        $rules = [
+            'user_id' => ['int', 'exists:users,id'],
+            'name' => ['string', 'max:255'],
+            'surname' => ['string', 'max:255'],
+            'avatar_id' => ['exists:images,id'],
+            'activity_kind_id' => ['int', 'exists:activity_kinds,id'],
+            'title' => ['string'],
+            'about' => ['string'],
+            'address' => ['string'],
+            'placement' => ['string'],
+            'floor' => ['string'],
+            'instagram_account' => ['string'],
+            'youtube_account' => ['string'],
+            'vk_account' => ['string'],
+            'tiktok_account' => ['string'],
             'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
         ];
+        if ($request->method() == 'POST') {
+            $rules['user_id'][] = 'required';
+            $rules['name'][] = 'required';
+            $rules['surname'][] = 'required';
+            $rules['activity_kind_id'][] = 'required';
+            $rules['title'][] = 'required';
+            $rules['about'][] = 'required';
+            $rules['address'][] = 'required';
+        } else {
+            $rules['id'] = ['required', 'exists:specialists,id'];
+        }
+        return $rules;
     }
 }

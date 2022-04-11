@@ -17,7 +17,6 @@ class SpecialistSeeder extends Seeder
     {
         DB::table('specialists')->insert([
            [
-               'id' => 1,
                'user_id' => 1,
                'name' => 'Николай',
                'surname' => 'Семеновский',

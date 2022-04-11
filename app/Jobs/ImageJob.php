@@ -37,7 +37,7 @@ class ImageJob implements ShouldQueue
         $nowDate = Carbon::now();
         foreach ($images as $image) {
             if ($image->deleted_at <= $nowDate) {
-                \Storage::disk('public')->delete($images->url);
+                \Storage::disk('public')->delete($image->url);
                 $image->delete();
             }
         }

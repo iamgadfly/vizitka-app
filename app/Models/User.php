@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'pin',
         'phone_number',
+        'verification_code'
     ];
 
     /**

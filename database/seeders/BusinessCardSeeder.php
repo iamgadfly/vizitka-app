@@ -17,7 +17,6 @@ class BusinessCardSeeder extends Seeder
     {
         DB::table('business_cards')->insert([
            [
-               'id' => 1,
                'specialist_id' => 1,
                'title' => 'Backend developer',
                'about' => 'PHP/Laravel backend developer',

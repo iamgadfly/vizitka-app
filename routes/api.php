@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
-use App\Http\Controllers\Api\GeocoderController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\MiscController;
 use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
@@ -30,8 +29,8 @@ Route::controller(SpecialistAuthController::class)
     Route::post('signup', 'signup')
         ->name('specialist.auth.signup');
 
-    Route::post('signin', 'signin')
-        ->name('specialist.auth.signin');
+    Route::post('signin', 'signIn')
+        ->name('specialist.auth.signIn');
 
     Route::post('setPin', 'setPin')
         ->middleware('auth:sanctum')
@@ -52,8 +51,8 @@ Route::controller(ClientAuthController::class)
         Route::post('signup', 'signup')
             ->name('client.auth.signup');
 
-        Route::post('signin', 'signin')
-            ->name('client.auth.signin');
+        Route::post('signin', 'signIn')
+            ->name('client.auth.signIn');
 
         Route::post('sendPassword', 'sendPassword')
             ->name('client.auth.sendPassword');
@@ -121,6 +120,9 @@ Route::controller(ClientController::class)
 
     Route::get('profile/{id}', 'get')
         ->name('client.get');
+
+        Route::put('profile/{id}', 'update')
+            ->name('client.update');
 
     Route::get('profile', 'me')
         ->name('client.me');
