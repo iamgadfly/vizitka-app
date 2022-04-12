@@ -20,6 +20,12 @@ class CardBackgroundHelper
     ];
 
     private static $colors = [
+        'default' => [
+            'title' => '#FFFFFF',
+            'name' => '#FFFFFF',
+            'description' => '#FFFFFF',
+            'icons' => '#1C7F9E'
+        ],
         'barber' => [
             'title' => '#FFFFFF',
             'name' => '#FFFFFF',
@@ -137,13 +143,13 @@ class CardBackgroundHelper
         return collect(Storage::disk('public')->files('/images/card_backgrounds'))->map(function ($file) {
             $name = str(basename($file))->explode('.')[0];
 
-            if ($name == 'default') return;
-
             return [
                 'name' => $name,
                 'colors' => self::$colors[$name],
                 'url' => self::getAssetFromFilename($file)
             ];
-        });
+        })->reject(function ($element) {
+            return $element['name'] == 'default';
+        })->values();
     }
 }
