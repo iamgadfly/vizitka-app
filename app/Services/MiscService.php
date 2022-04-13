@@ -3,9 +3,13 @@
 namespace App\Services;
 
 use App\Helpers\CardBackgroundHelper;
+use App\Http\Resources\OnboardingResource;
+use App\Models\Onboarding;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class MiscService
 {
@@ -54,5 +58,10 @@ class MiscService
     public function getBackgrounds(): Collection
     {
         return CardBackgroundHelper::getAll();
+    }
+
+    public function getOnboardings(): AnonymousResourceCollection
+    {
+        return OnboardingResource::collection(Onboarding::all());
     }
 }
