@@ -153,6 +153,9 @@ Route::controller(MiscController::class)->group(function () {
 
     Route::get('/getBackgrounds', 'getBackgrounds')
         ->name('misc.backgrounds');
+
+    Route::get('/getOnboardings', 'getOnboardings')
+        ->name('misc.onboardings');
 });
 
 Route::post('/test', [TestController::class, 'test']);

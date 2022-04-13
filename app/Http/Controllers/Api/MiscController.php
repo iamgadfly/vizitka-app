@@ -30,4 +30,11 @@ class MiscController extends Controller
             $this->service->getBackgrounds()
         );
     }
+
+    public function getOnboardings(): JsonResponse
+    {
+        return $this->success(
+            $this->service->getOnboardings()
+        );
+    }
 }

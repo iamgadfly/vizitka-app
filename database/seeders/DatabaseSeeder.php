@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ClientSeeder::class,
             SpecialistSeeder::class,
-            BusinessCardSeeder::class
+            BusinessCardSeeder::class,
+            OnboardingSeeder::class
         ]);
     }
 }
