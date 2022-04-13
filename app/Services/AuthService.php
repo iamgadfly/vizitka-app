@@ -69,7 +69,7 @@ class AuthService
             \Cache::put("User#$user->id", 1, 15 * 60);
         }
         try {
-            $this->SMSService->sendSms("Your password: $verification_code", $phone_number);
+            $this->SMSService->sendSms("Ваш пароль: $verification_code", $phone_number);
         } catch (SMSNotSentException $e) {
             throw new SMSNotSentException;
         }
