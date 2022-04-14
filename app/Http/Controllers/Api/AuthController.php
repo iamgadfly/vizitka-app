@@ -7,6 +7,7 @@ use App\Exceptions\UserAlreadyVerifiedException;
 use App\Exceptions\UserNotFoundException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\IsUserExistsRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\VerificationRequest;
 use App\Services\AuthService;
@@ -26,6 +27,13 @@ class AuthController extends Controller
         protected AuthService $authService,
         protected SMSService $SMSService
     ) {}
+
+    public function isUserExists(IsUserExistsRequest $request)
+    {
+        return $this->success(
+            $this->authService->isUserExists($request->phone_number)
+        );
+    }
 
     /**
      * @throws UserAlreadyVerifiedException

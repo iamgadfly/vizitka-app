@@ -18,6 +18,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Nette\Utils\Random;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthService
 {
@@ -25,6 +26,16 @@ class AuthService
         protected SMSService $SMSService,
         protected UserService $service
     ){}
+
+    public function isUserExists(string $phoneNumber)
+    {
+        try {
+            $user = $this->service->searchByPhoneNumber($phoneNumber);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 
     /**
      * @throws UserNotFoundException
