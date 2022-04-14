@@ -9,6 +9,7 @@ use App\Http\Requests\Specialist\CreateSpecialistRequest;
 use App\Http\Resources\SpecialistResource;
 use App\Services\ImageService;
 use App\Services\SpecialistService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpecialistController extends Controller
@@ -18,7 +19,7 @@ class SpecialistController extends Controller
         protected ImageService $imageService
     ) {}
 
-    public function create(CreateSpecialistRequest $request)
+    public function create(CreateSpecialistRequest $request): JsonResponse
     {
         $specialist = $this->service->findByUserId($request->user_id);
 
@@ -38,7 +39,7 @@ class SpecialistController extends Controller
             Response::HTTP_CREATED,'Specialist created');
     }
 
-    public function get(GetSpecialistRequest $request)
+    public function get(GetSpecialistRequest $request): JsonResponse
     {
         return $this->success(
             SpecialistResource::make($this->service->getSpecialistData($request->id)),
@@ -46,7 +47,7 @@ class SpecialistController extends Controller
         );
     }
 
-    public function update(CreateSpecialistRequest $request)
+    public function update(CreateSpecialistRequest $request): JsonResponse
     {
         if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
@@ -61,7 +62,7 @@ class SpecialistController extends Controller
         );
     }
 
-    public function me()
+    public function me(): JsonResponse
     {
         return $this->success(
             SpecialistResource::make($this->service->getMe()),

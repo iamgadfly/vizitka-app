@@ -8,6 +8,7 @@ use App\Http\Requests\GetClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Services\ClientService;
 use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ClientController extends Controller
@@ -17,7 +18,7 @@ class ClientController extends Controller
         protected ImageService $imageService
     ) {}
 
-    public function create(CreateClientRequest $request)
+    public function create(CreateClientRequest $request): JsonResponse
     {
         $client = $this->service->findByUserId($request->user_id);
 
@@ -37,7 +38,7 @@ class ClientController extends Controller
         );
     }
 
-    public function update(CreateClientRequest $request)
+    public function update(CreateClientRequest $request): JsonResponse
     {
         if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
@@ -51,7 +52,7 @@ class ClientController extends Controller
         );
     }
 
-    public function get(GetClientRequest $request)
+    public function get(GetClientRequest $request): JsonResponse
     {
         return $this->success(
             ClientResource::make($this->service->getClientData($request->id)),
@@ -59,7 +60,7 @@ class ClientController extends Controller
         );
     }
 
-    public function me()
+    public function me(): JsonResponse
     {
         return $this->success(
             ClientResource::make($this->service->getMe()),

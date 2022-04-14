@@ -2,9 +2,11 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\JsonResponse;
+
 trait JsonResponsive
 {
-    protected function success(mixed $data, int $code = 200, string $message = null): \Illuminate\Http\JsonResponse
+    protected function success(mixed $data, int $code = 200, string $message = null): JsonResponse
     {
         $response = [
             'status' => 'Success'
@@ -16,7 +18,7 @@ trait JsonResponsive
         return response()->json($response, $code);
     }
 
-    protected function error(string $message, int $code): \Illuminate\Http\JsonResponse
+    protected function error(string $message, int $code): JsonResponse
     {
         return response()->json([
             'status' => 'Error',

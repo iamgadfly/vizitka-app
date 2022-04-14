@@ -27,7 +27,7 @@ class AuthService
         protected UserService $service
     ){}
 
-    public function isUserExists(string $phoneNumber)
+    public function isUserExists(string $phoneNumber): bool
     {
         try {
             $user = $this->service->searchByPhoneNumber($phoneNumber);
@@ -65,7 +65,7 @@ class AuthService
      * @throws TooManyLoginAttemptsException
      * @throws GuzzleException
      */
-    public function sendSmsPassword(string $phoneNumber)
+    public function sendSmsPassword(string $phoneNumber): void
     {
         $user = $this->service->searchByPhoneNumberNotNull($phoneNumber);
         if (\Cache::get("User#$user->id") > 10) {
@@ -94,7 +94,7 @@ class AuthService
      * @throws UserNotVerifiedException
      * @throws InvalidPasswordException
      */
-    public function clientSignIn(string $phoneNumber, string $password)
+    public function clientSignIn(string $phoneNumber, string $password): string
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
 
@@ -111,7 +111,7 @@ class AuthService
     /**
      * @throws UnauthorizedException
      */
-    public function specialistSetPin(?User $user, string $pin)
+    public function specialistSetPin(?User $user, string $pin): void
     {
         $user ?? throw new UnauthorizedException;
 
@@ -124,7 +124,7 @@ class AuthService
      * @throws UserNotVerifiedException
      * @throws UserPinException
      */
-    public function specialistSignIn(string $phoneNumber, string $pin)
+    public function specialistSignIn(string $phoneNumber, string $pin): string
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
 

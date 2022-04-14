@@ -7,8 +7,14 @@ use Illuminate\Support\Facades\Storage;
 
 class CardBackgroundHelper
 {
+    /**
+     * @var string
+     */
     private static $imagePath = 'images/card_backgrounds/';
 
+    /**
+     * @var array<string>
+     */
     public static $files = [
         'barber', 'hairdresser_1', 'hairdresser_2',
         'manicure_1', 'manicure_2', 'default',
@@ -19,6 +25,9 @@ class CardBackgroundHelper
         'resnizi', 'visagiste', 'browist'
     ];
 
+    /**
+     * @var array<array<string>>
+     */
     private static $colors = [
         'default' => [
             'title' => '#FFFFFF',

@@ -8,6 +8,7 @@ use App\Http\Requests\Image\GetImageRequest;
 use App\Http\Requests\Image\UploadImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -17,7 +18,7 @@ class ImageController extends Controller
         protected ImageService $service
     ) {}
 
-    public function upload(UploadImageRequest $request)
+    public function upload(UploadImageRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->create($request->image),
@@ -25,14 +26,14 @@ class ImageController extends Controller
         );
     }
 
-    public function delete(DeleteImageRequest $request)
+    public function delete(DeleteImageRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->delete($request->id)
         );
     }
 
-    public function get(GetImageRequest $request)
+    public function get(GetImageRequest $request): JsonResponse
     {
         return $this->success(
             ImageResource::make($this->service->get($request->id))
