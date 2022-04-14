@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
@@ -159,3 +160,5 @@ Route::controller(MiscController::class)->group(function () {
 });
 
 Route::post('/test', [TestController::class, 'test']);
+
+Route::get('/isUserExists', [AuthController::class, 'isUserExists']);
