@@ -28,10 +28,11 @@ class AuthController extends Controller
         protected SMSService $SMSService
     ) {}
 
-    public function isUserExists(IsUserExistsRequest $request)
+    public function isUserExists(IsUserExistsRequest $request): JsonResponse
     {
         return $this->success(
-            $this->authService->isUserExists($request->phone_number)
+            $this->authService->isUserExists($request->phone_number),
+            Response::HTTP_OK
         );
     }
 
@@ -51,7 +52,7 @@ class AuthController extends Controller
         );
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 

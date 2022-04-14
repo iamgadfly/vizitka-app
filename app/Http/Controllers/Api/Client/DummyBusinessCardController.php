@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DummyBusinessCardRequest;
 use App\Http\Resources\DummyBusinessCardResource;
 use App\Services\DummyBusinessCardService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,7 +16,7 @@ class DummyBusinessCardController extends Controller
         protected DummyBusinessCardService $service
     ){}
 
-    public function create(DummyBusinessCardRequest $request)
+    public function create(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->create($request->validated()),
@@ -23,7 +24,7 @@ class DummyBusinessCardController extends Controller
         );
     }
 
-    public function update(DummyBusinessCardRequest $request)
+    public function update(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->update($request->validated()),
@@ -31,7 +32,7 @@ class DummyBusinessCardController extends Controller
         );
     }
 
-    public function delete(DummyBusinessCardRequest $request)
+    public function delete(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->delete($request->id),
@@ -39,7 +40,7 @@ class DummyBusinessCardController extends Controller
         );
     }
 
-    public function get(DummyBusinessCardRequest $request)
+    public function get(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             DummyBusinessCardResource::make(

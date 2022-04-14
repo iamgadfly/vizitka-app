@@ -11,7 +11,7 @@ class ImageRepository extends Repository
         parent::__construct($model);
     }
 
-    public function getByUrl(string $url)
+    public function getByUrl(string $url): Image
     {
         return $this->model->where('url', $url)->first();
     }

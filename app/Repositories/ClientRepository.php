@@ -12,7 +12,7 @@ class ClientRepository extends Repository
         parent::__construct($model);
     }
 
-    public function findByUserId($id)
+    public function findByUserId($id): Client
     {
         return $this->model::where('user_id', $id)->first();
     }

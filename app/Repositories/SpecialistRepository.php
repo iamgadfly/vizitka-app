@@ -12,7 +12,7 @@ class SpecialistRepository extends Repository
         parent::__construct($model);
     }
 
-    public function findByUserId($id)
+    public function findByUserId($id): Specialist
     {
         return $this->model::where('user_id', $id)->first();
     }

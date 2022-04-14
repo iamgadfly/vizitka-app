@@ -12,13 +12,13 @@ class UserRepository extends Repository
         parent::__construct($model);
     }
 
-    public function searchByPhoneNumberNotNull(string $number)
+    public function searchByPhoneNumberNotNull(string $number): User
     {
         return $this->model::where('phone_number', $number)
             ->whereNotNull('phone_number_verified_at')->firstOrFail();
     }
 
-    public function searchByPhoneNumber(string $number)
+    public function searchByPhoneNumber(string $number): User
     {
         return $this->model::where('phone_number', $number)->firstOrFail();
     }
