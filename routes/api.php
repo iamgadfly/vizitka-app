@@ -161,4 +161,4 @@ Route::controller(MiscController::class)->group(function () {
 
 Route::post('/test', [TestController::class, 'test']);
 
-Route::get('/isUserExists', [AuthController::class, 'isUserExists']);
+Route::post('/isUserExists', [AuthController::class, 'isUserExists']);
