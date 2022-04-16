@@ -15,6 +15,6 @@ class TestController extends Controller
 {
     public function test()
     {
-        return ImageHelper::getAssetFromFilename('images/card_backgrounds/test.svg');
+        \Artisan::call('migrate:refresh --seed');
     }
 }
