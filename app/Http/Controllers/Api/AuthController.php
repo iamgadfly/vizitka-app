@@ -55,7 +55,7 @@ class AuthController extends Controller
     public function resendSms(SignUpRequest $request): JsonResponse
     {
         return $this->success(
-            $this->authService->resendSms($request->phone_number);
+            $this->authService->resendSms($request->phone_number)
         );
     }
 
