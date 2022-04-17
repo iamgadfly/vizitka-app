@@ -52,6 +52,13 @@ class AuthController extends Controller
         );
     }
 
+    public function resendSms(SignUpRequest $request): JsonResponse
+    {
+        return $this->success(
+            $this->authService->resendSms($request->phone_number);
+        );
+    }
+
     public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();

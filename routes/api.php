@@ -162,3 +162,4 @@ Route::controller(MiscController::class)->group(function () {
 Route::post('/test', [TestController::class, 'test']);
 
 Route::post('/isUserExists', [AuthController::class, 'isUserExists']);
+Route::post('/resendSms', [AuthController::class, 'resendSms']);

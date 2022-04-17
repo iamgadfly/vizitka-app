@@ -37,6 +37,22 @@ class AuthService
         }
     }
 
+    public function resendSms(string $phoneNumber)
+    {
+        $user = $this->service->searchByPhoneNumberNotNull($phoneNumber);
+
+        $verification_code = Random::generate(4, '0-9');
+
+        try {
+            $this->SMSService->sendSms("Код верификации: $verification_code", $phoneNumber);
+        } catch (SMSNotSentException $e) {
+            throw new SMSNotSentException;
+        }
+
+        $user->verification_code = $verification_code;
+        $user->save();
+    }
+
     /**
      * @throws UserNotFoundException
      * @throws UserAlreadyVerifiedException
