@@ -18,8 +18,11 @@ class UserRepository extends Repository
             ->whereNotNull('phone_number_verified_at')->firstOrFail();
     }
 
-    public function searchByPhoneNumber(string $number): User
+        public function searchByPhoneNumber(string $number, bool $verified = true): User
     {
-        return $this->model::where('phone_number', $number)->firstOrFail();
+        return $this->model::where([
+            'phone_number' => $number,
+            'is_verified' => $verified
+        ])->firstOrFail();
     }
 }
