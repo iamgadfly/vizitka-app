@@ -25,7 +25,7 @@ class SignUpRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => ['required', 'string', 'max:15', new IsntVerifiedUser],
+            'phone_number' => ['required', 'string', 'max:15'],
         ];
     }
 
