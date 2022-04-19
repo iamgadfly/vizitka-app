@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\IsntVerifiedUser;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SignUpRequest extends FormRequest
@@ -24,7 +25,7 @@ class SignUpRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|string|max:15|unique:users',
+            'phone_number' => ['required', 'string', 'max:15', new IsntVerifiedUser],
         ];
     }
 

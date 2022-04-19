@@ -22,7 +22,9 @@ class Repository
 
     public function create(array $data)
     {
-        return $this->model::create($data);
+        return $this->model::updateOrCreate([
+            'phone_number' => $data['phone_number']
+        ], $data);
     }
 
     public function update($id, array $data)

@@ -66,7 +66,7 @@ class AuthService
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new UserNotFoundException;
 
-        if (!is_null($user->phone_number_verified_at)) {
+        if ($user->is_verified) {
             throw new UserAlreadyVerifiedException;
         }
 
