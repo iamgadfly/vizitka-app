@@ -19,9 +19,9 @@ class UserService
         return $this->repository->create($data);
     }
 
-    public function searchByPhoneNumber(string $number)
+    public function searchByPhoneNumber(string $number, bool $verified = true)
     {
-        return $this->repository->searchByPhoneNumber($number);
+        return $this->repository->searchByPhoneNumber($number, $verified);
     }
 
     public function searchByPhoneNumberNotNull(string $number)

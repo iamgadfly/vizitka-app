@@ -37,9 +37,13 @@ class AuthService
         }
     }
 
+    /**
+     * @throws GuzzleException
+     * @throws SMSNotSentException
+     */
     public function resendSms(string $phoneNumber)
     {
-        $user = $this->service->searchByPhoneNumberNotNull($phoneNumber);
+        $user = $this->service->searchByPhoneNumberNotNull($phoneNumber, false);
 
         $verification_code = Random::generate(4, '0-9');
 
@@ -60,7 +64,7 @@ class AuthService
      */
     public function verification(string $phoneNumber, string $verificationCode): string
     {
-        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new UserNotFoundException;
+        $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new UserNotFoundException;
 
         if (!is_null($user->phone_number_verified_at)) {
             throw new UserAlreadyVerifiedException;
@@ -68,6 +72,7 @@ class AuthService
 
         if ($user->verification_code == $verificationCode) {
             $user->phone_number_verified_at = Carbon::now();
+            $user->is_verified = true;
             $user->save();
 
             return $user->createToken("Token for user #$user->id")->plainTextToken;
