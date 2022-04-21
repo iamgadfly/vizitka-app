@@ -43,6 +43,12 @@ Route::controller(SpecialistAuthController::class)
     Route::post('logout',  'logout')
         ->middleware('auth:sanctum')
         ->name('specialist.auth.logout');
+
+    Route::post('sendPinResetRequest', 'sendPinResetRequest')
+        ->name('specialist.auth.send-pin-reset-request');
+
+    Route::post('pinReset', 'pinReset')
+        ->name('specialist.auth.pin-reset');
 });
 
 // Client auth routes
