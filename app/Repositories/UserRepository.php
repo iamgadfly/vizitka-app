@@ -12,17 +12,11 @@ class UserRepository extends Repository
         parent::__construct($model);
     }
 
-    public function searchByPhoneNumberNotNull(string $number): User
-    {
-        return $this->model::where('phone_number', $number)
-            ->whereNotNull('phone_number_verified_at')->firstOrFail();
-    }
-
-        public function searchByPhoneNumber(string $number, bool $verified = true): User
+    public function searchByPhoneNumber(string $number, bool $verified = true): ?User
     {
         return $this->model::where([
             'phone_number' => $number,
             'is_verified' => $verified
-        ])->firstOrFail();
+        ])->first();
     }
 }

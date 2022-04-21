@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\Api\Specialist;
 
 use App\Exceptions\InvalidLoginException;
+use App\Exceptions\SMSNotSentException;
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserNotVerifiedException;
 use App\Exceptions\UserPinException;
+use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Api\AuthController as BaseAuthController;
+use App\Http\Requests\PinResetRequest;
+use App\Http\Requests\SendPinResetRequest;
 use App\Http\Requests\SetPinRequest;
 use App\Http\Requests\SignInRequest;
 use App\Services\AuthService;
 use App\Services\SMSService;
 use App\Services\UserService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -28,7 +33,6 @@ class AuthController extends BaseAuthController
     /**
      * @throws UserPinException
      * @throws InvalidLoginException
-     * @throws UserNotVerifiedException
      */
     public function signIn(SignInRequest $request): JsonResponse
     {
@@ -51,6 +55,34 @@ class AuthController extends BaseAuthController
             null,
             Response::HTTP_OK,
             'PIN set successfully'
+        );
+    }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws GuzzleException
+     * @throws SMSNotSentException
+     */
+    public function sendPinResetRequest(SendPinResetRequest $request)
+    {
+        return $this->success(
+            $this->authService->sendPinResetRequest($request->phone_number),
+            Response::HTTP_OK
+        );
+    }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws VerificationCodeIsntValidException
+     */
+    public function pinReset(PinResetRequest $request)
+    {
+        return $this->success(
+            $this->authService->pinReset(
+                $request->phone_number,
+                $request->verification_code,
+                $request->pin
+            )
         );
     }
 }
