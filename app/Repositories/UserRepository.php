@@ -12,6 +12,13 @@ class UserRepository extends Repository
         parent::__construct($model);
     }
 
+    public function create(array $data)
+    {
+        return $this->model::updateOrCreate([
+            'phone_number' => $data['phone_number']
+        ], $data);
+    }
+
     public function searchByPhoneNumber(string $number, bool $verified = true): ?User
     {
         return $this->model::where([

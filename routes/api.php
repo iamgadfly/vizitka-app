@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\MaintenanceController;
 use App\Http\Controllers\Api\MiscController;
 use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
@@ -49,6 +50,17 @@ Route::controller(SpecialistAuthController::class)
 
     Route::post('pinReset', 'pinReset')
         ->name('specialist.auth.pin-reset');
+});
+
+Route::controller(MaintenanceController::class)
+    ->middleware('auth:sanctum')
+    ->prefix('specialist/maintenance')->group(function () {
+
+    Route::get('', 'get')
+        ->name('maintenance.get');
+
+    Route::post('', 'create')
+        ->name('maintenance.create');
 });
 
 // Client auth routes
