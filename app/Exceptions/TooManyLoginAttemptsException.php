@@ -2,10 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-class TooManyLoginAttemptsException extends BaseAuthException
+class TooManyLoginAttemptsException extends BaseException
 {
     public function __construct()
     {

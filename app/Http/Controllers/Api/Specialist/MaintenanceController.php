@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Specialist;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MaintenanceRequest;
-use App\Http\Resources\MaintenanceSettingsResource;
 use App\Services\MaintenanceService;
 
 class MaintenanceController extends Controller

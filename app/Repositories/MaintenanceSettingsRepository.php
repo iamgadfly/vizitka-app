@@ -13,8 +13,9 @@ class MaintenanceSettingsRepository extends Repository
 
     public function mySettings()
     {
-        return $this->model::whereHas('maintenances', function ($q) {
+        $model = $this->model::whereHas('maintenances', function ($q) {
             $q->where('specialist_id', auth()->user()->specialist->id);
-        })->get();
+        });
+        return $model->first();
     }
 }

@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class InvalidLoginException extends BaseAuthException
+class InvalidLoginException extends BaseException
 {
     public function __construct()
     {

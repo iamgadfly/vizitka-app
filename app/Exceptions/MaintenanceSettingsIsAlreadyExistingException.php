@@ -4,12 +4,12 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class VerificationCodeIsntValidException extends BaseException
+class MaintenanceSettingsIsAlreadyExistingException extends BaseException
 {
     public function __construct()
     {
         parent::__construct(
-            __('users.auth.exceptions.verification_code_inst_valid'),
+            __('users.maintenance.exceptions.specialist.maintenance_settings'),
             Response::HTTP_BAD_REQUEST
         );
     }

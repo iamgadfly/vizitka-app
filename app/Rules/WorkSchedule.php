@@ -3,9 +3,8 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use function PHPUnit\Framework\isInstanceOf;
 
-class Maintenance implements Rule
+class WorkSchedule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,11 +25,10 @@ class Maintenance implements Rule
      */
     public function passes($attribute, $value)
     {
-        foreach ($value as $item) {
-            if (array_key_exists('title', $item) && array_key_exists('duration', $item)) {
-                if (is_string($item['title']) && is_int($item['duration'])) {
-                    continue;
-                }
+        foreach ($value as $schedule) {
+            if (array_key_exists('start', $schedule) && array_key_exists('end', $schedule)
+                && array_key_exists('is_break', $schedule)) {
+                continue;
             }
             return false;
         }

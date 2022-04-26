@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
+use App\Helpers\WeekdayHelper;
 use Illuminate\Contracts\Validation\Rule;
-use function PHPUnit\Framework\isInstanceOf;
 
-class Maintenance implements Rule
+class Weekday implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,11 +26,9 @@ class Maintenance implements Rule
      */
     public function passes($attribute, $value)
     {
-        foreach ($value as $item) {
-            if (array_key_exists('title', $item) && array_key_exists('duration', $item)) {
-                if (is_string($item['title']) && is_int($item['duration'])) {
-                    continue;
-                }
+        foreach ($value as $day) {
+            if (in_array($day, WeekdayHelper::getAll())) {
+                continue;
             }
             return false;
         }
@@ -44,6 +42,6 @@ class Maintenance implements Rule
      */
     public function message()
     {
-        return __('users.other.rules.array_is_not_valid');
+        return __('users.work_schedule.rules.specialist.weekday');
     }
 }

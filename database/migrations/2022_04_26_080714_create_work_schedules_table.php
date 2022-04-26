@@ -13,24 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('maintenances', function (Blueprint $table) {
+        Schema::create('work_schedules', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('settings_id')
-                ->constrained('maintenance_settings')
+                ->constrained('work_schedule_settings')
                 ->onDelete('cascade');
-
-            $table->foreignId('specialist_id')
-                ->constrained('specialists')
-                ->onDelete('cascade');
-
-            $table->string('title');
-
-            $table->integer('price')
-                ->nullable();
-
-            $table->integer('duration');
-
+            $table->time('start');
+            $table->time('end');
+            $table->boolean('is_break')->default(false);
             $table->timestamps();
         });
     }
@@ -42,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maintenances');
+        Schema::dropIfExists('work_schedules');
     }
 };

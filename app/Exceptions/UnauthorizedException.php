@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class UnauthorizedException extends BaseAuthException
+class UnauthorizedException extends BaseException
 {
     public function __construct()
     {
