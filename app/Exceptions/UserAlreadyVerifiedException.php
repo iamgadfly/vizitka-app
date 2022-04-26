@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class UserAlreadyVerifiedException extends BaseAuthException
+class UserAlreadyVerifiedException extends BaseException
 {
     public function __construct()
     {

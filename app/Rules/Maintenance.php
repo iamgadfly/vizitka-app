@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
+use function PHPUnit\Framework\isInstanceOf;
 
-class IsntVerifiedUser implements Rule
+class Maintenance implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,10 +26,15 @@ class IsntVerifiedUser implements Rule
      */
     public function passes($attribute, $value)
     {
-        return User::where([
-            'phone_number' => $value,
-            'is_verified' => false
-        ])->first() !== null;
+        foreach ($value as $item) {
+            if (array_key_exists('title', $item) && array_key_exists('duration', $item)) {
+                if (is_string($item['title']) && is_int($item['duration'])) {
+                    continue;
+                }
+            }
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -39,6 +44,6 @@ class IsntVerifiedUser implements Rule
      */
     public function message()
     {
-        return __('users.auth.validation.phone_number.unique');
+        return __('users.other.rules.array_is_not_valid');
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-class SMSNotSentException extends BaseAuthException
+class SMSNotSentException extends BaseException
 {
     public function __construct()
     {

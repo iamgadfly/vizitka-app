@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class BaseAuthException extends Exception
+class BaseException extends Exception
 {
     //
 }

@@ -14,7 +14,7 @@ return [
             'too_many_login' => 'Too many login attempts. Try again in 15 minutes'
         ],
         'specialist' => [
-            'pin_exception' => 'PIN is not valid'
+            'pin_exception' => 'PIN is not valid',
         ],
         'client' => [
 
@@ -29,11 +29,33 @@ return [
             ]
         ]
     ],
-    'geocoder' => [
-        'validation' => [
-            'coordinates' => [
-                'required' => 'Parameter coordinates required'
+    'maintenance' => [
+        'exceptions' => [
+            'specialist' => [
+                'maintenance_settings' => 'Maintenance settings is already existing'
             ]
+        ],
+        'rules' => [
+            'specialist' => [
+                'maintenance' => 'Array is not valid',
+            ]
+        ]
+    ],
+    'work_schedule' => [
+        'exceptions' => [
+            'specialist' => [
+                'work_schedule_settings' => 'Work schedule settings is already existing'
+            ]
+        ],
+        'rules' => [
+            'specialist' => [
+                'weekday' => 'Weekday is not correct'
+            ]
+        ]
+    ],
+    'other' => [
+        'rules' => [
+            'array_is_not_valid' => 'Array is not valid'
         ]
     ]
 ];

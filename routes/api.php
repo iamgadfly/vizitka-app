@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\MiscController;
 use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
+use App\Http\Controllers\Api\Specialist\MaintenanceController;
+use App\Http\Controllers\Api\Specialist\WorkScheduleController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +51,28 @@ Route::controller(SpecialistAuthController::class)
 
     Route::post('pinReset', 'pinReset')
         ->name('specialist.auth.pin-reset');
+});
+
+Route::controller(MaintenanceController::class)
+    ->middleware('auth:sanctum')
+    ->prefix('specialist/maintenance')->group(function () {
+
+    Route::get('', 'get')
+        ->name('specialist.maintenance.get');
+
+    Route::post('', 'create')
+        ->name('specialist.maintenance.create');
+});
+
+Route::controller(WorkScheduleController::class)
+    ->middleware('auth:sanctum')
+    ->prefix('specialist/schedule')->group(function() {
+
+    Route::post('', 'create')
+        ->name('specialist.schedule.create');
+
+    Route::get('', 'get')
+        ->name('specialist.schedule.get');
 });
 
 // Client auth routes

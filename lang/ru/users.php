@@ -14,7 +14,7 @@ return [
           'too_many_login' => 'Слишком много попыток входа. Попробуйте еще раз через 15 минут'
       ],
       'specialist' => [
-          'pin_exception' => 'Неврно введен PIN код'
+          'pin_exception' => 'Неврно введен PIN код',
       ],
       'client' => [
 
@@ -29,11 +29,29 @@ return [
           ]
       ]
   ],
-    'geocoder' => [
-        'validation' => [
-            'coordinates' => [
-                'required' => 'Параметр coordinates обязателен'
+    'maintenance' => [
+        'exceptions' => [
+            'specialist' => [
+                'maintenance_settings' => 'Настройки услуг уже существуют'
             ]
+        ],
+    ],
+    'work_schedule' => [
+        'exceptions' => [
+            'specialist' => [
+                'work_schedule_settings' => 'Настройки рабочего графика уже существуют'
+            ]
+        ],
+        'rules' => [
+            'specialist' => [
+                'weekday' => 'Недопустимое значение дня недели',
+                'work_schedule' => 'Массив невалидный'
+            ]
+        ]
+    ],
+    'other' => [
+        'rules' => [
+            'array_is_not_valid' => 'Массив невалидный'
         ]
     ]
 ];

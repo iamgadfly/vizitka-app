@@ -2,10 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserNotFoundException extends BaseAuthException
+class UserNotFoundException extends BaseException
 {
     public function __construct()
     {

@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (BaseAuthException $e, $request) {
+        $this->renderable(function (BaseException $e, $request) {
            return $this->getJsonError($e->getMessage(), $e->getCode());
         });
     }

@@ -2,11 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserPinException extends BaseAuthException
+class UserPinException extends BaseException
 {
     public function __construct()
     {
