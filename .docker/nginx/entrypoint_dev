@@ -22,8 +22,8 @@ php artisan migrate
 #>&2 echo --- php artisan schedule:run ---
 #php artisan schedule:run
 >&2 echo --- remove assets ---
-rm storage/app/public/images/card_backgrounds/*
-rm storage/app/public/images/onboarding/*
+rm -f storage/app/public/images/card_backgrounds/*
+rm -f storage/app/public/images/onboarding/*
 >&2 echo --- move assets ---
 mkdir -p storage/app/public/images/card_backgrounds
 mkdir -p storage/app/public/images/onboarding
