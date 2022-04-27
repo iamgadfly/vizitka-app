@@ -57,8 +57,20 @@ Route::controller(MaintenanceController::class)
     ->middleware('auth:sanctum')
     ->prefix('specialist/maintenance')->group(function () {
 
+    Route::post('', 'create')
+        ->name('specialist.maintenance.create');
+
     Route::get('', 'get')
         ->name('specialist.maintenance.get');
+
+    Route::put('/settings', 'updateSettings')
+        ->name('specialist.maintenance.settings.update');
+
+    Route::put('{id}', 'update')
+        ->name('specialist.maintenance.update');
+
+    Route::delete('{id}', 'delete')
+        ->name('specialist.maintenance.delete');
 });
 
 Route::controller(WorkScheduleController::class)

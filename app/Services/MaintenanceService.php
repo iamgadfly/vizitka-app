@@ -7,6 +7,7 @@ use App\Http\Resources\MaintenanceSettingsResource;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\MaintenanceSettingsRepository;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class MaintenanceService
@@ -19,7 +20,7 @@ class MaintenanceService
     /**
      * @throws MaintenanceSettingsIsAlreadyExistingException
      */
-    public function create(array $data)
+    public function create(array $data): MaintenanceSettingsResource
     {
         $settings = $this->maintenanceSettingsRepository->mySettings();
         if ($settings) {
@@ -42,7 +43,30 @@ class MaintenanceService
         }
     }
 
-    public function getMySettings()
+    public function addNew(array $data)
+    {
+        $data['settings_id'] = $this->maintenanceSettingsRepository->mySettings()->id;
+        return $this->repository->create($data);
+    }
+
+    public function delete(int $id)
+    {
+        return $this->repository->deleteById($id);
+    }
+
+    public function updateSettings(array $data)
+    {
+        $item = $this->maintenanceSettingsRepository->mySettings() ?? throw new NotFoundHttpException;
+        return $this->maintenanceSettingsRepository->update($item->id, $data);
+    }
+
+    public function update(array $data)
+    {
+        $this->repository->getById($data['id']) ?? throw new NotFoundHttpException;
+        return $this->repository->update($data['id'], $data);
+    }
+
+    public function getMySettings(): MaintenanceSettingsResource
     {
         return new MaintenanceSettingsResource(
             $this->maintenanceSettingsRepository->mySettings()
