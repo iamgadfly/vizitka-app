@@ -59,17 +59,11 @@ Route::controller(MaintenanceController::class)
 
     Route::get('', 'get')
         ->name('specialist.maintenance.get');
-
-    Route::post('', 'create')
-        ->name('specialist.maintenance.create');
 });
 
 Route::controller(WorkScheduleController::class)
     ->middleware('auth:sanctum')
     ->prefix('specialist/schedule')->group(function() {
-
-    Route::post('', 'create')
-        ->name('specialist.schedule.create');
 
     Route::get('', 'get')
         ->name('specialist.schedule.get');
@@ -187,6 +181,9 @@ Route::controller(MiscController::class)->group(function () {
 
     Route::get('/getOnboardings', 'getOnboardings')
         ->name('misc.onboardings');
+
+    Route::get('/getActivityKinds', 'getActivityKinds')
+        ->name('name.activity_kinds');
 });
 
 Route::post('/test', [TestController::class, 'test']);

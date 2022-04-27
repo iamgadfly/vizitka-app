@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Rules\Maintenance;
+use App\Rules\Weekday;
+use App\Rules\WorkSchedule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -88,7 +91,7 @@ class RequestHelper
             'youtube_account' => ['string'],
             'vk_account' => ['string'],
             'tiktok_account' => ['string'],
-            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)]
+            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)],
         ];
         if ($request->method() == 'POST') {
             $rules['user_id'][] = 'required';
@@ -98,6 +101,23 @@ class RequestHelper
             $rules['title'][] = 'required';
             $rules['about'][] = 'required';
             $rules['address'][] = 'required';
+            $rules['schedule'] = [
+                'smart_schedule' => ['required', 'boolean', 'bail'],
+                'confirmation' => ['required', 'boolean', 'bail'],
+                'cancel_appointment' => ['required', 'integer', 'bail'],
+                'new_appointment_not_before_than' => ['required', 'integer', 'bail'],
+                'new_appointment_not_after_than' => ['required', 'integer', 'bail'],
+                'weekends' => ['required', 'array', new Weekday, 'bail'],
+                'type_id' => ['required', 'integer', 'exists:work_schedule_types,id', 'bail'],
+                'specialist_id' => ['required', 'integer', 'exists:specialists,id', 'bail'],
+                'schedules' => ['required', 'array', new WorkSchedule, 'bail'],
+            ];
+            $rules['maintenance'] = [
+                'finance_analytics' => ['required', 'boolean', 'bail'],
+                'many_maintenances' => ['required', 'boolean', 'bail'],
+                'specialist_id' => ['required' , 'exists:specialists,id', 'bail'],
+                'maintenances' => ['required', 'array', new Maintenance, 'bail']
+            ];
         } else {
             $rules['id'] = ['required', 'exists:specialists,id'];
         }

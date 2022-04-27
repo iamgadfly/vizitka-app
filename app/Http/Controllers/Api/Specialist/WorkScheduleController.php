@@ -14,16 +14,6 @@ class WorkScheduleController extends Controller
         protected WorkScheduleService $service
     ){}
 
-    /**
-     * @throws WorkScheduleSettingsIsAlreadyExistingException
-     */
-    public function create(WorkScheduleRequest $request)
-    {
-        return $this->success(
-            $this->service->create($request->validated())
-        );
-    }
-
     public function get()
     {
         return $this->success(

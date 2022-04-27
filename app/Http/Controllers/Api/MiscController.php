@@ -38,4 +38,11 @@ class MiscController extends Controller
             $this->service->getOnboardings()
         );
     }
+
+    public function getActivityKinds(): JsonResponse
+    {
+        return $this->success(
+            $this->service->getActivityKinds()
+        );
+    }
 }
