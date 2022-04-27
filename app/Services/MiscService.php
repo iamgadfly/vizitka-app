@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Helpers\CardBackgroundHelper;
+use App\Http\Resources\ActivityKindResource;
 use App\Http\Resources\OnboardingResource;
+use App\Models\ActivityKind;
 use App\Models\Onboarding;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -63,5 +65,10 @@ class MiscService
     public function getOnboardings(): AnonymousResourceCollection
     {
         return OnboardingResource::collection(Onboarding::all());
+    }
+
+    public function getActivityKinds(): AnonymousResourceCollection
+    {
+        return ActivityKindResource::collection(ActivityKind::all());
     }
 }

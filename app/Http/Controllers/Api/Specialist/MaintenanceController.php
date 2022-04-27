@@ -12,17 +12,22 @@ class MaintenanceController extends Controller
         protected MaintenanceService $service
     ) {}
 
-    public function create(MaintenanceRequest $request)
-    {
-        return $this->success(
-            $this->service->create($request->validated())
-        );
-    }
-
     public function get()
     {
         return $this->success(
             $this->service->getMySettings()
         );
+    }
+
+    public function delete()
+    {
+//        return $this->success(
+//            $this->service->delete()
+//        );
+    }
+
+    public function update()
+    {
+
     }
 }
