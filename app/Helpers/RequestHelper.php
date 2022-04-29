@@ -5,11 +5,30 @@ namespace App\Helpers;
 use App\Rules\Maintenance;
 use App\Rules\Weekday;
 use App\Rules\WorkSchedule;
+use App\Rules\WorkScheduleBreak;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
+    public static function getWorkScheduleRulesOnCreate(): array
+    {
+        return [
+            'smart_schedule' => ['required', 'boolean', 'bail'],
+            'confirmation' => ['required', 'boolean', 'bail'],
+            'cancel_appointment' => ['required', 'integer', 'bail'],
+            'limit_before' => ['required', 'integer', 'bail'],
+            'limit_after' => ['required', 'integer', 'bail'],
+            'type' => ['required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'],
+            'specialist_id' => ['required', 'integer', 'exists:specialists,id', 'bail'],
+            'start_from' => ['date', 'bail'],
+            'schedules' => [
+                'work_times' => ['required', 'array', new WorkSchedule, 'bail'],
+                'breaks' => ['required', 'array', new WorkScheduleBreak, 'bail'],
+//                'weekends' => ['required', 'array', new Weekday, 'bail']
+            ],
+        ];
+    }
     public static function getDummyBusinessCardRules(FormRequest $request): array
     {
         $rules = [
@@ -102,15 +121,7 @@ class RequestHelper
             $rules['about'][] = 'required';
             $rules['address'][] = 'required';
             $rules['schedule'] = [
-                'smart_schedule' => ['required', 'boolean', 'bail'],
-                'confirmation' => ['required', 'boolean', 'bail'],
-                'cancel_appointment' => ['required', 'integer', 'bail'],
-                'new_appointment_not_before_than' => ['required', 'integer', 'bail'],
-                'new_appointment_not_after_than' => ['required', 'integer', 'bail'],
-                'weekends' => ['required', 'array', new Weekday, 'bail'],
-                'type_id' => ['required', 'integer', 'exists:work_schedule_types,id', 'bail'],
-                'specialist_id' => ['required', 'integer', 'exists:specialists,id', 'bail'],
-                'schedules' => ['required', 'array', new WorkSchedule, 'bail'],
+
             ];
             $rules['maintenance'] = [
                 'finance_analytics' => ['required', 'boolean', 'bail'],

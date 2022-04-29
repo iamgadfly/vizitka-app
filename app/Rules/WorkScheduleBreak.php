@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class WorkSchedule implements Rule
+class WorkScheduleBreak implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,9 +25,9 @@ class WorkSchedule implements Rule
      */
     public function passes($attribute, $value)
     {
-        foreach ($value as $schedule) {
-            if (array_key_exists('start', $schedule) && array_key_exists('end', $schedule)
-                && array_key_exists('day', $schedule)) {
+        foreach ($value as $break) {
+            if (array_key_exists('start', $break) && array_key_exists('end', $break)
+                && array_key_exists('day', $break)) {
                 continue;
             }
             return false;
@@ -42,6 +42,6 @@ class WorkSchedule implements Rule
      */
     public function message()
     {
-        return __('users.other.rules.array_is_not_valid');
+        return 'The validation error message.';
     }
 }

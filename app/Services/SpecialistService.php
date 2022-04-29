@@ -10,7 +10,10 @@ use App\Repositories\BusinessCardRepository;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\WorkScheduleBreakRepository;
+use App\Repositories\WorkScheduleDayRepository;
 use App\Repositories\WorkScheduleRepository;
+use App\Repositories\WorkScheduleWorkRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 

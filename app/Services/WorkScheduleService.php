@@ -4,14 +4,19 @@ namespace App\Services;
 
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Http\Resources\WorkScheduleSettingsResource;
+use App\Repositories\WorkScheduleBreakRepository;
+use App\Repositories\WorkScheduleDayRepository;
 use App\Repositories\WorkScheduleSettingsRepository;
 use App\Repositories\WorkScheduleRepository;
+use App\Repositories\WorkScheduleWorkRepository;
 
 class WorkScheduleService
 {
     public function __construct(
         protected WorkScheduleSettingsRepository $settingsRepository,
-        protected WorkScheduleRepository $repository
+        protected WorkScheduleBreakRepository $breakRepository,
+        protected WorkScheduleDayRepository $dayRepository,
+        protected WorkScheduleWorkRepository $workRepository,
     ) {}
 
     /**
@@ -25,13 +30,7 @@ class WorkScheduleService
         }
         try {
             \DB::beginTransaction();
-            $data['specialist_id'] = auth()->user()->specialist->id;
-            $data['weekends'] = json_encode($data['weekends']);
             $settings = $this->settingsRepository->create($data);
-            foreach ($data['schedules'] as $schedule) {
-                $schedule['settings_id'] = $settings->id;
-                $this->repository->create($schedule);
-            }
             \DB::commit();
             return new WorkScheduleSettingsResource($settings);
         } catch (\PDOException $e) {

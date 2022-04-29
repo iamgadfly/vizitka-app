@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('work_schedules', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('settings_id')
-                ->constrained('work_schedule_settings')
-                ->onDelete('cascade');
-            $table->time('start');
+        Schema::create('work_schedule_works', function (Blueprint $table) {
+            $table->id();$table->time('start');
             $table->time('end');
-            $table->boolean('is_break')->default(false);
+            $table->foreignId('day_id')
+                ->constrained('work_schedule_days')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_schedules');
+        Schema::dropIfExists('work_schedule_works');
     }
 };
