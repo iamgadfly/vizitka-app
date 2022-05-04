@@ -13,7 +13,7 @@ class WorkScheduleTypeHelper
         'standard' => 'misc.work_schedule.types.standard'
     ];
 
-    public function getAllKeys(): array
+    public static function getAllKeys(): array
     {
         return array_keys(self::$translations);
     }

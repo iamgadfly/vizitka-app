@@ -20,12 +20,13 @@ class RequestHelper
             'limit_before' => ['required', 'integer', 'bail'],
             'limit_after' => ['required', 'integer', 'bail'],
             'type' => ['required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'],
+            'workdays_count' => ['required_if:type,sliding', 'integer', 'bail'],
+            'weekends_count' => ['required_if:type,sliding', 'integer', 'bail'],
+            'start_from' => ['required_if:type,sliding','date', 'bail'],
             'specialist_id' => ['required', 'integer', 'exists:specialists,id', 'bail'],
-            'start_from' => ['date', 'bail'],
             'schedules' => [
                 'work_times' => ['required', 'array', new WorkSchedule, 'bail'],
                 'breaks' => ['required', 'array', new WorkScheduleBreak, 'bail'],
-//                'weekends' => ['required', 'array', new Weekday, 'bail']
             ],
         ];
     }
@@ -120,9 +121,7 @@ class RequestHelper
             $rules['title'][] = 'required';
             $rules['about'][] = 'required';
             $rules['address'][] = 'required';
-            $rules['schedule'] = [
-
-            ];
+            $rules['schedule'] = self::getWorkScheduleRulesOnCreate();
             $rules['maintenance'] = [
                 'finance_analytics' => ['required', 'boolean', 'bail'],
                 'many_maintenances' => ['required', 'boolean', 'bail'],

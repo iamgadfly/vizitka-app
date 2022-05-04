@@ -12,13 +12,37 @@ class WorkScheduleDayRepository extends Repository
         parent::__construct($model);
     }
 
-    public function fillDays(int $settings_id)
+    public function fillDaysNotForSlidingType(int $settings_id)
     {
+        $output = [];
         foreach (WeekdayHelper::getAll() as $day) {
-            $this->create([
-                'setting_id' => $settings_id,
+            $output[] = $this->create([
+                'settings_id' => $settings_id,
                 'day' => $day
             ]);
         }
+        return $output;
+    }
+
+    public function fillDaysForSlidingType(int $settings_id, int $workdays, int $weekends)
+    {
+        $output = [];
+        foreach (range(1, $workdays) as $day) {
+            $output[] = $this->create([
+                'settings_id' => $settings_id,
+                'day_index' => $day,
+                'is_weekend' => false
+            ]);
+        }
+
+        foreach (range($workdays + 1, $workdays + $weekends) as $day) {
+            $output[] = $this->create([
+                'settings_id' => $settings_id,
+                'day_index' => $day,
+                'is_weekend' => true
+            ]);
+        }
+
+        return $output;
     }
 }

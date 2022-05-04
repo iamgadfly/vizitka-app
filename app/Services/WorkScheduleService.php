@@ -31,6 +31,29 @@ class WorkScheduleService
         try {
             \DB::beginTransaction();
             $settings = $this->settingsRepository->create($data);
+            $schedule = $data['schedule'];
+            if ($schedule['type'] !== 'sliding') {
+                $days = $this->dayRepository->fillDaysNotForSlidingType($settings->id);
+            } else {
+                $days = $this->dayRepository->fillDaysForSlidingType(
+                    $settings->id, $schedule['workdays_count'], $schedule['weekends_count']
+                );
+            }
+            foreach (range(0, $schedule['workdays_count']) as $day) {
+                $data = $schedule['schedules']['work_times'][$day];
+                $data['day_id'] = $days[$day]->id;
+                $this->workRepository->create($data);
+            }
+            foreach (
+                range(
+                    $schedule['workdays_count'] + 1,
+                    $schedule['workdays_count'] + $schedule['weekends_count']
+                ) as $day
+            ) {
+                $data = $schedule['schedules']['breaks'][$day];
+                $data['day_id'] = $days[$day]->id;
+                $this->breakRepository->create($data);
+            }
             \DB::commit();
             return new WorkScheduleSettingsResource($settings);
         } catch (\PDOException $e) {

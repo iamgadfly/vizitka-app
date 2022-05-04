@@ -27,7 +27,7 @@ class WorkSchedule implements Rule
     {
         foreach ($value as $schedule) {
             if (array_key_exists('start', $schedule) && array_key_exists('end', $schedule)
-                && array_key_exists('day', $schedule)) {
+                && array_key_exists('day', $schedule) && array_key_exists('is_weekend', $schedule)) {
                 continue;
             }
             return false;

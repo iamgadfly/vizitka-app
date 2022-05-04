@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('work_schedule_days', function (Blueprint $table) {
             $table->id();
-            $table->string('day');
+            $table->string('day')->nullable();
+            $table->unsignedInteger('day_index')->nullable();
             $table->boolean('is_weekend');
             $table->foreignId('settings_id')
                 ->constrained('work_schedule_settings')
