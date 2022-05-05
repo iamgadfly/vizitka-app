@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('day')->nullable();
             $table->unsignedInteger('day_index')->nullable();
-            $table->boolean('is_weekend');
+//            $table->boolean('is_weekend');
             $table->foreignId('settings_id')
                 ->constrained('work_schedule_settings')
                 ->onDelete('cascade');

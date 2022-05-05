@@ -31,28 +31,14 @@ class WorkScheduleService
         try {
             \DB::beginTransaction();
             $settings = $this->settingsRepository->create($data);
-            $schedule = $data['schedule'];
-            if ($schedule['type'] !== 'sliding') {
-                $days = $this->dayRepository->fillDaysNotForSlidingType($settings->id);
+            $schedule = $data['schedules'];
+            if ($data['type'] !== 'sliding') {
+                $this->createNotSlidingSchedule($settings->id, $schedule['work'], $schedule['breaks']);
             } else {
-                $days = $this->dayRepository->fillDaysForSlidingType(
-                    $settings->id, $schedule['workdays_count'], $schedule['weekends_count']
+                $this->createSlidingSchedule(
+                    $settings->id, $schedule['work'], $schedule['breaks'],
+                    $data['workdays_count'], $data['weekends_count']
                 );
-            }
-            foreach (range(0, $schedule['workdays_count']) as $day) {
-                $data = $schedule['schedules']['work_times'][$day];
-                $data['day_id'] = $days[$day]->id;
-                $this->workRepository->create($data);
-            }
-            foreach (
-                range(
-                    $schedule['workdays_count'] + 1,
-                    $schedule['workdays_count'] + $schedule['weekends_count']
-                ) as $day
-            ) {
-                $data = $schedule['schedules']['breaks'][$day];
-                $data['day_id'] = $days[$day]->id;
-                $this->breakRepository->create($data);
             }
             \DB::commit();
             return new WorkScheduleSettingsResource($settings);
@@ -65,5 +51,26 @@ class WorkScheduleService
     public function mySettings()
     {
         return new WorkScheduleSettingsResource($this->settingsRepository->mySettings());
+    }
+
+    private function createNotSlidingSchedule(int $settings_id, array $workdays, array $breaks)
+    {
+        $days = $this->dayRepository->fillDaysNotForSlidingType($settings_id);
+        foreach (array_map(null, $days, $workdays) as $pair) {
+            $pair[1]['day_id'] = $pair[0]->id;
+            $this->workRepository->create($pair[1]);
+        }
+    }
+
+    private function createSlidingSchedule(
+        int $settings_id, array $workdays, array $breaks, int $workdays_count, int $weekends_count
+    )
+    {
+        $days = $this->dayRepository->fillDaysForSlidingType($settings_id, $workdays_count, $weekends_count);
+        // Create work days
+        foreach (array_map(null, $days, $workdays) as $pair) {
+            $pair[1]['day_id'] = $pair[0]->id;
+            $this->workRepository->create($pair[1]);
+        }
     }
 }

@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('work_schedule_works', function (Blueprint $table) {
-            $table->id();$table->time('start');
-            $table->time('end');
+            $table->id();
+            $table->time('start')->nullable();
+            $table->time('end')->nullable();
             $table->foreignId('day_id')
                 ->constrained('work_schedule_days')
                 ->onDelete('cascade');

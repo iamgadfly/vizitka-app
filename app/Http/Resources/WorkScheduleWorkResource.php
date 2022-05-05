@@ -2,12 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Helpers\WorkScheduleTypeHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WorkScheduleTypeResource extends JsonResource
+class WorkScheduleWorkResource extends JsonResource
 {
-    public static $wrap = null;
     /**
      * Transform the resource into an array.
      *
@@ -18,7 +16,9 @@ class WorkScheduleTypeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => WorkScheduleTypeHelper::get($this->name)
+            'start' => $this->start,
+            'end' => $this->end,
+            'day_id' => $this->day_id
         ];
     }
 }

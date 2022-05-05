@@ -13,6 +13,15 @@ class WorkScheduleTypeHelper
         'standard' => 'misc.work_schedule.types.standard'
     ];
 
+    protected static array $breakTypes = [
+        'individual', 'united'
+    ];
+
+    public static function getBreakTypes(): array
+    {
+        return self::$breakTypes;
+    }
+
     public static function getAllKeys(): array
     {
         return array_keys(self::$translations);

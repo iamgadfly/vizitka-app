@@ -51,8 +51,9 @@ class SpecialistService
             DB::commit();
 
             return true;
-        } catch (\PDOException) {
+        } catch (\PDOException $e) {
             DB::rollBack();
+            throw new \PDOException($e);
             return false;
         }
     }

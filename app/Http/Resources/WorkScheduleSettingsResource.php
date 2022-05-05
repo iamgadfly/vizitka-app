@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Repositories\WorkScheduleBreakRepository;
+use App\Repositories\WorkScheduleWorkRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WorkScheduleSettingsResource extends JsonResource
@@ -19,11 +21,14 @@ class WorkScheduleSettingsResource extends JsonResource
             'smart_schedule' => $this->smart_schedule,
             'confirmation' => $this->confirmation,
             'cancel_appointment' => $this->cancel_appointment,
-            'new_appointment_not_before_than' => $this->new_appointment_not_before_than,
-            'new_appointment_not_after_than' => $this->new_appointment_not_after_than,
-            'weekends' => json_decode($this->weekends),
-            'type' => WorkScheduleTypeResource::make($this->type),
-            'schedules' => WorkScheduleResource::collection($this->schedule),
+            'limit_before' => $this->limit_before,
+            'limit_after' => $this->limit_after,
+            'type' => $this->type,
+            'break_type' => $this->break_type,
+            'schedules' => [
+                'work' => WorkScheduleWorkResource::collection(WorkScheduleWorkRepository::getWorks($this->id)),
+                'breaks' => WorkScheduleBreakResource::collection(WorkScheduleBreakRepository::getBreaks($this->id))
+            ],
             'specialist' => SpecialistResource::make($this->specialist)
         ];
     }

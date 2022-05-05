@@ -10,4 +10,13 @@ class WorkScheduleBreakRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    public static function getBreaks($settingsId)
+    {
+        return WorkScheduleBreak::whereHas('day', function ($q) use ($settingsId) {
+            return $q->whereHas('settings', function ($qb) use ($settingsId) {
+                return $qb->where('id', $settingsId);
+            });
+        })->get();
+    }
 }

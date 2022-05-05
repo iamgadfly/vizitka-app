@@ -31,7 +31,6 @@ class WorkScheduleDayRepository extends Repository
             $output[] = $this->create([
                 'settings_id' => $settings_id,
                 'day_index' => $day,
-                'is_weekend' => false
             ]);
         }
 
@@ -39,7 +38,6 @@ class WorkScheduleDayRepository extends Repository
             $output[] = $this->create([
                 'settings_id' => $settings_id,
                 'day_index' => $day,
-                'is_weekend' => true
             ]);
         }
 

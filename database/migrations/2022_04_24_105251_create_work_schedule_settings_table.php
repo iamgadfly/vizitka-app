@@ -29,7 +29,8 @@ return new class extends Migration
                 ->constrained('specialists')
                 ->onDelete('cascade');
             $table->string('type'); // standard, flexible, sliding
-            $table->time('start_from')->nullable();
+            $table->string('break_type');
+            $table->date('start_from')->nullable();
             $table->timestamps();
         });
     }
