@@ -7,6 +7,33 @@ use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
+    public static function getAppointmentRules(FormRequest $request): array
+    {
+        $rules = [
+            'client_id' => ['exists:clients,id', 'bail'],
+            'dummy_client_id' => ['exists:dummy_clients,id', 'bail'],
+            'specialist_id' => ['exists:specialists,id', 'bail'],
+            'maintenance_id' => ['exists:maintenances,id', 'bail'],
+            'date' => ['date_format:m.d.Y', 'bail'],
+            'time_start' => ['date_format:H:i', 'bail'],
+            'time_end' => ['date_format:H:i', 'bail', 'after:time_start'],
+        ];
+
+        if ($request->method() == 'POST') {
+            $rules['client_id'][] = 'exclude_if:dummy_clients_id,!=,null';
+            $rules['dummy_client_id'][] = 'exclude_if:client_id,!=,null';
+            $rules['specialist_id'][] = 'required';
+            $rules['maintenance_id'][] = 'required';
+            $rules['date'][] = 'required';
+            $rules['time_start'][] = 'required';
+            $rules['time_end'][] = 'required';
+        } elseif ($request->method() == 'PUT') {
+            $rules['id'] = ['required', 'exists:appointments,id', 'bail'];
+        }
+
+        return $rules;
+    }
+
     public static function getDummyClientRules(FormRequest $request): array
     {
         $rules = [

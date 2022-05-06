@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Specialist\BusinessCardController;
 use App\Http\Controllers\Api\Specialist\MaintenanceController;
 use App\Http\Controllers\Api\Specialist\WorkScheduleController;
 use App\Http\Controllers\Api\SpecialistController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DummyClientController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -202,6 +203,30 @@ Route::controller(DummyClientController::class)
 
     Route::delete('{id}', 'delete')
         ->name('specialist.client.delete');
+});
+
+// Appointment routes
+Route::controller(AppointmentController::class)
+    ->prefix('specialist/appointment')
+    ->middleware('auth:sanctum')->group(function() {
+
+    Route::post('', 'create')
+        ->name('specialist.appointment.create');
+
+    Route::get('{id}', 'get')
+        ->name('specialist.appointment.get');
+
+    Route::put('{id}', 'update')
+        ->name('specialist.appointment.update');
+
+    Route::delete('{id}', 'delete')
+        ->name('specialist.appointment.delete');
+
+    Route::post('{id}/confirm', 'confirm')
+        ->name('specialist.appointment.confirm');
+
+    Route::post('{id}/skipped', 'skipped')
+        ->name('specialist.appointment.skipped');
 });
 
 // Misc Routes

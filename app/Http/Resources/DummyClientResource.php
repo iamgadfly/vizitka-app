@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ImageHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DummyClientResource extends JsonResource
@@ -21,7 +22,7 @@ class DummyClientResource extends JsonResource
             'full_name' => "$this->name $this->surname",
             'discount' => $this->discount,
             'phone_number' => $this->phone_number,
-            'avatar' => ImageResource::make($this->avatar)
+            'avatar' => ImageHelper::getAssetFromFilename($this->avatar->url)
         ];
     }
 }
