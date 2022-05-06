@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\Specialist;
 
-use App\Helpers\CardBackgroundHelper;
 use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use function auth;
 
 class CreateSpecialistRequest extends FormRequest

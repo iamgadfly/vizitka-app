@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\IsntVerifiedUser;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SignUpRequest extends FormRequest

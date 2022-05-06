@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Helpers\CardBackgroundHelper;
 use App\Helpers\ImageHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 

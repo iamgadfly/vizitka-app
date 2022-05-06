@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WorkSchedule extends Model
+class WorkScheduleBreak extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    public function settings()
+    public function day()
     {
-        return $this->belongsTo(WorkScheduleSettings::class, 'settings_id', 'id');
+        return $this->belongsTo(WorkScheduleDay::class, 'day_id', 'id');
     }
 }

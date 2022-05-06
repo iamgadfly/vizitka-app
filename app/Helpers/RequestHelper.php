@@ -5,11 +5,18 @@ namespace App\Helpers;
 use App\Rules\Maintenance;
 use App\Rules\Weekday;
 use App\Rules\WorkSchedule;
+use App\Rules\WorkScheduleBreak;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
+    public static function getWorkScheduleRulesOnCreate(): array
+    {
+        return [
+
+        ];
+    }
     public static function getDummyBusinessCardRules(FormRequest $request): array
     {
         $rules = [
@@ -101,26 +108,87 @@ class RequestHelper
             $rules['title'][] = 'required';
             $rules['about'][] = 'required';
             $rules['address'][] = 'required';
-            $rules['schedule'] = [
-                'smart_schedule' => ['required', 'boolean', 'bail'],
-                'confirmation' => ['required', 'boolean', 'bail'],
-                'cancel_appointment' => ['required', 'integer', 'bail'],
-                'new_appointment_not_before_than' => ['required', 'integer', 'bail'],
-                'new_appointment_not_after_than' => ['required', 'integer', 'bail'],
-                'weekends' => ['required', 'array', new Weekday, 'bail'],
-                'type_id' => ['required', 'integer', 'exists:work_schedule_types,id', 'bail'],
-                'specialist_id' => ['required', 'integer', 'exists:specialists,id', 'bail'],
-                'schedules' => ['required', 'array', new WorkSchedule, 'bail'],
+            $rules['schedule'] = ['required', 'array'];
+            $rules['schedule.type'] = [
+                'required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'
             ];
+            $rules['schedule.break_type'] = [
+                'required', 'string', Rule::in(WorkScheduleTypeHelper::getBreakTypes()), 'bail'
+            ];
+            $rules['schedule.smart_schedule'] = ['required', 'boolean', 'bail'];
+            $rules['schedule.confirmation'] = ['required', 'boolean', 'bail'];
+            $rules['schedule.cancel_appointment'] = ['required', 'integer', 'bail'];
+            $rules['schedule.limit_before'] = ['required', 'integer', 'bail'];
+            $rules['schedule.limit_after'] = ['required', 'integer', 'bail'];
+            $rules['schedule.workdays_count'] = ['integer', 'bail', 'required_if:type,==,sliding'];
+            $rules['schedule.weekends_count'] = ['integer', 'bail', 'required_if:type,==,sliding'];
+            $rules['schedule.start_from'] = ['date_format:d.m.Y', 'bail', 'required_if:type,==,sliding'];
+            $rules['schedule.schedules'] = ['required', 'array', 'bail'];
+            if ($request->schedule['type'] == 'sliding') {
+                $rules = array_merge($rules, self::getSlidingScheduleRules());
+            } else {
+                $rules = array_merge($rules, self::getNotSlidingScheduleRules());
+            }
+
             $rules['maintenance'] = [
                 'finance_analytics' => ['required', 'boolean', 'bail'],
                 'many_maintenances' => ['required', 'boolean', 'bail'],
                 'specialist_id' => ['required' , 'exists:specialists,id', 'bail'],
-                'maintenances' => ['required', 'array', new Maintenance, 'bail']
+                'maintenances' => ['required', 'array', 'bail'],
+                'maintenances.*.title' => ['required', 'string', 'bail'],
+                'maintenances.*.price' => ['required', 'integer', 'bail'],
+                'maintenances.*.duration' => ['required', 'integer', 'bail']
             ];
         } else {
             $rules['id'] = ['required', 'exists:specialists,id'];
         }
+
         return $rules;
+    }
+
+    private static function getNotSlidingScheduleRules()
+    {
+        $rules = [];
+        // Standard schedules
+        $rules['schedule.schedules.work'] = ['array', 'bail', 'max:7', 'required_if:type,!=,sliding'];
+        $rules['schedule.schedules.work.*.day'] = [
+            Rule::in(WeekdayHelper::getAll()), 'string', 'bail', 'required_if:type,!=,sliding'
+        ];
+//        $rules['schedule.schedules.work.*.is_weekend'] = [
+//            'boolean', 'bail', 'required_if:type,!=,sliding'
+//        ];
+        $rules['schedule.schedules.work.*.start'] = [
+            'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
+        ];
+        $rules['schedule.schedules.work.*.end'] = [
+            'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
+        ];
+        // Standard breaks
+        $rules['schedule.schedules.breaks'] = ['array', 'bail', 'required_if:type,!=,sliding'];
+        $rules['schedule.schedules.breaks.*.day'] = [Rule::in(WeekdayHelper::getAll()), 'string', 'bail'];
+        $rules['schedule.schedules.breaks.*.start'] = ['date_format:H:i', 'bail'];
+        $rules['schedule.schedules.breaks.*.end'] = ['date_format:H:i', 'bail'];
+
+        return $rules;
+    }
+
+    private static function getSlidingScheduleRules()
+    {
+        return [
+            // Sliding schedules
+            'schedule.schedules.work.*.day' => ['integer', 'bail', 'required_if:type,==,sliding'],
+//            'schedule.schedules.work.*.is_weekend' => ['boolean', 'bail', 'required_if:type,==,sliding'],
+            'schedule.schedules.work.*.start' => [
+                'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
+            ],
+            'schedule.schedules.work.*.end' => [
+                'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
+            ],
+            // Sliding breaks
+            'schedule.schedules.breaks' => ['required_if:type,sliding', 'array', 'bail'],
+            'schedule.schedules.breaks.*.day' => ['integer', 'bail'],
+            'schedule.schedules.breaks.*.start' => ['date_format:H:i', 'bail'],
+            'schedule.schedules.breaks.*.end' => ['date_format:H:i', 'bail'],
+        ];
     }
 }

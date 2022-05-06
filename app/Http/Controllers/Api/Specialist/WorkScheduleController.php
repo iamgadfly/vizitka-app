@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
-use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\WorkScheduleRequest;
-use App\Http\Resources\WorkScheduleSettingsResource;
 use App\Services\WorkScheduleService;
 
 class WorkScheduleController extends Controller

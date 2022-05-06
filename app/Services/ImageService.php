@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Resources\ImageResource;
 use App\Models\Image;
 use App\Repositories\ImageRepository;
 use Carbon\Carbon;

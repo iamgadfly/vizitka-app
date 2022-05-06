@@ -21,8 +21,7 @@ class DatabaseSeeder extends Seeder
             ClientSeeder::class,
             SpecialistSeeder::class,
             BusinessCardSeeder::class,
-            OnboardingSeeder::class,
-            WorkScheduleTypeSeeder::class
+            OnboardingSeeder::class
         ]);
     }
 }

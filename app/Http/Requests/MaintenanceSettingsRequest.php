@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Axiom\Rules\LocationCoordinates;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GeocodeRequest extends FormRequest
+class MaintenanceSettingsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +24,8 @@ class GeocodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'coordinates' => ['required', new LocationCoordinates]
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'coordinates.required' => __('users.geocoder.validation.coordinates.required')
+            'finance_analytics' => ['boolean', 'bail'],
+            'many_maintenances' => ['boolean', 'bail']
         ];
     }
 }

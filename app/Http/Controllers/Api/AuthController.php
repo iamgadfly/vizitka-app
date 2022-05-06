@@ -13,10 +13,8 @@ use App\Http\Requests\VerificationRequest;
 use App\Services\AuthService;
 use App\Services\SMSService;
 use App\Services\UserService;
-use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
-use Nette\Utils\Random;
 use Symfony\Component\HttpFoundation\Response;
 use function auth;
 

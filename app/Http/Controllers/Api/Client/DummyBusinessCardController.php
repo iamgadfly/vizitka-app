@@ -7,7 +7,6 @@ use App\Http\Requests\DummyBusinessCardRequest;
 use App\Http\Resources\DummyBusinessCardResource;
 use App\Services\DummyBusinessCardService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class DummyBusinessCardController extends Controller

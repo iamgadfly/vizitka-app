@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Client;
-use Illuminate\Database\Eloquent\Model;
 
 class ClientRepository extends Repository
 {

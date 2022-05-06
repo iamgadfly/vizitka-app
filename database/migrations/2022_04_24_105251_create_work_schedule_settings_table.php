@@ -21,15 +21,16 @@ return new class extends Migration
                 ->default(true);
             $table->integer('cancel_appointment')
                 ->default(60);
-            $table->integer('new_appointment_not_before_than')
+            $table->integer('limit_before')
                 ->default(43200); // One month
-            $table->integer('new_appointment_not_after_than')
+            $table->integer('limit_after')
                 ->default(60); // One hour
-            $table->json('weekends');
-            $table->foreignId('type_id')
-                ->constrained('work_schedule_types')
+            $table->foreignId('specialist_id')
+                ->constrained('specialists')
                 ->onDelete('cascade');
-            $table->foreignId('specialist_id')->constrained('specialists');
+            $table->string('type'); // standard, flexible, sliding
+            $table->string('break_type');
+            $table->date('start_from')->nullable();
             $table->timestamps();
         });
     }

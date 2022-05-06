@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WorkScheduleResource extends JsonResource
+class WorkScheduleBreakResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,9 @@ class WorkScheduleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'settings_id' => $this->settings_id,
             'start' => $this->start,
             'end' => $this->end,
-            'is_break' => $this->is_break
+            'day_id' => $this->day_id
         ];
     }
 }

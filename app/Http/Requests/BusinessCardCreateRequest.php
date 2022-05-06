@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\CardBackgroundHelper;
 use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class BusinessCardCreateRequest extends FormRequest
 {

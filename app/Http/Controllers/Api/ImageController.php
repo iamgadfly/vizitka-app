@@ -9,7 +9,6 @@ use App\Http\Requests\Image\UploadImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ImageController extends Controller

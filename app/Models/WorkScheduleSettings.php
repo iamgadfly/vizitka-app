@@ -15,14 +15,9 @@ class WorkScheduleSettings extends Model
         'weekends' => 'array'
     ];
 
-    public function schedule()
+    public function day()
     {
-        return $this->hasMany(WorkSchedule::class, 'settings_id', 'id');
-    }
-
-    public function type()
-    {
-        return $this->belongsTo(WorkScheduleType::class, 'type_id', 'id');
+        return $this->hasMany(WorkScheduleDay::class, 'settings_id', 'id');
     }
 
     public function specialist()

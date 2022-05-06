@@ -5,13 +5,9 @@ namespace App\Services;
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Models\Specialist;
-use App\Models\User;
 use App\Repositories\BusinessCardRepository;
-use App\Repositories\MaintenanceRepository;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
-use App\Repositories\WorkScheduleRepository;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SpecialistService
@@ -48,7 +44,7 @@ class SpecialistService
             DB::commit();
 
             return true;
-        } catch (\PDOException) {
+        } catch (\PDOException $e) {
             DB::rollBack();
             return false;
         }

@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('work_schedule_types', function (Blueprint $table) {
+        Schema::create('work_schedule_days', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('day')->nullable();
+            $table->unsignedInteger('day_index')->nullable();
+//            $table->boolean('is_weekend');
+            $table->foreignId('settings_id')
+                ->constrained('work_schedule_settings')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_schedule_types');
+        Schema::dropIfExists('work_schedule_days');
     }
 };
