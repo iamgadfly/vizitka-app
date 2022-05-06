@@ -16,9 +16,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Response;
 use Nette\Utils\Random;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthService
 {

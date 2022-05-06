@@ -6,9 +6,7 @@ use App\Exceptions\InvalidLoginException;
 use App\Exceptions\InvalidPasswordException;
 use App\Exceptions\SMSNotSentException;
 use App\Exceptions\TooManyLoginAttemptsException;
-use App\Exceptions\UserNotVerifiedException;
 use App\Http\Controllers\Api\AuthController as BaseAuthController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\SendPasswordRequest;
 use App\Http\Requests\SignInRequest;
 use App\Services\AuthService;
@@ -17,8 +15,6 @@ use App\Services\UserService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Nette\Utils\Random;
-use function str;
 
 class AuthController extends BaseAuthController
 {

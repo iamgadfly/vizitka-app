@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Specialist;
-use Illuminate\Database\Eloquent\Model;
 
 class SpecialistRepository extends Repository
 {

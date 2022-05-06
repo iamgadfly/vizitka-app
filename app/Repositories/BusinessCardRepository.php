@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\BusinessCard;
-use JetBrains\PhpStorm\Pure;
 
 class BusinessCardRepository extends Repository
 {

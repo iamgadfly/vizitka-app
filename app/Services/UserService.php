@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Exceptions\UserPinException;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Nette\Utils\Random;
 
 class UserService

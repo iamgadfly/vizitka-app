@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Specialist;
 use App\Exceptions\InvalidLoginException;
 use App\Exceptions\SMSNotSentException;
 use App\Exceptions\UnauthorizedException;
-use App\Exceptions\UserNotVerifiedException;
 use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Api\AuthController as BaseAuthController;

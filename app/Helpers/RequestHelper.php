@@ -134,7 +134,10 @@ class RequestHelper
                 'finance_analytics' => ['required', 'boolean', 'bail'],
                 'many_maintenances' => ['required', 'boolean', 'bail'],
                 'specialist_id' => ['required' , 'exists:specialists,id', 'bail'],
-                'maintenances' => ['required', 'array', new Maintenance, 'bail']
+                'maintenances' => ['required', 'array', 'bail'],
+                'maintenances.*.title' => ['required', 'string', 'bail'],
+                'maintenances.*.price' => ['required', 'integer', 'bail'],
+                'maintenances.*.duration' => ['required', 'integer', 'bail']
             ];
         } else {
             $rules['id'] = ['required', 'exists:specialists,id'];

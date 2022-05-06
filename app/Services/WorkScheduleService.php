@@ -7,7 +7,6 @@ use App\Http\Resources\WorkScheduleSettingsResource;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleDayRepository;
 use App\Repositories\WorkScheduleSettingsRepository;
-use App\Repositories\WorkScheduleRepository;
 use App\Repositories\WorkScheduleWorkRepository;
 
 class WorkScheduleService
