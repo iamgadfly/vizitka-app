@@ -51,7 +51,8 @@ return [
     ],
     'other' => [
         'rules' => [
-            'array_is_not_valid' => 'Массив невалидный'
+            'array_is_not_valid' => 'Массив невалидный',
+            'time_is_not_valid' => 'Данный отрезок времени занят'
         ]
     ]
 ];

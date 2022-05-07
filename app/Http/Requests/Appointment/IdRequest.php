@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Appointment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewMaintenanceRequest extends FormRequest
+class IdRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['specialist_id' => auth()->user()->specialist->id]);
+        $this->merge(['id' => $this->route('id')]);
     }
 
     /**
@@ -29,10 +29,7 @@ class NewMaintenanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
-            'title' => ['required', 'string', 'bail'],
-            'price' => ['required', 'nullable', 'integer', 'bail'],
-            'duration' => ['required', 'integer', 'bail']
+            'id' => ['required', 'exists:appointments,id']
         ];
     }
 }

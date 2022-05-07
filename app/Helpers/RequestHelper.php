@@ -2,21 +2,59 @@
 
 namespace App\Helpers;
 
-use App\Rules\Maintenance;
-use App\Rules\Weekday;
-use App\Rules\WorkSchedule;
-use App\Rules\WorkScheduleBreak;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
-    public static function getWorkScheduleRulesOnCreate(): array
+    public static function getAppointmentRules(FormRequest $request): array
     {
-        return [
-
+        $rules = [
+            'client_id' => ['exists:clients,id', 'bail'],
+            'dummy_client_id' => ['exists:dummy_clients,id', 'bail'],
+            'specialist_id' => ['exists:specialists,id', 'bail'],
+            'maintenance_id' => ['exists:maintenances,id', 'bail'],
+            'date' => ['date_format:m.d.Y', 'bail'],
+            'time_start' => ['date_format:H:i', 'bail'],
+            'time_end' => ['date_format:H:i', 'bail', 'after:time_start'],
         ];
+
+        if ($request->method() == 'POST') {
+            $rules['client_id'][] = 'exclude_if:dummy_clients_id,!=,null';
+            $rules['dummy_client_id'][] = 'exclude_if:client_id,!=,null';
+            $rules['specialist_id'][] = 'required';
+            $rules['maintenance_id'][] = 'required';
+            $rules['date'][] = 'required';
+            $rules['time_start'][] = 'required';
+            $rules['time_end'][] = 'required';
+        } elseif ($request->method() == 'PUT') {
+            $rules['id'] = ['required', 'exists:appointments,id', 'bail'];
+        }
+
+        return $rules;
     }
+
+    public static function getDummyClientRules(FormRequest $request): array
+    {
+        $rules = [
+            'name' => ['string', 'bail'],
+            'surname' => ['string', 'bail'],
+            'phone_number' => ['string', 'bail', 'unique:dummy_clients,phone_number'],
+            'discount' => ['numeric', 'between:0,1'],
+            'avatar_id' => ['exists:images,id']
+        ];
+        if ($request->method() == 'POST') {
+            $rules['name'][] = 'required';
+            $rules['surname'][] = 'required';
+            $rules['phone_number'][] = 'required';
+            $rules['discount'][] = 'required';
+            $rules['avatar_id'][] = 'required';
+        } elseif ($request->method() == 'PUT') {
+            $rules['id'] = ['required', 'exists:dummy_clients,id'];
+        }
+        return $rules;
+    }
+
     public static function getDummyBusinessCardRules(FormRequest $request): array
     {
         $rules = [
@@ -154,9 +192,6 @@ class RequestHelper
         $rules['schedule.schedules.work.*.day'] = [
             Rule::in(WeekdayHelper::getAll()), 'string', 'bail', 'required_if:type,!=,sliding'
         ];
-//        $rules['schedule.schedules.work.*.is_weekend'] = [
-//            'boolean', 'bail', 'required_if:type,!=,sliding'
-//        ];
         $rules['schedule.schedules.work.*.start'] = [
             'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
         ];
@@ -177,7 +212,6 @@ class RequestHelper
         return [
             // Sliding schedules
             'schedule.schedules.work.*.day' => ['integer', 'bail', 'required_if:type,==,sliding'],
-//            'schedule.schedules.work.*.is_weekend' => ['boolean', 'bail', 'required_if:type,==,sliding'],
             'schedule.schedules.work.*.start' => [
                 'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
             ],
