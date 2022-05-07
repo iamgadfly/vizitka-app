@@ -51,6 +51,11 @@ class AppointmentService
         return $this->repository->skipped($id);
     }
 
+    public function getAllByDay(string $date)
+    {
+        return $this->repository->getAllByDate($date);
+    }
+
     /**
      * @throws TimeIsNotValidException
      */

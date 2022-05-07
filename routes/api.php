@@ -227,6 +227,9 @@ Route::controller(AppointmentController::class)
 
     Route::post('{id}/skipped', 'skipped')
         ->name('specialist.appointment.skipped');
+
+    Route::get('byDay', 'getAllByDay')
+        ->name('specialist.appointment.byDay');
 });
 
 // Misc Routes
