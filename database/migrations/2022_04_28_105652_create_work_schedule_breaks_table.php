@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('work_schedule_breaks', function (Blueprint $table) {
             $table->id();
-            $table->time('start');
-            $table->time('end');
+            $table->time('start')->nullable();
+            $table->time('end')->nullable();
             $table->foreignId('day_id')
                 ->constrained('work_schedule_days')
                 ->onDelete('cascade');

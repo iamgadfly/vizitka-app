@@ -59,6 +59,10 @@ class WorkScheduleService
             $pair[1]['day_id'] = $pair[0]->id;
             $this->workRepository->create($pair[1]);
         }
+        foreach (array_map(null, $days, $breaks) as $pair) {
+            $pair[1]['day_id'] = $pair[0]->id;
+            $this->breakRepository->create($pair[1]);
+        }
     }
 
     private function createSlidingSchedule(
@@ -70,6 +74,10 @@ class WorkScheduleService
         foreach (array_map(null, $days, $workdays) as $pair) {
             $pair[1]['day_id'] = $pair[0]->id;
             $this->workRepository->create($pair[1]);
+        }
+        foreach (array_map(null, $days, $workdays) as $pair) {
+            $pair[1]['day_id'] = $pair[0]->id;
+            $this->breakRepository->create($pair[1]);
         }
     }
 }
