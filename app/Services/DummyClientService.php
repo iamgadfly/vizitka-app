@@ -30,4 +30,9 @@ class DummyClientService
     {
         return $this->repository->deleteById($id);
     }
+
+    public function all(int $specialistId)
+    {
+        return $this->repository->allForCurrentSpecialist($specialistId);
+    }
 }

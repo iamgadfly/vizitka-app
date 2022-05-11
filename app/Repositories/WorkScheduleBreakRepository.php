@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\WorkScheduleBreak;
+use Carbon\Carbon;
 
 class WorkScheduleBreakRepository extends Repository
 {
@@ -18,5 +19,25 @@ class WorkScheduleBreakRepository extends Repository
                 return $qb->where('id', $settingsId);
             });
         })->get();
+    }
+
+    public static function getBreaksForDay(string $date)
+    {
+        $result = [];
+        $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
+        $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($weekday) {
+            $q->where('day', $weekday);
+            return $q->whereHas('settings', function ($qb) {
+                return $qb->where('specialist_id', auth()->user()->specialist->id);
+            });
+        })->get();
+        foreach ($breaks as $break) {
+            $result[] = [
+                $break->start,
+                $break->end
+            ];
+        }
+
+        return $result;
     }
 }

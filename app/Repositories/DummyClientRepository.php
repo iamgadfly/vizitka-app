@@ -10,4 +10,9 @@ class DummyClientRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    public function allForCurrentSpecialist(int $specialistId)
+    {
+        return $this->model::where('specialist_id', $specialistId)->get();
+    }
 }

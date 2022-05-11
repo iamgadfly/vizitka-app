@@ -40,8 +40,8 @@ class RequestHelper
             'name' => ['string', 'bail'],
             'surname' => ['string', 'bail'],
             'phone_number' => ['string', 'bail', 'unique:dummy_clients,phone_number'],
-            'discount' => ['numeric', 'between:0,1'],
-            'avatar_id' => ['exists:images,id']
+            'discount' => ['numeric', 'between:0,1', 'bail'],
+            'avatar_id' => ['exists:images,id', 'bail']
         ];
         if ($request->method() == 'POST') {
             $rules['name'][] = 'required';
@@ -49,8 +49,9 @@ class RequestHelper
             $rules['phone_number'][] = 'required';
             $rules['discount'][] = 'required';
             $rules['avatar_id'][] = 'required';
+            $rules['specialist_id'] = ['required', 'exists:specialists,id', 'bail'];
         } elseif ($request->method() == 'PUT') {
-            $rules['id'] = ['required', 'exists:dummy_clients,id'];
+            $rules['id'] = ['required', 'exists:dummy_clients,id', 'bail'];
         }
         return $rules;
     }
@@ -145,7 +146,6 @@ class RequestHelper
             $rules['activity_kind_id'][] = 'required';
             $rules['title'][] = 'required';
             $rules['about'][] = 'required';
-            $rules['address'][] = 'required';
             $rules['schedule'] = ['required', 'array'];
             $rules['schedule.type'] = [
                 'required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'

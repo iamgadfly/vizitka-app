@@ -3,8 +3,13 @@
 namespace App\Services;
 
 use App\Exceptions\TimeIsNotValidException;
+use App\Helpers\ImageHelper;
+use App\Helpers\TimeHelper;
 use App\Repositories\AppointmentRepository;
+use App\Repositories\WorkScheduleBreakRepository;
+use App\Repositories\WorkScheduleWorkRepository;
 use Carbon\Carbon;
+use Ramsey\Uuid\Type\Time;
 
 
 class AppointmentService
@@ -53,7 +58,63 @@ class AppointmentService
 
     public function getAllByDay(string $date)
     {
-        return $this->repository->getAllByDate($date);
+        $output = [];
+        $result = [];
+        $i = 1;
+        foreach (TimeHelper::getWeekdays($date) as $date) {
+            $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
+            foreach ($breaks as $break) {
+                if (is_null($break[0]) && is_null($break[1])) {
+                    continue;
+                }
+                $item = [
+                    'time' => TimeHelper::getTimeInterval($break[0], $break[1]),
+                    'status' => 'break'
+                ];
+                $output[TimeHelper::formatDateForResponse($date)][] = $item;
+            }
+            $times = WorkScheduleWorkRepository::getWorkDay($date);
+            if (empty($times)){
+                continue;
+            }
+            $interval = TimeHelper::getTimeInterval($times[0], $times[1]);
+            $all = $this->repository->getAllByDate(Carbon::parse($date)->format('Y-m-d'))->sortBy('time_start');
+            if ($all->isNotEmpty()) {
+                foreach ($all as $appointment) {
+                    $item = [
+                        'time' => TimeHelper::getTimeInterval($appointment->time_start, $appointment->time_end),
+                        'name' => $appointment->client->name ?? $appointment->dummyClient->name,
+                        'surname' => $appointment->client->surname ?? $appointment->dummyClient->surname,
+                        'service' => $appointment->maintenance->title,
+                        'photo' => ImageHelper::getAssetFromFilename($appointment->client->avatar->url
+                            ?? $appointment->dummyClient->avatar->url),
+                        'status' => $appointment->status
+                    ];
+                    $output[TimeHelper::formatDateForResponse($date)][] = $item;
+                }
+            }
+            $busy = [];
+            foreach (array_column($output[TimeHelper::formatDateForResponse($date)], 'time') as $value) {
+                $busy = array_merge($busy, $value);
+            }
+
+            foreach ($busy as $time) {
+                $key = array_search($time, $interval);
+                unset($interval[$key]);
+                $interval = array_values($interval);
+            }
+            foreach ($interval as $index => $time) {
+                $interval[$index] = ['time' => [$time]];
+            }
+            $arr = array_merge($interval, $output[TimeHelper::formatDateForResponse($date)] ?? []);
+            usort($arr, function ($a, $b) {
+                return Carbon::parse($a['time'][0]) > Carbon::parse($b['time'][0]);
+            });
+            $i++;
+
+            $result[TimeHelper::formatDateForResponse($date)] = $arr;
+        }
+        return response()->json($result);
     }
 
     /**

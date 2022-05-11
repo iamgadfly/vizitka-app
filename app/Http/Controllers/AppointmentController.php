@@ -62,8 +62,6 @@ class AppointmentController extends Controller
 
     public function getAllByDay(GetAllByDayRequest $request)
     {
-        return $this->success(
-            AppointmentResource::collection($this->service->getAllByDay($request->date))
-        );
+        return $this->service->getAllByDay($request->date);
     }
 }

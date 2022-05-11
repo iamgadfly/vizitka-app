@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Specialist;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Maintenance\GetAllRequest;
 use App\Http\Requests\MaintenanceRequest;
 use App\Http\Requests\MaintenanceSettingsRequest;
 use App\Http\Requests\NewMaintenanceRequest;
@@ -47,6 +48,13 @@ class MaintenanceController extends Controller
     {
         return $this->success(
             $this->service->update($request->validated())
+        );
+    }
+
+    public function all(GetAllRequest $request)
+    {
+        return $this->success(
+           MaintenanceResource::collection($this->service->all($request->specialist_id))
         );
     }
 }

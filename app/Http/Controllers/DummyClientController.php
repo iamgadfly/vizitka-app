@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DummyClient\CreateOrUpdateRequest;
 use App\Http\Requests\DummyClient\DeleteRequest;
+use App\Http\Requests\DummyClient\GetAllRequest;
 use App\Http\Requests\DummyClient\GetRequest;
 use App\Http\Resources\DummyClientResource;
 use App\Services\DummyClientService;
@@ -42,6 +43,13 @@ class DummyClientController extends Controller
     {
         return $this->success(
             $this->service->delete($request->id)
+        );
+    }
+
+    public function all(GetAllRequest $request): JsonResponse
+    {
+        return $this->success(
+            DummyClientResource::collection($this->service->all($request->specialist_id))
         );
     }
 }
