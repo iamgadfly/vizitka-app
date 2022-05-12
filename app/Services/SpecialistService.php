@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
+use App\Exceptions\SpecialistNotCreatedException;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Models\Specialist;
 use App\Repositories\BusinessCardRepository;
@@ -23,6 +24,7 @@ class SpecialistService
     /**
      * @throws MaintenanceSettingsIsAlreadyExistingException
      * @throws WorkScheduleSettingsIsAlreadyExistingException
+     * @throws SpecialistNotCreatedException
      */
     public function create(array $data): bool
     {
@@ -43,10 +45,10 @@ class SpecialistService
 
             DB::commit();
 
-            return true;
+            return $specialist;
         } catch (\PDOException $e) {
             DB::rollBack();
-            return false;
+            throw new SpecialistNotCreatedException;
         }
     }
 

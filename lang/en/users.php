@@ -11,7 +11,8 @@ return [
             'user_not_found' => 'User not found',
             'verified' => 'User has already been verified',
             'verification_code_inst_valid' => 'Verification code is not valid',
-            'too_many_login' => 'Too many login attempts. Try again in 15 minutes'
+            'too_many_login' => 'Too many login attempts. Try again in 15 minutes',
+            'specialist_not_created' => 'Specialist not created'
         ],
         'specialist' => [
             'pin_exception' => 'PIN is not valid',
