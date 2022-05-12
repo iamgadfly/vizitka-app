@@ -234,7 +234,7 @@ Route::controller(AppointmentController::class)
     Route::post('{id}/skipped', 'skipped')
         ->name('specialist.appointment.skipped');
 
-    Route::get('byDay', 'getAllByDay')
+    Route::post('byDay', 'getAllByDay')
         ->name('specialist.appointment.byDay');
 });
 
@@ -253,7 +253,7 @@ Route::controller(MiscController::class)->group(function () {
     Route::get('/getActivityKinds', 'getActivityKinds')
         ->name('misc.activity_kinds');
 
-    Route::get('/getWeekDates', 'getWeekDates')
+    Route::post('/getWeekDates', 'getWeekDates')
         ->name('misc.get_week_dates');
 });
 
