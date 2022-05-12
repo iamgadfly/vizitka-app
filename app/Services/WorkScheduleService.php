@@ -33,7 +33,7 @@ class WorkScheduleService
             $schedule = $data['schedules'];
             if ($data['type'] !== 'sliding') {
                 $this->createNotSlidingSchedule($settings->id, $schedule['work'], $schedule['breaks']);
-            } else {
+            } elseif($data['type']) {
                 $this->createSlidingSchedule(
                     $settings->id, $schedule['work'], $schedule['breaks'],
                     $data['workdays_count'], $data['weekends_count']
@@ -54,10 +54,10 @@ class WorkScheduleService
 
     private function createNotSlidingSchedule(int $settings_id, array $workdays, array $breaks)
     {
-        $days = $this->dayRepository->fillDaysNotForSlidingType($settings_id);
-        foreach (array_map(null, $days, $workdays) as $pair) {
-            $pair[1]['day_id'] = $pair[0]->id;
-            $this->workRepository->create($pair[1]);
+        $this->dayRepository->fillDaysNotForSlidingType($settings_id);
+        foreach ($workdays as $workday) {
+            $workday['day_id'] = WorkScheduleDayRepository::getDayFromString($workday['day'])->id;
+            $this->workRepository->create($workday);
         }
         foreach ($breaks as $break) {
             $break['day_id'] = WorkScheduleDayRepository::getDayFromString($break['day'])->id;
@@ -69,11 +69,11 @@ class WorkScheduleService
         int $settings_id, array $workdays, array $breaks, int $workdays_count, int $weekends_count
     )
     {
-        $days = $this->dayRepository->fillDaysForSlidingType($settings_id, $workdays_count, $weekends_count);
+        $this->dayRepository->fillDaysForSlidingType($settings_id, $workdays_count, $weekends_count);
         // Create work days
-        foreach (array_map(null, $days, $workdays) as $pair) {
-            $pair[1]['day_id'] = $pair[0]->id;
-            $this->workRepository->create($pair[1]);
+        foreach ($workdays as $workday) {
+            $workday['day_id'] = WorkScheduleDayRepository::getDayFromInt($workday['day'])->id;
+            $this->workRepository->create($workday);
         }
         foreach ($breaks as $break) {
             $break['day_id'] = WorkScheduleDayRepository::getDayFromInt($break['day'])->id;

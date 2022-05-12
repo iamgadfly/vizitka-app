@@ -27,14 +27,7 @@ class WorkScheduleDayRepository extends Repository
     public function fillDaysForSlidingType(int $settings_id, int $workdays, int $weekends)
     {
         $output = [];
-        foreach (range(1, $workdays) as $day) {
-            $output[] = $this->create([
-                'settings_id' => $settings_id,
-                'day_index' => $day,
-            ]);
-        }
-
-        foreach (range($workdays + 1, $workdays + $weekends) as $day) {
+        foreach (range(1, $workdays + $weekends) as $day) {
             $output[] = $this->create([
                 'settings_id' => $settings_id,
                 'day_index' => $day,
