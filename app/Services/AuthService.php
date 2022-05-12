@@ -25,9 +25,18 @@ class AuthService
         protected UserService $service
     ){}
 
-    public function isUserExists(string $phoneNumber): bool
+    public function isUserExists(string $phoneNumber): array
     {
-        return !is_null($this->service->searchByPhoneNumber($phoneNumber));
+        $output = [];
+        $user = $this->service->searchByPhoneNumber($phoneNumber);
+        if (!is_null($user)) {
+            $output['user'] = true;
+            $output['specialist'] = !is_null($user->specialist);
+            $output['client'] = !is_null($user->client);
+        } else {
+            $output['user'] = false;
+        }
+        return $output;
     }
 
     /**

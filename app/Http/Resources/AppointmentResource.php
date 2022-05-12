@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ImageHelper;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,14 +17,14 @@ class AppointmentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'time_start' => Carbon::parse($this->time_start)->format('H:i'),
-            'time_end' => Carbon::parse($this->time_end)->format('H:i'),
-            'date' => Carbon::parse($this->date)->format('d.m.Y'),
+            'startTime' => Carbon::parse($this->time_start)->toISOString(),
+            'endTime' => Carbon::parse($this->time_end)->toISOString(),
             'status' => $this->status,
-            'maintenance' => MaintenanceResource::make($this->maintenance),
-            'client' => $this->when(!is_null($this->client), ClientResource::make($this->client)),
-            'dummy_client' => $this->when(!is_null($this->dummyClient), DummyClientResource::make($this->dummyClient)),
+            'service' => $this->maintenance->title,
+            'name' => $this->client?->name ?? $this->dummyClient?->name,
+            'surname' => $this->client?->name ?? $this->dummyClient?->surname,
+            'photo' => ImageHelper::getAssetFromFilename($this->client?->avatar->url
+                ?? $this->dummyClient?->avatar->url)
         ];
     }
 }

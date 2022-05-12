@@ -7,6 +7,7 @@ use App\Http\Requests\Appointment\CreateOrUpdateRequest;
 use App\Http\Requests\Appointment\GetAllByDayRequest;
 use App\Http\Requests\Appointment\IdRequest;
 use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\AppointmentResourceForCalendar;
 use App\Services\AppointmentService;
 
 class AppointmentController extends Controller
@@ -62,6 +63,6 @@ class AppointmentController extends Controller
 
     public function getAllByDay(GetAllByDayRequest $request)
     {
-        return $this->service->getAllByDay($request->date);
+        return response()->json(new AppointmentResourceForCalendar($this->service->getAllByDay($request->date)));
     }
 }

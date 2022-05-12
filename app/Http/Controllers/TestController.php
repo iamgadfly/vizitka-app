@@ -18,6 +18,6 @@ class TestController extends Controller
 //        dd($dates);
 
 //        dd(TimeHelper::getTimeInterval("13:00", "14:00"), TimeHelper::getWeekdays("15.05.2022"));
-        WorkScheduleWorkRepository::getWorkDay("9.05.2022");
+        dd(Carbon::parse('12.05.2022' . '12:22')->toISOString());
     }
 }
