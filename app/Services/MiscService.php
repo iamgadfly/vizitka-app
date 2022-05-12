@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Helpers\CardBackgroundHelper;
+use App\Helpers\TimeHelper;
 use App\Http\Resources\ActivityKindResource;
 use App\Http\Resources\OnboardingResource;
 use App\Models\ActivityKind;
@@ -70,5 +71,10 @@ class MiscService
     public function getActivityKinds(): AnonymousResourceCollection
     {
         return ActivityKindResource::collection(ActivityKind::all());
+    }
+
+    public function getWeekDates(string $date): array
+    {
+        return TimeHelper::getWeekdays($date);
     }
 }

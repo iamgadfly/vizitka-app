@@ -22,7 +22,7 @@ class TimeHelper
     {
         $dates = [];
         foreach (range(0, 6) as $day) {
-            $dates[] = Carbon::parse($date)->startOfWeek()->addDay($day)->format('d-m-Y');
+            $dates[] = Carbon::parse($date)->startOfWeek()->addDay($day)->format('Y-m-d');
         }
 
         return $dates;

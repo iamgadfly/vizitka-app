@@ -37,7 +37,7 @@ class WorkScheduleWorkRepository extends Repository
                 return $qb->where('specialist_id', auth()->user()->specialist->id);
             });
         })->get();
-        if (is_null($day->first()->start)) return [];
+        if (is_null($day->first()?->start)) return [];
         return [
             Carbon::parse($day->first()->start)->format('H:i'),
             Carbon::parse($day->first()->end)->format('H:i')

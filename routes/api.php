@@ -251,7 +251,10 @@ Route::controller(MiscController::class)->group(function () {
         ->name('misc.onboardings');
 
     Route::get('/getActivityKinds', 'getActivityKinds')
-        ->name('name.activity_kinds');
+        ->name('misc.activity_kinds');
+
+    Route::get('/getWeekDates', 'getWeekDates')
+        ->name('misc.get_week_dates');
 });
 
 Route::post('/test', [TestController::class, 'test'])->middleware('auth:sanctum');
