@@ -35,7 +35,7 @@ class SpecialistController extends Controller
         $request->merge(['background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image)]);
 
         return $this->success(
-            $this->service->create($request->toArray()),
+            new SpecialistResource($this->service->create($request->toArray())),
             Response::HTTP_CREATED,'Specialist created');
     }
 
