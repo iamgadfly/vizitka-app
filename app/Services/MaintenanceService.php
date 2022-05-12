@@ -72,4 +72,9 @@ class MaintenanceService
             $this->maintenanceSettingsRepository->mySettings()
         );
     }
+
+    public function all(int $specialistId)
+    {
+        return $this->repository->allForCurrentUser($specialistId);
+    }
 }

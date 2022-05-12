@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\TimeIsNotValidException;
 use App\Http\Requests\Appointment\CreateOrUpdateRequest;
+use App\Http\Requests\Appointment\GetAllByDayRequest;
 use App\Http\Requests\Appointment\IdRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Services\AppointmentService;
@@ -57,5 +58,10 @@ class AppointmentController extends Controller
         return $this->success(
             $this->service->skipped($request->id)
         );
+    }
+
+    public function getAllByDay(GetAllByDayRequest $request)
+    {
+        return $this->service->getAllByDay($request->date);
     }
 }

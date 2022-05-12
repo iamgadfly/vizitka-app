@@ -10,4 +10,9 @@ class MaintenanceRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    public function allForCurrentUser(int $specialistId)
+    {
+        return $this->model::where('specialist_id', $specialistId)->get();
+    }
 }

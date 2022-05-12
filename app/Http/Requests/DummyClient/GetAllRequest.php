@@ -2,19 +2,15 @@
 
 namespace App\Http\Requests\DummyClient;
 
-use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateOrUpdateRequest extends FormRequest
+class GetAllRequest extends FormRequest
 {
-    public function prepareForValidation()
+    protected function prepareForValidation()
     {
-        if ($this->method() == 'PUT') {
-            $this->merge(['id' => $this->route('id')]);
-        } elseif ($this->method() == 'POST') {
-            $this->merge(['specialist_id' => auth()->user()->specialist->id]);
-        }
+        $this->merge(['specialist_id' => auth()->user()->specialist->id]);
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -32,6 +28,8 @@ class CreateOrUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return RequestHelper::getDummyClientRules($this);
+        return [
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail']
+        ];
     }
 }

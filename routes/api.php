@@ -74,6 +74,9 @@ Route::controller(MaintenanceController::class)
 
     Route::delete('{id}', 'delete')
         ->name('specialist.maintenance.delete');
+
+    Route::get('all', 'all')
+        ->name('specialist.maintenance.all');
 });
 
 // Work schedule routes
@@ -203,6 +206,9 @@ Route::controller(DummyClientController::class)
 
     Route::delete('{id}', 'delete')
         ->name('specialist.client.delete');
+
+    Route::get('', 'all')
+        ->name('specialist.client.all');
 });
 
 // Appointment routes
@@ -227,6 +233,9 @@ Route::controller(AppointmentController::class)
 
     Route::post('{id}/skipped', 'skipped')
         ->name('specialist.appointment.skipped');
+
+    Route::get('byDay', 'getAllByDay')
+        ->name('specialist.appointment.byDay');
 });
 
 // Misc Routes
@@ -245,7 +254,7 @@ Route::controller(MiscController::class)->group(function () {
         ->name('name.activity_kinds');
 });
 
-Route::post('/test', [TestController::class, 'test']);
+Route::post('/test', [TestController::class, 'test'])->middleware('auth:sanctum');
 
 Route::post('/isUserExists', [AuthController::class, 'isUserExists']);
 Route::post('/resendSms', [AuthController::class, 'resendSms']);
