@@ -14,7 +14,7 @@ class RequestHelper
             'dummy_client_id' => ['exists:dummy_clients,id', 'bail'],
             'specialist_id' => ['exists:specialists,id', 'bail'],
             'maintenance_id' => ['exists:maintenances,id', 'bail'],
-            'date' => ['date_format:m.d.Y', 'bail'],
+            'date' => ['date_format:Y-m-d', 'bail'],
             'time_start' => ['date_format:H:i', 'bail'],
             'time_end' => ['date_format:H:i', 'bail', 'after:time_start'],
         ];
