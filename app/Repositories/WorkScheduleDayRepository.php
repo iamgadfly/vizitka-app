@@ -52,4 +52,13 @@ class WorkScheduleDayRepository extends Repository
 
         return $day->first();
     }
+
+    public static function getDayFromInt(int $id)
+    {
+        $day = WorkScheduleDay::whereHas('settings', function($q) {
+            return $q->where('specialist_id', auth()->user()->specialist->id);
+        })->where('day_index', $id)->get();
+
+        return $day->first();
+    }
 }
