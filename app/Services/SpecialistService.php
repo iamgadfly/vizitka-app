@@ -26,7 +26,7 @@ class SpecialistService
      * @throws WorkScheduleSettingsIsAlreadyExistingException
      * @throws SpecialistNotCreatedException
      */
-    public function create(array $data): bool
+    public function create(array $data)
     {
         try {
             DB::beginTransaction();
