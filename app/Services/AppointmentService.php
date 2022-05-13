@@ -60,21 +60,21 @@ class AppointmentService
     {
         try {
             $output = collect();
-            $times = WorkScheduleWorkRepository::getWorkDay($date);
-            $timesobj = new \StdClass;
-            $timesobj->start = Carbon::parse($date . $times[0])->toISOString();
-            $timesobj->end = Carbon::parse($date . $times[1])->toISOString();
-            $output->workSchedule = $timesobj;
             $appointments = $this->repository->getAllByDate($date);
             foreach ($appointments as $appointment) {
                 $appointment->time_start = Carbon::parse($appointment->date . $appointment->time_start);
                 $appointment->time_end = Carbon::parse($appointment->date . $appointment->time_end);
             }
             $output->appointments = $appointments;
-            return $output;
         } catch (\Exception $e) {
-            return [];
+            $output->appointments = collect();
         }
+        $times = WorkScheduleWorkRepository::getWorkDay($date);
+        $timesobj = new \StdClass;
+        $timesobj->start = Carbon::parse($date . $times[0])->toISOString();
+        $timesobj->end = Carbon::parse($date . $times[1])->toISOString();
+        $output->workSchedule = $timesobj;
+        return $output;
     }
 
     /**
