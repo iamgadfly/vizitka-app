@@ -18,7 +18,8 @@ class AppointmentResourceForCalendar extends JsonResource
             'data' => AppointmentResource::collection($this->appointments),
             'workSchedule' => [
                 'start' => $this->workSchedule->start,
-                'end' => $this->workSchedule->end
+                'end' => $this->workSchedule->end,
+                'interval' => 15
             ]
         ];
     }
