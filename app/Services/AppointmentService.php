@@ -72,7 +72,7 @@ class AppointmentService
             }
             $output->appointments = $appointments;
             return $output;
-        } catch (\Error $e) {
+        } catch (\Exception $e) {
             return [];
         }
     }
