@@ -63,6 +63,7 @@ class AppointmentController extends Controller
 
     public function getAllByDay(GetAllByDayRequest $request)
     {
-        return response()->json(new AppointmentResourceForCalendar($this->service->getAllByDay($request->date)));
+        $data = $this->service->getAllByDay($request->date);
+        return response()->json(new AppointmentResourceForCalendar($data));
     }
 }
