@@ -66,7 +66,7 @@ class AppointmentService
                 $appointment->time_end = Carbon::parse($appointment->date . $appointment->time_end);
             }
             $output->appointments = $appointments;
-        } catch (\Exception $e) {
+        } catch (\ErrorException $e) {
             $output->appointments = collect();
         }
         $times = WorkScheduleWorkRepository::getWorkDay($date);
