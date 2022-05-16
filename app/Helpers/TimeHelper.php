@@ -6,8 +6,11 @@ use Carbon\Carbon;
 
 class TimeHelper
 {
-    public static function getTimeInterval(string $start, string $end): array
+    public static function getTimeInterval(?string $start, ?string $end): array
     {
+        if (is_null($start) || is_null($end)) {
+            return [];
+        }
         $start = Carbon::parse($start);
         $end = Carbon::parse($end);
         $output = [$start->format('H:i')];
