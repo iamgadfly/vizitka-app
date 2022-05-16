@@ -20,7 +20,7 @@ class DummyClientResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'full_name' => "$this->name $this->surname",
-            'discount' => $this->discount,
+            'discount' => $this->discount * 100,
             'phone_number' => $this->phone_number,
             'avatar' => ImageHelper::getAssetFromFilename($this->avatar->url)
         ];

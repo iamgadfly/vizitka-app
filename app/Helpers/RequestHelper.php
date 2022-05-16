@@ -40,7 +40,7 @@ class RequestHelper
             'name' => ['string', 'bail'],
             'surname' => ['string', 'bail'],
             'phone_number' => ['string', 'bail', 'unique:dummy_clients,phone_number'],
-            'discount' => ['numeric', 'between:0,1', 'bail'],
+            'discount' => ['integer', 'min:0', 'max:100', 'bail'],
             'avatar_id' => ['exists:images,id', 'bail']
         ];
         if ($request->method() == 'POST') {

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Appointment;
+use Carbon\Carbon;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AppointmentRepository extends Repository
@@ -30,6 +31,6 @@ class AppointmentRepository extends Repository
 
     public function getAllByDate(string $date)
     {
-        return $this->model::where('date', $date)->get();
+        return $this->model::where('date', Carbon::parse($date))->get();
     }
 }
