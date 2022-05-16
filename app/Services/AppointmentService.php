@@ -61,10 +61,15 @@ class AppointmentService
         $output = collect();
         $appointments = $this->repository->getAllByDate($date);
         $output->appointments = $appointments;
-        $times = WorkScheduleWorkRepository::getWorkDay($date);
-        $timesobj = new \StdClass;
-        $timesobj->start = Carbon::parse($date . $times[0])->toISOString();
-        $timesobj->end = Carbon::parse($date . $times[1])->toISOString();
+
+        $times = WorkScheduleWorkRepository::getWorkDay($date) ?? null;
+        if (!is_null($times)) {
+            $timesobj = new \StdClass;
+            $timesobj->start = Carbon::parse($date . $times[0])->toISOString();
+            $timesobj->end = Carbon::parse($date . $times[1])->toISOString();
+        } else {
+            $timesobj = null;
+        }
         $output->workSchedule = $timesobj;
         return $output;
     }
