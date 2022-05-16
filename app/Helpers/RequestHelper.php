@@ -142,10 +142,8 @@ class RequestHelper
         if ($request->method() == 'POST') {
             $rules['user_id'][] = 'required';
             $rules['name'][] = 'required';
-            $rules['surname'][] = 'required';
             $rules['activity_kind_id'][] = 'required';
             $rules['title'][] = 'required';
-            $rules['about'][] = 'required';
             $rules['schedule'] = ['required', 'array'];
             $rules['schedule.type'] = [
                 'required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'
