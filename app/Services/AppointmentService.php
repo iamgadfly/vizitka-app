@@ -58,17 +58,9 @@ class AppointmentService
 
     public function getAllByDay(string $date)
     {
-        try {
-            $output = collect();
-            $appointments = $this->repository->getAllByDate($date);
-            foreach ($appointments as $appointment) {
-                $appointment->time_start = Carbon::parse($appointment->date . $appointment->time_start);
-                $appointment->time_end = Carbon::parse($appointment->date . $appointment->time_end);
-            }
-            $output->appointments = $appointments;
-        } catch (\ErrorException $e) {
-            $output->appointments = collect();
-        }
+        $output = collect();
+        $appointments = $this->repository->getAllByDate($date);
+        $output->appointments = $appointments;
         $times = WorkScheduleWorkRepository::getWorkDay($date);
         $timesobj = new \StdClass;
         $timesobj->start = Carbon::parse($date . $times[0])->toISOString();

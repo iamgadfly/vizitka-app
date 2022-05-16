@@ -18,6 +18,7 @@ class DummyClientService
 
     public function create(array $data)
     {
+        $data['discount'] = $data['discount'] / 100;
         return $this->repository->create($data);
     }
 
