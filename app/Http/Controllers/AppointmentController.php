@@ -6,6 +6,7 @@ use App\Exceptions\TimeIsNotValidException;
 use App\Http\Requests\Appointment\CreateOrUpdateRequest;
 use App\Http\Requests\Appointment\GetAllByDayRequest;
 use App\Http\Requests\Appointment\IdRequest;
+use App\Http\Requests\GetSvgRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\AppointmentResourceForCalendar;
 use App\Services\AppointmentService;
@@ -65,5 +66,12 @@ class AppointmentController extends Controller
     {
         $data = $this->service->getAllByDay($request->date);
         return response()->json(new AppointmentResourceForCalendar($data));
+    }
+
+    public function svgByMonth(GetSvgRequest $request)
+    {
+        return $this->success(
+            $this->service->getSvgForPeriod($request->date)
+        );
     }
 }

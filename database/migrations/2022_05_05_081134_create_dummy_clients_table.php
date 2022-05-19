@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->float('discount');
             $table->foreignId('avatar_id')->constrained('images');
-            $table->foreignId('specialist_id')->constrained('specialists');
+            $table->foreignId('specialist_id')->constrained('specialists')->onDelete('cascade');
             $table->timestamps();
         });
     }

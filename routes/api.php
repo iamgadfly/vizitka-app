@@ -236,6 +236,9 @@ Route::controller(AppointmentController::class)
 
     Route::post('byDay', 'getAllByDay')
         ->name('specialist.appointment.byDay');
+
+    Route::post('svgByMonth', 'svgByMonth')
+        ->name('specialist.appointment.svg');
 });
 
 // Misc Routes
