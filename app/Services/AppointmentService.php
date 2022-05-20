@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\ImageHelper;
+use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\WorkScheduleBreakRepository;
@@ -14,6 +15,12 @@ use Ramsey\Uuid\Type\Time;
 
 class AppointmentService
 {
+    public const SVG_MAX_DASHARRAY = 30;
+    public const SVG_MAX_DASHOFFSET = -70;
+    public const SVG_MIN_DASHARRAY = 17.5;
+    public const SVG_MIN_DASHOFFSET = -17.5;
+//    public const SVG_FILLABLE_AREA = 0.7;
+
     public function __construct(
         protected AppointmentRepository $repository
     ) {}
@@ -74,6 +81,49 @@ class AppointmentService
         return $output;
     }
 
+    public function getSvgForPeriod(string $date)
+    {
+        $output = [];
+        $dates = TimeHelper::getMonthInterval($date);
+        foreach ($dates as $date) {
+            $schedule = WorkScheduleWorkRepository::getWorkDay($date);
+            if (is_null($schedule)) {
+                continue;
+            }
+            $output[$date] = $this->getSvgForDate($date, $schedule[0], $schedule[1]);
+        }
+
+        return $output;
+    }
+
+
+
+    public function getSvgForDate(string $date, string $minTime, string $maxTime)
+    {
+        $appointments = $this->repository->getAllByDate($date);
+        $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
+        return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime);
+    }
+
+    public function getMinMaxTimes(string $date)
+    {
+        $starts = [];
+        $ends = [];
+        $weekDates = TimeHelper::getWeekdays($date);
+        foreach ($weekDates as $weekDate) {
+            $times = WorkScheduleWorkRepository::getWorkDay($weekDate) ?? null;
+            if (!is_null($times)) {
+                $starts[] = $times[0];
+                $ends[] = $times[1];
+            }
+        }
+
+        return [
+            min($starts),
+            max($ends)
+        ];
+    }
+
     /**
      * @throws TimeIsNotValidException
      */
@@ -93,5 +143,92 @@ class AppointmentService
                 throw new TimeIsNotValidException;
             }
         }
+    }
+
+    private function convertToScheduleType($appointments, $breaks, string $minTime, string $maxTime)
+    {
+        /*
+            Worship Allah, and be of those who give thanks.
+            (Quran 39:66)
+            Blessed be the name of thy Lord, full of Majesty, Bounty, and Honor. (Quran 55:78)
+            So celebrate with praises the name of thy Lord, the Supreme.
+            (Quran 59:56)
+            Praise be to Allah, who has guided us to this.
+            Never could we have found guidance, had it not been for the guidance of Allah.
+            (Quran 7:43)
+            And He is Allah, there is no god but He. To Him be praise, at the first and at the last.
+            For Him is the command, and to Him shall you be brought back. (Quran 28:70)
+            Then Praise be to Allah, Lord of the heavens and Lord of the earth. Lord and Cherisher of all the worlds!
+            To Him be Glory throughout the heavens and the earth, And He is Exalted in Power, Full of Wisdom!
+            (Quran 45:36-37)
+         */
+        $intervalsCount = TimeHelper::getTimeIntervalAsInt($minTime, $maxTime) / 15;
+        $sectionOffset = 70 / $intervalsCount;
+        $sectionOffsetValue = $sectionOffset;
+        $interval = TimeHelper::getTimeIntervalAsFreeAppointment($minTime, $maxTime);
+        $convertedAppointments = [];
+        $convertedBreaks = [];
+        foreach ($appointments as $appointment)
+        {
+            $start = Carbon::parse($appointment->time_start)->format('H:i');
+            $end = Carbon::parse($appointment->time_end)->format('H:i');
+            foreach ($interval as $index => $item) {
+                // try to find interval intersections
+                if ($item['start'] >= $start && $item['end'] <= $end) {
+                    unset($interval[$index]);
+                }
+            }
+            $convertedAppointments[] = [
+                'start' => $start,
+                'end' => $end,
+                'status' => $appointment->status
+            ];
+        }
+
+        foreach ($breaks as $break)
+        {
+            $start = Carbon::parse($break[0])->format('H:i');
+            $end = Carbon::parse($break[1])->format('H:i');
+            foreach ($interval as $index => $item) {
+                if ($item['start'] >= $start && $item['end'] <= $end) {
+                    unset($interval[$index]);
+                }
+            }
+            $convertedBreaks[] = [
+                'start' => Carbon::parse($break[0])->format('H:i'),
+                'end' => Carbon::parse($break[1])->format('H:i'),
+                'status' => 'break'
+            ];
+        }
+//        dd($interval);
+        $svg = [];
+        $all = array_merge($convertedAppointments, $convertedBreaks, $interval);
+//        dd($all);
+        usort($all, function ($a, $b) {
+            return $a['start'] > $b['start'] ? 1 : -1;
+        });
+
+        foreach ($all as $item) {
+            if ($item['status'] == 'free') {
+                $svg[] = [
+                    'stroke' => SvgHelper::getColorFromType($item['status']),
+                    'strokeDasharray' => $sectionOffsetValue,
+                    'strokeDashoffset' => -$sectionOffset
+                ];
+                $sectionOffset += $sectionOffsetValue;
+            } else {
+                $sectionsCount = TimeHelper::getTimeIntervalAsInt($item['start'], $item['end']) / 15;
+                foreach (range(1, $sectionsCount) as $value) {
+                    $svg[] = [
+                        'stroke' => SvgHelper::getColorFromType($item['status']),
+                        'strokeDasharray' => $sectionOffsetValue,
+                        'strokeDashoffset' => -$sectionOffset
+                    ];
+                    $sectionOffset += $sectionOffsetValue;
+                }
+            }
+        }
+//        dd($svg);
+        return $svg;
     }
 }
