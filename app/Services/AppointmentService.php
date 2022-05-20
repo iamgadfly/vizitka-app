@@ -204,6 +204,9 @@ class AppointmentService
         $svg = [];
         $all = array_merge($convertedAppointments, $convertedBreaks, $interval);
 //        dd($all);
+        usort($all, function ($a, $b) {
+            return $a['start'] > $b['start'] ? 1 : -1;
+        });
 
         foreach ($all as $item) {
             if ($item['status'] == 'free') {
@@ -226,9 +229,6 @@ class AppointmentService
             }
         }
 //        dd($svg);
-        usort($all, function ($a, $b) {
-            return $a['start'] > $b['start'] ? 1 : -1;
-        });
         return $svg;
     }
 }
