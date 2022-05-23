@@ -21,13 +21,18 @@ class AppointmentResource extends JsonResource
 //            'startTime' => Carbon::parse($this->time_start)->toISOString(),
 //            'endTime' => Carbon::parse($this->time_end)->toISOString(),
             'id' => $this->id,
-            'interval' => TimeHelper::getTimeInterval($this->time_start, $this->time_end),
-            'status' => $this->status,
-            'service' => $this->maintenance->title,
-            'name' => $this->client?->name ?? $this->dummyClient?->name,
-            'surname' => $this->client?->name ?? $this->dummyClient?->surname,
-            'photo' => ImageHelper::getAssetFromFilename($this->client?->avatar->url
-                ?? $this->dummyClient?->avatar->url)
+            'services' => [
+                'interval' => TimeHelper::getTimeInterval($this->time_start, $this->time_end),
+                'status' => $this->status,
+                'service' => MaintenanceResource::make($this->maintenance),
+            ],
+            'client' => [
+                'name' => $this->client?->name ?? $this->dummyClient?->name,
+                'surname' => $this->client?->name ?? $this->dummyClient?->surname,
+                'photo' => ImageHelper::getAssetFromFilename($this->client?->avatar->url
+                    ?? $this->dummyClient?->avatar->url),
+                'discount' => $this?->dummyClient->discount * 100
+            ]
         ];
     }
 }

@@ -15,12 +15,6 @@ use Ramsey\Uuid\Type\Time;
 
 class AppointmentService
 {
-    public const SVG_MAX_DASHARRAY = 30;
-    public const SVG_MAX_DASHOFFSET = -70;
-    public const SVG_MIN_DASHARRAY = 17.5;
-    public const SVG_MIN_DASHOFFSET = -17.5;
-//    public const SVG_FILLABLE_AREA = 0.7;
-
     public function __construct(
         protected AppointmentRepository $repository
     ) {}
