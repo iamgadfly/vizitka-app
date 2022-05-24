@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleDay;
 use App\Models\WorkScheduleWork;
 use Carbon\Carbon;
@@ -30,7 +31,24 @@ class WorkScheduleWorkRepository extends Repository
 
     public static function getWorkDay(string $date)
     {
+        // Try to get single work schedule for a day
         $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
+        $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
+            return $q->where('specialist_id', auth()->user()->specialist->id);
+        })->where('day', $weekday)->first()->id;
+        $single = SingleWorkSchedule::where([
+            'date' => $date,
+            'day_id' => $day_id,
+            'is_break' => false
+        ])->first();
+
+        if (!is_null($single)) {
+            return [
+                Carbon::parse($single->start)->format('H:i'),
+                Carbon::parse($single->end)->format('H:i')
+            ];
+        }
+        // If not found single work schedule
         $day = WorkScheduleWork::whereHas('day', function ($q) use ($weekday) {
             $q->where('day', $weekday);
             return $q->whereHas('settings', function ($qb) {

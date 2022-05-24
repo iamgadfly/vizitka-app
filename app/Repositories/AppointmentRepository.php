@@ -31,6 +31,7 @@ class AppointmentRepository extends Repository
 
     public function getAllByDate(string $date)
     {
+
         return $this->model::where([
             'date' => Carbon::parse($date),
             'specialist_id' => auth()->user()->specialist->id

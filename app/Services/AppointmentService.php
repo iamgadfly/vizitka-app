@@ -61,8 +61,10 @@ class AppointmentService
     {
         $output = collect();
         $appointments = $this->repository->getAllByDate($date);
+        // TODO: Uncomment this in future
+//        $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
+//        $output->breaks = $breaks;
         $output->appointments = $appointments;
-
         $times = WorkScheduleWorkRepository::getWorkDay($date) ?? null;
         if (!is_null($times)) {
             $timesobj = new \StdClass;

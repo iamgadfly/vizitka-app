@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\MiscController;
+use App\Http\Controllers\Api\SingleWorkScheduleController;
 use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
 use App\Http\Controllers\Api\Specialist\MaintenanceController;
@@ -239,6 +240,17 @@ Route::controller(AppointmentController::class)
 
     Route::post('svgByMonth', 'svgByMonth')
         ->name('specialist.appointment.svg');
+});
+
+Route::controller(SingleWorkScheduleController::class)
+    ->prefix('specialist/schedule/single')
+    ->middleware('auth:sanctum')->group(function() {
+
+    Route::post('', 'create')
+        ->name('specialist.schedule.single.create');
+
+    Route::delete('{id}', 'delete')
+        ->name('specialist.schedule.single.delete');
 });
 
 // Misc Routes
