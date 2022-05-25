@@ -22,6 +22,6 @@ class TestController extends Controller
 //        dd(Carbon::parse('12.05.2022' . '12:22')->toISOString());
 //        $m = Carbon::parse('18:32')->diff(Carbon::parse('10:00'));
 //        dd($m->h * 60 + $m->i);
-        dd(TimeHelper::getMonthInterval('19.05.2022'));
+        dd(Carbon::parse('may 2022'));
     }
 }
