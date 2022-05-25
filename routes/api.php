@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Specialist\MaintenanceController;
 use App\Http\Controllers\Api\Specialist\WorkScheduleController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\DummyClientController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -242,6 +243,8 @@ Route::controller(AppointmentController::class)
         ->name('specialist.appointment.svg');
 });
 
+// Single work schedule routes
+
 Route::controller(SingleWorkScheduleController::class)
     ->prefix('specialist/schedule/single')
     ->middleware('auth:sanctum')->group(function() {
@@ -249,8 +252,24 @@ Route::controller(SingleWorkScheduleController::class)
     Route::post('', 'create')
         ->name('specialist.schedule.single.create');
 
+    Route::post('break', 'createBreak')
+        ->name('specialist.schedule.single.create.break');
+
     Route::delete('{id}', 'delete')
         ->name('specialist.schedule.single.delete');
+});
+
+// Blacklist routes
+
+Route::controller(BlacklistController::class)
+    ->prefix('specialist/blacklist')
+    ->middleware('auth:sanctum')->group(function() {
+
+    Route::post('{id}', 'create')
+        ->name('blacklist.add');
+
+    Route::delete('{id}', 'delete')
+        ->name('blacklist.delete');
 });
 
 // Misc Routes
