@@ -26,6 +26,15 @@ class SingleWorkScheduleService
         return $output;
     }
 
+    public function createBreak(array $data)
+    {
+        $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
+        $data['is_break'] = true;
+        $data['day_id'] = WorkScheduleDayRepository::getDayFromString($weekday)->id;
+
+        return $this->repository->create($data);
+    }
+
     public function delete(int $id)
     {
         return $this->repository->deleteById($id);

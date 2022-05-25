@@ -25,6 +25,7 @@ class WorkScheduleBreakRepository extends Repository
 
     public static function getBreaksForDay(string $date)
     {
+        $result = [];
         // Try to get single work schedule for a day
         $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
 //        $day_id = WorkScheduleDay::whereHas([
@@ -51,7 +52,6 @@ class WorkScheduleBreakRepository extends Repository
             return $result;
         }
         // If not found single work schedule
-        $result = [];
         $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($weekday) {
             $q->where('day', $weekday);
             return $q->whereHas('settings', function ($qb) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SingleWorkSchedule\CreateBreakRequest;
 use App\Http\Requests\SingleWorkSchedule\CreateRequest;
 use App\Http\Requests\SingleWorkSchedule\DeleteRequest;
 use App\Http\Resources\SingleWorkSchueduleResource;
@@ -27,6 +28,13 @@ class SingleWorkScheduleController extends Controller
     {
         return $this->success(
             $this->service->delete($request->id)
+        );
+    }
+
+    public function createBreak(CreateBreakRequest $request)
+    {
+        return $this->success(
+            SingleWorkSchueduleResource::make($this->service->createBreak($request->validated()))
         );
     }
 }

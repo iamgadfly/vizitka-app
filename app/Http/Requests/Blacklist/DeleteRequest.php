@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Blacklist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetSvgRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge(['blacklisted_id' => $this->route('id')]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +29,7 @@ class GetSvgRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required|date_format:Y-m-d'
+            'blacklisted_id' => ['required', 'exists:clients,id']
         ];
     }
 }

@@ -38,4 +38,14 @@ class Repository
 
         return $model->delete();
     }
+
+    public function whereFirst(array $condition)
+    {
+        return $this->model::where($condition)->first();
+    }
+
+    public function whereGet(array $condition)
+    {
+        return $this->model::where($condition)->get();
+    }
 }
