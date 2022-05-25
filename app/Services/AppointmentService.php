@@ -92,8 +92,6 @@ class AppointmentService
         return $output;
     }
 
-
-
     public function getSvgForDate(string $date, string $minTime, string $maxTime)
     {
         $appointments = $this->repository->getAllByDate($date);
