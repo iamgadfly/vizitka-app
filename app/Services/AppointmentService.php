@@ -120,6 +120,14 @@ class AppointmentService
         ];
     }
 
+    public function massDelete(array $data)
+    {
+        foreach ($data['ids'] as $id) {
+            $this->repository->deleteById($id);
+        }
+        return true;
+    }
+
     /**
      * @throws TimeIsNotValidException
      */

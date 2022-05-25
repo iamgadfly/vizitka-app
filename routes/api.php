@@ -241,6 +241,9 @@ Route::controller(AppointmentController::class)
 
     Route::post('svgByMonth', 'svgByMonth')
         ->name('specialist.appointment.svg');
+
+    Route::delete('mass', 'massDelete')
+        ->name('specialist.appointment.delete.mass');
 });
 
 // Single work schedule routes

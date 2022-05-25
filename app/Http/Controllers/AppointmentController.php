@@ -6,6 +6,7 @@ use App\Exceptions\TimeIsNotValidException;
 use App\Http\Requests\Appointment\CreateOrUpdateRequest;
 use App\Http\Requests\Appointment\GetAllByDayRequest;
 use App\Http\Requests\Appointment\IdRequest;
+use App\Http\Requests\Appointment\MassDeleteRequest;
 use App\Http\Requests\GetSvgRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\AppointmentResourceForCalendar;
@@ -72,6 +73,13 @@ class AppointmentController extends Controller
     {
         return $this->success(
             $this->service->getSvgForPeriod($request->date)
+        );
+    }
+
+    public function massDelete(MassDeleteRequest $request)
+    {
+        return $this->success(
+            $this->service->massDelete($request->validated())
         );
     }
 }
