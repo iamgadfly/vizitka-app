@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetWeekDatesRequest;
+use App\Http\Requests\Misc\GetWeekDatesRequest;
 use App\Services\MiscService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -45,7 +45,7 @@ class MiscController extends Controller
         );
     }
 
-    public function getWeekDates(GetWeekDatesRequest $request)
+    public function getWeekDates(GetWeekDatesRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getWeekDates($request->date)

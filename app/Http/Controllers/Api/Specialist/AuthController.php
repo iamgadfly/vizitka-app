@@ -8,17 +8,16 @@ use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Api\AuthController as BaseAuthController;
-use App\Http\Requests\PinResetRequest;
-use App\Http\Requests\SendPinResetRequest;
-use App\Http\Requests\SetPinRequest;
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\User\PinResetRequest;
+use App\Http\Requests\User\SendPinResetRequest;
+use App\Http\Requests\User\SetPinRequest;
+use App\Http\Requests\User\SignInRequest;
 use App\Services\AuthService;
 use App\Services\SMSService;
 use App\Services\UserService;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use function auth;
 
 class AuthController extends BaseAuthController
@@ -46,7 +45,7 @@ class AuthController extends BaseAuthController
     /**
      * @throws UnauthorizedException
      */
-    public function setPin(SetPinRequest $request)
+    public function setPin(SetPinRequest $request): JsonResponse
     {
         $this->authService->specialistSetPin(auth()->user(), $request->pin);
 
@@ -62,7 +61,7 @@ class AuthController extends BaseAuthController
      * @throws GuzzleException
      * @throws SMSNotSentException
      */
-    public function sendPinResetRequest(SendPinResetRequest $request)
+    public function sendPinResetRequest(SendPinResetRequest $request): JsonResponse
     {
         return $this->success(
             $this->authService->sendPinResetRequest($request->phone_number),
@@ -74,7 +73,7 @@ class AuthController extends BaseAuthController
      * @throws InvalidLoginException
      * @throws VerificationCodeIsntValidException
      */
-    public function pinReset(PinResetRequest $request)
+    public function pinReset(PinResetRequest $request): JsonResponse
     {
         return $this->success(
             $this->authService->pinReset(

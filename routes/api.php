@@ -6,18 +6,17 @@ use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\MiscController;
-use App\Http\Controllers\Api\SingleWorkScheduleController;
+use App\Http\Controllers\Api\Specialist\AppointmentController;
 use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
+use App\Http\Controllers\Api\Specialist\BlacklistController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
+use App\Http\Controllers\Api\Specialist\ContactBookController;
+use App\Http\Controllers\Api\Specialist\DummyClientController;
 use App\Http\Controllers\Api\Specialist\MaintenanceController;
+use App\Http\Controllers\Api\Specialist\SingleWorkScheduleController;
 use App\Http\Controllers\Api\Specialist\WorkScheduleController;
 use App\Http\Controllers\Api\SpecialistController;
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\BlacklistController;
-use App\Http\Controllers\ContactBookController;
-use App\Http\Controllers\DummyClientController;
 use App\Http\Controllers\TestController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -316,5 +315,6 @@ Route::controller(MiscController::class)->group(function () {
 
 Route::post('/test', [TestController::class, 'test'])->middleware('auth:sanctum');
 
+// No auth routes
 Route::post('/isUserExists', [AuthController::class, 'isUserExists']);
 Route::post('/resendSms', [AuthController::class, 'resendSms']);

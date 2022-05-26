@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Maintenance;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MaintenanceRequest extends FormRequest
+class NewMaintenanceRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['id' => $this->route('id')]);
+        $this->merge(['specialist_id' => auth()->user()->specialist->id]);
     }
 
     /**
@@ -29,10 +29,10 @@ class MaintenanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:maintenances,id', 'bail'],
-            'title' => ['string', 'bail'],
-            'price' => ['integer', 'bail'],
-            'duration' => ['integer', 'bail']
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
+            'title' => ['required', 'string', 'bail'],
+            'price' => ['required', 'nullable', 'integer', 'bail'],
+            'duration' => ['required', 'integer', 'bail']
         ];
     }
 }

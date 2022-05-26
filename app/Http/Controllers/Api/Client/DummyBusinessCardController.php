@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DummyBusinessCardRequest;
+use App\Http\Requests\DummyBusinessCard\DummyBusinessCardRequest;
 use App\Http\Resources\DummyBusinessCardResource;
 use App\Services\DummyBusinessCardService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class DummyBusinessCardController extends Controller
 {

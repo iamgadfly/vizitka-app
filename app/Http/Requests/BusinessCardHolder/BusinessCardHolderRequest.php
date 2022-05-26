@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\BusinessCardHolder;
 
+use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetSpecialistRequest extends FormRequest
+class BusinessCardHolderRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['id' => $this->route('id')]);
+        if ($this->method() != 'POST') {
+            $this->merge(['id' => $this->route('id')]);
+        }
     }
 
     /**
@@ -28,8 +31,6 @@ class GetSpecialistRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'id' => 'required|int|exists:specialists,id'
-        ];
+        return RequestHelper::getBusinessCardHolderRules($this);
     }
 }

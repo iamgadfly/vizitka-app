@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Maintenance;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetSvgRequest extends FormRequest
+class MaintenanceRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge(['id' => $this->route('id')]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +29,10 @@ class GetSvgRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required|date_format:Y-m-d'
+            'id' => ['required', 'exists:maintenances,id', 'bail'],
+            'title' => ['string', 'bail'],
+            'price' => ['integer', 'bail'],
+            'duration' => ['integer', 'bail']
         ];
     }
 }

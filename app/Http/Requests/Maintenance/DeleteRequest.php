@@ -1,21 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Maintenance;
 
-use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DummyBusinessCardRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        if ($this->method() == 'POST') {
-            $this->merge(['client_id' => auth()->user()->client->id]);
-        } else {
-            $this->merge(['id' => $this->route('id')]);
-        }
+        $this->merge(['id' => $this->route('id')]);
     }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -33,6 +27,8 @@ class DummyBusinessCardRequest extends FormRequest
      */
     public function rules()
     {
-        return RequestHelper::getDummyBusinessCardRules($this);
+        return [
+            'id' => ['required', 'exists:maintenances,id']
+        ];
     }
 }

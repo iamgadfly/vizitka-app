@@ -1,16 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Maintenance;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetClientRequest extends FormRequest
+class MaintenanceSettingsRequest extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        $this->merge(['id' => $this->route('id')]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,7 +24,8 @@ class GetClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|int|exists:clients,id'
+            'finance_analytics' => ['boolean', 'bail'],
+            'many_maintenances' => ['boolean', 'bail']
         ];
     }
 }

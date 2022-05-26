@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpecialistNotCreatedException extends BaseException

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateClientRequest;
-use App\Http\Requests\GetClientRequest;
+use App\Http\Requests\Client\GetClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Services\ClientService;
 use App\Services\ImageService;

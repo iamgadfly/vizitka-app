@@ -9,7 +9,6 @@ use App\Exceptions\TooManyLoginAttemptsException;
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserAlreadyVerifiedException;
 use App\Exceptions\UserNotFoundException;
-use App\Exceptions\UserNotVerifiedException;
 use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Models\User;

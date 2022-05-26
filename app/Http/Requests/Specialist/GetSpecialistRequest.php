@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Specialist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SetPinRequest extends FormRequest
+class GetSpecialistRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge(['id' => $this->route('id')]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +29,7 @@ class SetPinRequest extends FormRequest
     public function rules()
     {
         return [
-            'pin' => 'required|string|size:4'
+            'id' => 'required|int|exists:specialists,id'
         ];
     }
 }

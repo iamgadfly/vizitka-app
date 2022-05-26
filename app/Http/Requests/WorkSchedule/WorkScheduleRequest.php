@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\WorkSchedule;
 
-use App\Rules\Weekday;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WorkScheduleRequest extends FormRequest

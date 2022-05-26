@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Client;
-use App\Repositories\ClientRepository;
 use App\Repositories\ContactBookRepository;
 
 
@@ -13,7 +12,7 @@ class ContactBookService
         protected ContactBookRepository $repository,
     ) {}
 
-    public function massCreate(array $data)
+    public function massCreate(array $data): array
     {
         $output = [];
         foreach ($data['phone_numbers'] as $phoneNumber) {

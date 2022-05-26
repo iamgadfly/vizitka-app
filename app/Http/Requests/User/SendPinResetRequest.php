@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SendPasswordRequest extends FormRequest
+class SendPinResetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class SendPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|string|exists:users|bail',
-            'pin' => 'required|string|size:4|bail'
+            'phone_number' => 'required|max:15|exists:users',
         ];
     }
 }

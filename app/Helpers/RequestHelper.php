@@ -120,7 +120,7 @@ class RequestHelper
             'user_id' => ['int', 'exists:users,id'],
             'name' => ['string', 'max:255'],
             'surname' => ['string', 'max:255'],
-            'avatar_id' => ['exists:images,id'],
+            'avatar_id' => ['integer', 'exists:images,id'],
             'activity_kind_id' => ['int', 'exists:activity_kinds,id'],
             'title' => ['string'],
             'about' => ['string'],
@@ -176,7 +176,7 @@ class RequestHelper
         return $rules;
     }
 
-    private static function getNotSlidingScheduleRules()
+    private static function getNotSlidingScheduleRules(): array
     {
         $rules = [];
         // Standard schedules
@@ -199,7 +199,7 @@ class RequestHelper
         return $rules;
     }
 
-    private static function getSlidingScheduleRules()
+    private static function getSlidingScheduleRules(): array
     {
         return [
             // Sliding schedules

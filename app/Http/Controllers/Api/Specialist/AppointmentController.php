@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Specialist;
 
 use App\Exceptions\TimeIsNotValidException;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Appointment\CreateOrUpdateRequest;
 use App\Http\Requests\Appointment\GetAllByDayRequest;
+use App\Http\Requests\Appointment\GetSvgRequest;
 use App\Http\Requests\Appointment\IdRequest;
 use App\Http\Requests\Appointment\MassDeleteRequest;
-use App\Http\Requests\GetSvgRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\AppointmentResourceForCalendar;
 use App\Services\AppointmentService;
+use Illuminate\Http\JsonResponse;
 
 class AppointmentController extends Controller
 {
@@ -21,62 +23,62 @@ class AppointmentController extends Controller
     /**
      * @throws TimeIsNotValidException
      */
-    public function create(CreateOrUpdateRequest $request)
+    public function create(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(
             AppointmentResource::collection($this->service->create($request->validated()))
         );
     }
 
-    public function update(CreateOrUpdateRequest $request)
+    public function update(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(
             AppointmentResource::collection($this->service->update($request->validated()))
         );
     }
 
-    public function get(IdRequest $request)
+    public function get(IdRequest $request): JsonResponse
     {
         return $this->success(
             AppointmentResource::collection($this->service->get($request->order_number))
         );
     }
 
-    public function delete(IdRequest $request)
+    public function delete(IdRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->delete($request->id)
         );
     }
 
-    public function confirm(IdRequest $request)
+    public function confirm(IdRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->confirm($request->id)
         );
     }
 
-    public function skipped(IdRequest $request)
+    public function skipped(IdRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->skipped($request->id)
         );
     }
 
-    public function getAllByDay(GetAllByDayRequest $request)
+    public function getAllByDay(GetAllByDayRequest $request): JsonResponse
     {
         $data = $this->service->getAllByDay($request->date);
         return response()->json(new AppointmentResourceForCalendar($data));
     }
 
-    public function svgByMonth(GetSvgRequest $request)
+    public function svgByMonth(GetSvgRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getSvgForPeriod($request->date)
         );
     }
 
-    public function massDelete(MassDeleteRequest $request)
+    public function massDelete(MassDeleteRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->massDelete($request->validated())

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SingleWorkSchedule extends Model
 {
@@ -11,7 +12,7 @@ class SingleWorkSchedule extends Model
 
     protected $guarded = ['id'];
 
-    public function day()
+    public function day(): BelongsTo
     {
         return $this->belongsTo(WorkScheduleDay::class, 'day_id', 'id');
     }
