@@ -17,6 +17,13 @@ class ImageController extends Controller
         protected ImageService $service
     ) {}
 
+    /**
+     * @param UploadImageRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Upload Image route
+     * @lrd:end
+     */
     public function upload(UploadImageRequest $request): JsonResponse
     {
         return $this->success(
@@ -25,6 +32,13 @@ class ImageController extends Controller
         );
     }
 
+    /**
+     * @param DeleteImageRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Image route
+     * @lrd:end
+     */
     public function delete(DeleteImageRequest $request): JsonResponse
     {
         return $this->success(
@@ -32,6 +46,13 @@ class ImageController extends Controller
         );
     }
 
+    /**
+     * @param GetImageRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Image route
+     * @lrd:end
+     */
     public function get(GetImageRequest $request): JsonResponse
     {
         return $this->success(

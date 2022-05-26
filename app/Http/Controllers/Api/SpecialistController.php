@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
+use App\Exceptions\SpecialistNotCreatedException;
+use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Helpers\CardBackgroundHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Specialist\CreateSpecialistRequest;
@@ -19,6 +22,16 @@ class SpecialistController extends Controller
         protected ImageService $imageService
     ) {}
 
+    /**
+     * @param CreateSpecialistRequest $request
+     * @return JsonResponse
+     * @throws MaintenanceSettingsIsAlreadyExistingException
+     * @throws SpecialistNotCreatedException
+     * @throws WorkScheduleSettingsIsAlreadyExistingException
+     * @lrd:start
+     * Create Specialist route
+     * @lrd:end
+     */
     public function create(CreateSpecialistRequest $request): JsonResponse
     {
         $specialist = $this->service->findByUserId($request->user_id);
@@ -39,6 +52,13 @@ class SpecialistController extends Controller
             Response::HTTP_CREATED,'Specialist created');
     }
 
+    /**
+     * @param GetSpecialistRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Specialist route
+     * @lrd:end
+     */
     public function get(GetSpecialistRequest $request): JsonResponse
     {
         return $this->success(
@@ -47,6 +67,13 @@ class SpecialistController extends Controller
         );
     }
 
+    /**
+     * @param CreateSpecialistRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Specialist route
+     * @lrd:end
+     */
     public function update(CreateSpecialistRequest $request): JsonResponse
     {
         if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
@@ -62,6 +89,12 @@ class SpecialistController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get current Specialist route
+     * @lrd:end
+     */
     public function me(): JsonResponse
     {
         return $this->success(

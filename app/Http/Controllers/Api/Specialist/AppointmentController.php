@@ -22,6 +22,9 @@ class AppointmentController extends Controller
 
     /**
      * @throws TimeIsNotValidException
+     * @lrd:start
+     * Create Appointment route
+     * @lrd:end
      */
     public function create(CreateOrUpdateRequest $request): JsonResponse
     {
@@ -30,6 +33,14 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param CreateOrUpdateRequest $request
+     * @return JsonResponse
+     * @throws TimeIsNotValidException
+     * @lrd:start
+     * Update Appointment route
+     * @lrd:end
+     */
     public function update(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(
@@ -37,6 +48,13 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param IdRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Appointment route
+     * @lrd:end
+     */
     public function get(IdRequest $request): JsonResponse
     {
         return $this->success(
@@ -44,6 +62,13 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param IdRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Appointment route
+     * @lrd:end
+     */
     public function delete(IdRequest $request): JsonResponse
     {
         return $this->success(
@@ -51,6 +76,13 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param IdRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Confirm Appointment route
+     * @lrd:end
+     */
     public function confirm(IdRequest $request): JsonResponse
     {
         return $this->success(
@@ -58,6 +90,13 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param IdRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Skipped Appointment route
+     * @lrd:end
+     */
     public function skipped(IdRequest $request): JsonResponse
     {
         return $this->success(
@@ -65,12 +104,26 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param GetAllByDayRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get All appointments by day route
+     * @lrd:end
+     */
     public function getAllByDay(GetAllByDayRequest $request): JsonResponse
     {
         $data = $this->service->getAllByDay($request->date);
         return response()->json(new AppointmentResourceForCalendar($data));
     }
 
+    /**
+     * @param GetSvgRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get SVG data for a month
+     * @lrd:end
+     */
     public function svgByMonth(GetSvgRequest $request): JsonResponse
     {
         return $this->success(
@@ -78,6 +131,13 @@ class AppointmentController extends Controller
         );
     }
 
+    /**
+     * @param MassDeleteRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Mass delete appointments route
+     * @lrd:end
+     */
     public function massDelete(MassDeleteRequest $request): JsonResponse
     {
         return $this->success(

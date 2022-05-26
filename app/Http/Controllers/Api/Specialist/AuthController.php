@@ -31,6 +31,9 @@ class AuthController extends BaseAuthController
     /**
      * @throws UserPinException
      * @throws InvalidLoginException
+     * @lrd:start
+     * Sing In route
+     * @lrd:end
      */
     public function signIn(SignInRequest $request): JsonResponse
     {
@@ -44,6 +47,9 @@ class AuthController extends BaseAuthController
 
     /**
      * @throws UnauthorizedException
+     * @lrd:start
+     * Set PIN route
+     * @lrd:end
      */
     public function setPin(SetPinRequest $request): JsonResponse
     {
@@ -60,6 +66,9 @@ class AuthController extends BaseAuthController
      * @throws InvalidLoginException
      * @throws GuzzleException
      * @throws SMSNotSentException
+     * @lrd:start
+     * Send PIN reset request route
+     * @lrd:end
      */
     public function sendPinResetRequest(SendPinResetRequest $request): JsonResponse
     {
@@ -72,6 +81,9 @@ class AuthController extends BaseAuthController
     /**
      * @throws InvalidLoginException
      * @throws VerificationCodeIsntValidException
+     * @lrd:start
+     * PIN reset route
+     * @lrd:end
      */
     public function pinReset(PinResetRequest $request): JsonResponse
     {

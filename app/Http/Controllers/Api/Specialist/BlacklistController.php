@@ -14,6 +14,13 @@ class BlacklistController extends Controller
         protected BlacklistService $service
     ){}
 
+    /**
+     * @param CreateRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Add to blacklist route
+     * @lrd:end
+     */
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
@@ -21,6 +28,13 @@ class BlacklistController extends Controller
         );
     }
 
+    /**
+     * @param DeleteRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Remove from blacklist route
+     * @lrd:end
+     */
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(

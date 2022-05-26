@@ -16,6 +16,13 @@ class BusinessCardController extends Controller
         protected BusinessCardService $service
     ) {}
 
+    /**
+     * @param BusinessCardGetRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Business Card route
+     * @lrd:end
+     */
     public function get(BusinessCardGetRequest $request): JsonResponse
     {
         return $this->success(
@@ -24,6 +31,13 @@ class BusinessCardController extends Controller
         );
     }
 
+    /**
+     * @param BusinessCardCreateRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Business Card route
+     * @lrd:end
+     */
     public function update(BusinessCardCreateRequest $request): JsonResponse
     {
         return $this->success(
