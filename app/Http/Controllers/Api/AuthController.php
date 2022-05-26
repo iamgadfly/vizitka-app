@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\InvalidLoginException;
 use App\Exceptions\SMSNotSentException;
 use App\Exceptions\UserAlreadyVerifiedException;
 use App\Exceptions\UserNotFoundException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\IsUserExistsRequest;
-use App\Http\Requests\SignUpRequest;
-use App\Http\Requests\VerificationRequest;
+use App\Http\Requests\User\IsUserExistsRequest;
+use App\Http\Requests\User\SignUpRequest;
+use App\Http\Requests\User\VerificationRequest;
 use App\Services\AuthService;
 use App\Services\SMSService;
 use App\Services\UserService;
@@ -50,6 +51,11 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * @throws InvalidLoginException
+     * @throws GuzzleException
+     * @throws SMSNotSentException
+     */
     public function resendSms(SignUpRequest $request): JsonResponse
     {
         $this->authService->resendSms($request->phone_number);

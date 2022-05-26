@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\WorkScheduleDay;
 use App\Repositories\SingleWorkScheduleRepository;
 use App\Repositories\WorkScheduleDayRepository;
 use Carbon\Carbon;
@@ -14,7 +13,7 @@ class SingleWorkScheduleService
         protected SingleWorkScheduleRepository $repository
     ) {}
 
-    public function create(array $data)
+    public function create(array $data): array
     {
         $output = [];
         foreach ($data['dates'] as $date) {

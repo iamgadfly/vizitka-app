@@ -176,7 +176,7 @@ class RequestHelper
         return $rules;
     }
 
-    private static function getNotSlidingScheduleRules()
+    private static function getNotSlidingScheduleRules(): array
     {
         $rules = [];
         // Standard schedules
@@ -199,7 +199,7 @@ class RequestHelper
         return $rules;
     }
 
-    private static function getSlidingScheduleRules()
+    private static function getSlidingScheduleRules(): array
     {
         return [
             // Sliding schedules

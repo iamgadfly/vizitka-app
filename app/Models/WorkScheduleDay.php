@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WorkScheduleDay extends Model
 {
@@ -11,17 +13,17 @@ class WorkScheduleDay extends Model
 
     protected $guarded = ['id'];
 
-    public function work()
+    public function work(): HasMany
     {
         return $this->hasMany(WorkScheduleWork::class, 'day_id', 'id');
     }
 
-    public function breaks()
+    public function breaks(): HasMany
     {
         return $this->hasMany(WorkScheduleBreak::class, 'day_id', 'id');
     }
 
-    public function settings()
+    public function settings(): BelongsTo
     {
         return $this->belongsTo(WorkScheduleSettings::class, 'settings_id', 'id');
     }

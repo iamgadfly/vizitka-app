@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\DummyBusinessCard;
 
 use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BusinessCardHolderRequest extends FormRequest
+class DummyBusinessCardRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        if ($this->method() != 'POST') {
+        if ($this->method() == 'POST') {
+            $this->merge(['client_id' => auth()->user()->client->id]);
+        } else {
             $this->merge(['id' => $this->route('id')]);
         }
     }
@@ -31,6 +33,6 @@ class BusinessCardHolderRequest extends FormRequest
      */
     public function rules()
     {
-        return RequestHelper::getBusinessCardHolderRules($this);
+        return RequestHelper::getDummyBusinessCardRules($this);
     }
 }

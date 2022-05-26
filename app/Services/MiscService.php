@@ -10,14 +10,14 @@ use App\Models\ActivityKind;
 use App\Models\Onboarding;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 
 class MiscService
 {
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function getCountries(): array
     {

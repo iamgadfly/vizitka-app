@@ -3,15 +3,14 @@
 namespace App\Services;
 
 use App\Exceptions\TimeIsNotValidException;
-use App\Helpers\ImageHelper;
 use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleWorkRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Nette\Utils\Random;
-use Ramsey\Uuid\Type\Time;
 
 
 class AppointmentService
@@ -23,7 +22,7 @@ class AppointmentService
     /**
      * @throws TimeIsNotValidException
      */
-    public function create(array $data)
+    public function create(array $data): array
     {
         $orderNumber = Random::generate(5, '0-9');
         $output = [];
@@ -41,7 +40,7 @@ class AppointmentService
     /**
      * @throws TimeIsNotValidException
      */
-    public function update(array $data)
+    public function update(array $data): array
     {
 
         $output = [];
@@ -79,7 +78,7 @@ class AppointmentService
         return $this->repository->skipped($id);
     }
 
-    public function getAllByDay(string $date)
+    public function getAllByDay(string $date): Collection
     {
         $output = collect();
         $appointments = $this->repository->getAllByDate($date);
@@ -99,7 +98,7 @@ class AppointmentService
         return $output;
     }
 
-    public function getSvgForPeriod(string $date)
+    public function getSvgForPeriod(string $date): array
     {
         $output = [];
         $dates = TimeHelper::getMonthInterval($date);
@@ -114,14 +113,14 @@ class AppointmentService
         return $output;
     }
 
-    public function getSvgForDate(string $date, string $minTime, string $maxTime)
+    public function getSvgForDate(string $date, string $minTime, string $maxTime): array
     {
         $appointments = $this->repository->getAllByDate($date);
         $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
         return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime);
     }
 
-    public function getMinMaxTimes(string $date)
+    public function getMinMaxTimes(string $date): array
     {
         $starts = [];
         $ends = [];
@@ -140,7 +139,7 @@ class AppointmentService
         ];
     }
 
-    public function massDelete(array $data)
+    public function massDelete(array $data): bool
     {
         foreach ($data['ids'] as $id) {
             $this->repository->deleteById($id);
@@ -169,7 +168,7 @@ class AppointmentService
         }
     }
 
-    private function convertToScheduleType($appointments, $breaks, string $minTime, string $maxTime)
+    private function convertToScheduleType($appointments, $breaks, string $minTime, string $maxTime): array
     {
         /*
             Worship Allah, and be of those who give thanks.
@@ -224,10 +223,9 @@ class AppointmentService
                 'status' => 'break'
             ];
         }
-//        dd($interval);
         $svg = [];
         $all = array_merge($convertedAppointments, $convertedBreaks, $interval);
-//        dd($all);
+
         usort($all, function ($a, $b) {
             return $a['start'] > $b['start'] ? 1 : -1;
         });
@@ -252,7 +250,6 @@ class AppointmentService
                 }
             }
         }
-//        dd($svg);
         return $svg;
     }
 }

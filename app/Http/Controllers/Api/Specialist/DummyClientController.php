@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Specialist;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\DummyClient\CreateOrUpdateRequest;
 use App\Http\Requests\DummyClient\DeleteRequest;
 use App\Http\Requests\DummyClient\GetAllRequest;
@@ -9,7 +10,6 @@ use App\Http\Requests\DummyClient\GetRequest;
 use App\Http\Resources\DummyClientResource;
 use App\Services\DummyClientService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class DummyClientController extends Controller
 {

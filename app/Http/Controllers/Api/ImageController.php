@@ -9,7 +9,7 @@ use App\Http\Requests\Image\UploadImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImageController extends Controller
 {

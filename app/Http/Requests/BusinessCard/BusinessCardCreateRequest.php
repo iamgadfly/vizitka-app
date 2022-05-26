@@ -1,11 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\BusinessCard;
 
+use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PinResetRequest extends FormRequest
+class BusinessCardCreateRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        if ($this->method() == 'PUT') {
+            $this->merge(['id' => $this->route('id')]);
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,10 +31,6 @@ class PinResetRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'phone_number' => 'required|max:15|exists:users|bail',
-            'verification_code' => 'required|max:4|bail',
-            'pin' => 'required|string|size:4|bail'
-        ];
+        return RequestHelper::getBusinessCardRules($this);
     }
 }

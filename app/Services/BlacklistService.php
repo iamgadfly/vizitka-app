@@ -31,7 +31,7 @@ class BlacklistService
             'specialist_id' => $id,
             'blacklisted_id' => auth()->user()->specialist->id
         ]);
-        if ($record->trashed()) {
+        if (!is_null($record) && $record->trashed()) {
             $record->restore();
         }
         $recordId = $this->repository->whereFirst([

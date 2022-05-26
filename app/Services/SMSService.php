@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\SMSNotSentException;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 
 class SMSService
 {
@@ -22,7 +23,7 @@ class SMSService
 
     /**
      * @throws SMSNotSentException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function sendSms(string $text, string $phone)
     {

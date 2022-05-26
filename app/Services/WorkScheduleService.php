@@ -21,7 +21,7 @@ class WorkScheduleService
     /**
      * @throws WorkScheduleSettingsIsAlreadyExistingException
      */
-    public function create(array $data)
+    public function create(array $data): WorkScheduleSettingsResource
     {
         $settings = $this->settingsRepository->mySettings();
         if ($settings) {
@@ -47,12 +47,12 @@ class WorkScheduleService
         }
     }
 
-    public function mySettings()
+    public function mySettings(): WorkScheduleSettingsResource
     {
         return new WorkScheduleSettingsResource($this->settingsRepository->mySettings());
     }
 
-    private function createNotSlidingSchedule(int $settings_id, array $workdays, array $breaks)
+    private function createNotSlidingSchedule(int $settings_id, array $workdays, array $breaks): void
     {
         $this->dayRepository->fillDaysNotForSlidingType($settings_id);
         foreach ($workdays as $workday) {
@@ -67,7 +67,7 @@ class WorkScheduleService
 
     private function createSlidingSchedule(
         int $settings_id, array $workdays, array $breaks, int $workdays_count, int $weekends_count
-    )
+    ): void
     {
         $this->dayRepository->fillDaysForSlidingType($settings_id, $workdays_count, $weekends_count);
         // Create work days

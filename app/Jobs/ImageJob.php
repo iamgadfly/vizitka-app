@@ -29,7 +29,7 @@ class ImageJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $images = Image::all();
         $nowDate = Carbon::now();

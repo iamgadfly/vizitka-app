@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IsUserExistsRequest extends FormRequest
+class SendPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class IsUserExistsRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|regex:/\+[0-9]{0,3}[0-9]{10}/'
+            'phone_number' => 'required|string|exists:users|bail',
+            'pin' => 'required|string|size:4|bail'
         ];
     }
 }

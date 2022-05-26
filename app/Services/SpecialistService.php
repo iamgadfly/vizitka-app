@@ -9,7 +9,6 @@ use App\Models\Specialist;
 use App\Repositories\BusinessCardRepository;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\DB;
 
 class SpecialistService
 {
@@ -29,7 +28,7 @@ class SpecialistService
     public function create(array $data)
     {
         try {
-            DB::beginTransaction();
+            \DB::beginTransaction();
 
             // Create specialist and his business card
             $specialist = $this->repository->create($data);
@@ -43,11 +42,11 @@ class SpecialistService
             $this->maintenanceService->create($data['maintenance']);
             $this->scheduleService->create($data['schedule']);
 
-            DB::commit();
+            \DB::commit();
 
             return $specialist;
         } catch (\PDOException $e) {
-            DB::rollBack();
+            \DB::rollBack();
             throw new SpecialistNotCreatedException;
         }
     }
@@ -55,15 +54,15 @@ class SpecialistService
     public function update($data): bool
     {
         try {
-            DB::beginTransaction();
+            \DB::beginTransaction();
             $this->repository->update($data['id'], $data);
             $data['card_id'] = $this->repository->getById($data['id'])->card->id;
             $this->businessCardRepository->update($data['card_id'], $data);
-            DB::commit();
+            \DB::commit();
 
             return true;
         } catch (\PDOException) {
-            DB::rollBack();
+            \DB::rollBack();
             return false;
         }
     }

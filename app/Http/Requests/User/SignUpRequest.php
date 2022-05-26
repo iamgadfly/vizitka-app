@@ -1,19 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BusinessCardCreateRequest extends FormRequest
+class SignUpRequest extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        if ($this->method() == 'PUT') {
-            $this->merge(['id' => $this->route('id')]);
-        }
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -31,6 +23,15 @@ class BusinessCardCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return RequestHelper::getBusinessCardRules($this);
+        return [
+            'phone_number' => ['required', 'string', 'max:15'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+          'phone_number.unique' => __('users.auth.validation.phone_number.unique')
+        ];
     }
 }

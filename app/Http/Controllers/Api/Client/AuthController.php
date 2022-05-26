@@ -7,14 +7,14 @@ use App\Exceptions\InvalidPasswordException;
 use App\Exceptions\SMSNotSentException;
 use App\Exceptions\TooManyLoginAttemptsException;
 use App\Http\Controllers\Api\AuthController as BaseAuthController;
-use App\Http\Requests\SendPasswordRequest;
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\User\SendPasswordRequest;
+use App\Http\Requests\User\SignInRequest;
 use App\Services\AuthService;
 use App\Services\SMSService;
 use App\Services\UserService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends BaseAuthController
 {
