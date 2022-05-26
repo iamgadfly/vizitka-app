@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Specialist\WorkScheduleController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\BlacklistController;
+use App\Http\Controllers\ContactBookController;
 use App\Http\Controllers\DummyClientController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -273,6 +274,25 @@ Route::controller(BlacklistController::class)
 
     Route::delete('{id}', 'delete')
         ->name('blacklist.delete');
+});
+
+// Contact book routes
+
+Route::controller(ContactBookController::class)
+    ->prefix('specialist/contactBook')
+    ->middleware('auth:sanctum')->group(function() {
+
+    Route::post('/mass', 'massCreate')
+        ->name('specialist.contactBook.create.mass');
+
+    Route::post('', 'create')
+            ->name('specialist.contactBook.create');
+
+    Route::delete('{id}', 'delete')
+        ->name('specialist.contactBook.delete');
+
+    Route::get('', 'get')
+        ->name('specialist.contactBook.get');
 });
 
 // Misc Routes
