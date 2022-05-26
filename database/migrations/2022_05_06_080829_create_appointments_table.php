@@ -16,14 +16,19 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('specialist_id')
-                ->constrained('specialists');
+                ->constrained('specialists')
+                ->onDelete('cascade');
             $table->foreignId('client_id')
                 ->nullable()
-                ->constrained('clients');
+                ->constrained('clients')
+                ->onDelete('cascade');
             $table->foreignId('dummy_client_id')
                 ->nullable()
-                ->constrained('dummy_clients');
-            $table->foreignId('maintenance_id')->constrained('maintenances');
+                ->constrained('dummy_clients')
+                ->onDelete('cascade');
+            $table->foreignId('maintenance_id')
+                ->constrained('maintenances')
+                ->onDelete('cacade');
             $table->date('date');
             $table->time('time_start');
             $table->time('time_end');
