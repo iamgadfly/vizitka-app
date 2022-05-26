@@ -8,7 +8,7 @@ class IdRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['id' => $this->route('id')]);
+        $this->merge(['order_number' => $this->route('orderNumber')]);
     }
 
     /**
@@ -29,7 +29,7 @@ class IdRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:appointments,id']
+            'order_number' => ['required', 'exists:appointments,order_number']
         ];
     }
 }

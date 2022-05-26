@@ -10,25 +10,19 @@ class RequestHelper
     public static function getAppointmentRules(FormRequest $request): array
     {
         $rules = [
-            'client_id' => ['exists:clients,id', 'bail'],
-            'dummy_client_id' => ['exists:dummy_clients,id', 'bail'],
-            'specialist_id' => ['exists:specialists,id', 'bail'],
-            'maintenance_id' => ['exists:maintenances,id', 'bail'],
-            'date' => ['date_format:Y-m-d', 'bail'],
-            'time_start' => ['date_format:H:i', 'bail'],
-            'time_end' => ['date_format:H:i', 'bail', 'after:time_start'],
+            'client_id' => ['exclude_if:dummy_clients_id,!=,null', 'exists:clients,id', 'bail'],
+            'dummy_client_id' => ['exclude_if:client_id,!=,null', 'exists:dummy_clients,id', 'bail'],
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
+            'appointments' => ['required', 'array'],
+            'appointments.*.maintenance_id' => ['required', 'exists:maintenances,id', 'bail'],
+            'appointments.*.date' => ['required', 'date_format:Y-m-d', 'bail'],
+            'appointments.*.time_start' => ['required', 'date_format:H:i', 'bail'],
+            'appointments.*.time_end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
         ];
 
-        if ($request->method() == 'POST') {
-            $rules['client_id'][] = 'exclude_if:dummy_clients_id,!=,null';
-            $rules['dummy_client_id'][] = 'exclude_if:client_id,!=,null';
-            $rules['specialist_id'][] = 'required';
-            $rules['maintenance_id'][] = 'required';
-            $rules['date'][] = 'required';
-            $rules['time_start'][] = 'required';
-            $rules['time_end'][] = 'required';
-        } elseif ($request->method() == 'PUT') {
-            $rules['id'] = ['required', 'exists:appointments,id', 'bail'];
+        if ($request->method() == 'PUT') {
+            $rules['order_number'] = ['required', 'exists:appointments,order_number', 'bail'];
+            $rules['appointments.*.id'] = ['required', 'exists:appointments,id', 'bail'];
         }
 
         return $rules;
