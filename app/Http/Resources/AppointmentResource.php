@@ -18,9 +18,8 @@ class AppointmentResource extends JsonResource
     public function toArray($request)
     {
         return [
-//            'startTime' => Carbon::parse($this->time_start)->toISOString(),
-//            'endTime' => Carbon::parse($this->time_end)->toISOString(),
             'id' => $this->id,
+            'order_number' => $this->order_number,
             'services' => [
                 'interval' => TimeHelper::getTimeInterval($this->time_start, $this->time_end),
                 'status' => $this->status,

@@ -221,19 +221,19 @@ Route::controller(AppointmentController::class)
     Route::post('', 'create')
         ->name('specialist.appointment.create');
 
-    Route::get('{id}', 'get')
+    Route::get('{orderNumber}', 'get')
         ->name('specialist.appointment.get');
 
-    Route::put('{id}', 'update')
+    Route::put('{orderNumber}', 'update')
         ->name('specialist.appointment.update');
 
-    Route::delete('{id}', 'delete')
+    Route::delete('{orderNumber}', 'delete')
         ->name('specialist.appointment.delete');
 
-    Route::post('{id}/confirm', 'confirm')
+    Route::post('{orderNumber}/confirm', 'confirm')
         ->name('specialist.appointment.confirm');
 
-    Route::post('{id}/skipped', 'skipped')
+    Route::post('{orderNumber}/skipped', 'skipped')
         ->name('specialist.appointment.skipped');
 
     Route::post('byDay', 'getAllByDay')

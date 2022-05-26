@@ -9,11 +9,10 @@ class CreateOrUpdateRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        if ($this->method() == 'POST') {
-            $this->merge(['specialist_id' => auth()->user()->specialist->id]);
-        } elseif ($this->method() == 'PUT') {
-            $this->merge(['id' => $this->route('id')]);
+        if ($this->method() == 'PUT') {
+            $this->merge(['order_number' => $this->route('orderNumber')]);
         }
+        $this->merge(['specialist_id' => auth()->user()->specialist->id]);
     }
 
     /**

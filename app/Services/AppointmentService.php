@@ -10,6 +10,7 @@ use App\Repositories\AppointmentRepository;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleWorkRepository;
 use Carbon\Carbon;
+use Nette\Utils\Random;
 use Ramsey\Uuid\Type\Time;
 
 
@@ -24,8 +25,17 @@ class AppointmentService
      */
     public function create(array $data)
     {
-        $this->isInInterval($data);
-        return $this->repository->create($data);
+        $orderNumber = Random::generate(5, '0-9');
+        $output = [];
+        foreach ($data['appointments'] as $appointment) {
+            $this->isInInterval($appointment);
+            $appointment['dummy_client_id'] = $data['dummy_client_id'] ?? null;
+            $appointment['client_id'] = $data['client_id'] ?? null;
+            $appointment['specialist_id'] = $data['specialist_id'];
+            $appointment['order_number'] = $orderNumber;
+            $output[] = $this->repository->create($appointment);
+        }
+        return $output;
     }
 
     /**
@@ -33,8 +43,20 @@ class AppointmentService
      */
     public function update(array $data)
     {
-        $this->isInInterval($data);
-        return $this->repository->update($data['id'], $data);
+
+        $output = [];
+        foreach ($data['appointments'] as $appointment) {
+            $this->repository->deleteById($appointment['id']);
+        }
+        foreach ($data['appointments'] as $appointment) {
+            $this->isInInterval($appointment);
+            $appointment['dummy_client_id'] = $data['dummy_client_id'] ?? null;
+            $appointment['client_id'] = $data['client_id'] ?? null;
+            $appointment['specialist_id'] = $data['specialist_id'];
+            $appointment['order_number'] = $data['order_number'];
+            $output[] = $this->repository->create($appointment);
+        }
+        return $output;
     }
 
     public function delete(int $id)
@@ -42,9 +64,9 @@ class AppointmentService
         return $this->repository->deleteById($id);
     }
 
-    public function get(int $id)
+    public function get(string $orderNumber)
     {
-        return $this->repository->getById($id);
+        return $this->repository->whereGet(['order_number' => $orderNumber]);
     }
 
     public function confirm(int $id)

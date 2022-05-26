@@ -24,21 +24,21 @@ class AppointmentController extends Controller
     public function create(CreateOrUpdateRequest $request)
     {
         return $this->success(
-            new AppointmentResource($this->service->create($request->validated()))
+            AppointmentResource::collection($this->service->create($request->validated()))
         );
     }
 
     public function update(CreateOrUpdateRequest $request)
     {
         return $this->success(
-            $this->service->update($request->validated())
+            AppointmentResource::collection($this->service->update($request->validated()))
         );
     }
 
     public function get(IdRequest $request)
     {
         return $this->success(
-            new AppointmentResource($this->service->get($request->id))
+            AppointmentResource::collection($this->service->get($request->order_number))
         );
     }
 
