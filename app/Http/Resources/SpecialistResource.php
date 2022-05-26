@@ -21,7 +21,7 @@ class SpecialistResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'phone' => $this->user->phone_number,
-            'avatar' => ImageResource::make($this?->avatar),
+            'avatar' => $this?->avatar?->url,
             'activity_kind' => $this->activity_kind?->name,
             'youtube_account' => $this->youtube_account,
             'vk_account' => $this->vk_account,

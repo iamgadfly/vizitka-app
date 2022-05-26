@@ -4,9 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ClientResource extends JsonResource
+class ContactBookResource extends JsonResource
 {
-    public static $wrap = null;
     /**
      * Transform the resource into an array.
      *
@@ -17,10 +16,8 @@ class ClientResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'surname' => $this->surname,
-            'phone' => $this->user->phone_number,
-            'avatar' => $this?->avatar?->url,
+            'client' => ClientResource::make($this->client),
+            'specialist' => SpecialistResource::make($this->specialist)
         ];
     }
 }
