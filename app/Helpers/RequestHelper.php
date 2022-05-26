@@ -120,7 +120,7 @@ class RequestHelper
             'user_id' => ['int', 'exists:users,id'],
             'name' => ['string', 'max:255'],
             'surname' => ['string', 'max:255'],
-            'avatar_id' => ['exists:images,id'],
+            'avatar_id' => ['integer', 'exists:images,id'],
             'activity_kind_id' => ['int', 'exists:activity_kinds,id'],
             'title' => ['string'],
             'about' => ['string'],

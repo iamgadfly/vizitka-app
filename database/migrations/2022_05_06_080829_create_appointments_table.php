@@ -28,7 +28,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->foreignId('maintenance_id')
                 ->constrained('maintenances')
-                ->onDelete('cacade');
+                ->onDelete('cascade');
             $table->date('date');
             $table->time('time_start');
             $table->time('time_end');
