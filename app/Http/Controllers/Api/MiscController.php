@@ -16,6 +16,9 @@ class MiscController extends Controller
 
     /**
      * @throws GuzzleException
+     * @lrd:start
+     * Get Countries route
+     * @lrd:end
      */
     public function getCountries(): JsonResponse
     {
@@ -24,6 +27,12 @@ class MiscController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get Backgrounds route
+     * @lrd:end
+     */
     public function getBackgrounds(): JsonResponse
     {
         return $this->success(
@@ -31,6 +40,12 @@ class MiscController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get Onboarding route
+     * @lrd:end
+     */
     public function getOnboardings(): JsonResponse
     {
         return $this->success(
@@ -38,6 +53,12 @@ class MiscController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get Activity Kinds route
+     * @lrd:end
+     */
     public function getActivityKinds(): JsonResponse
     {
         return $this->success(
@@ -45,6 +66,13 @@ class MiscController extends Controller
         );
     }
 
+    /**
+     * @param GetWeekDatesRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Week Dates route
+     * @lrd:end
+     */
     public function getWeekDates(GetWeekDatesRequest $request): JsonResponse
     {
         return $this->success(

@@ -17,7 +17,13 @@ class DummyClientController extends Controller
         protected DummyClientService $service
     ){}
 
-
+    /**
+     * @param CreateOrUpdateRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Dummy Client route
+     * @lrd:end
+     */
     public function create(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(
@@ -25,6 +31,13 @@ class DummyClientController extends Controller
         );
     }
 
+    /**
+     * @param GetRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Dummy Client route
+     * @lrd:end
+     */
     public function get(GetRequest $request): JsonResponse
     {
         return $this->success(
@@ -32,6 +45,13 @@ class DummyClientController extends Controller
         );
     }
 
+    /**
+     * @param CreateOrUpdateRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Dummy Client route
+     * @lrd:end
+     */
     public function update(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\UserNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateClientRequest;
 use App\Http\Requests\Client\GetClientRequest;
@@ -18,6 +19,13 @@ class ClientController extends Controller
         protected ImageService $imageService
     ) {}
 
+    /**
+     * @param CreateClientRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Client route
+     * @lrd:end
+     */
     public function create(CreateClientRequest $request): JsonResponse
     {
         $client = $this->service->findByUserId($request->user_id);
@@ -38,6 +46,14 @@ class ClientController extends Controller
         );
     }
 
+    /**
+     * @param CreateClientRequest $request
+     * @return JsonResponse
+     * @throws UserNotFoundException
+     * @lrd:start
+     * Update Client route
+     * @lrd:end
+     */
     public function update(CreateClientRequest $request): JsonResponse
     {
         if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
@@ -52,6 +68,13 @@ class ClientController extends Controller
         );
     }
 
+    /**
+     * @param GetClientRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Client route
+     * @lrd:end
+     */
     public function get(GetClientRequest $request): JsonResponse
     {
         return $this->success(
@@ -60,6 +83,13 @@ class ClientController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @throws UserNotFoundException
+     * @lrd:start
+     * Get current Client route
+     * @lrd:end
+     */
     public function me(): JsonResponse
     {
         return $this->success(

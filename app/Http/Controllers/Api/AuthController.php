@@ -27,6 +27,13 @@ class AuthController extends Controller
         protected SMSService $SMSService
     ) {}
 
+    /**
+     * @param IsUserExistsRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Is User Exists route
+     * @lrd:end
+     */
     public function isUserExists(IsUserExistsRequest $request): JsonResponse
     {
         return $this->success(
@@ -39,6 +46,9 @@ class AuthController extends Controller
      * @throws UserAlreadyVerifiedException
      * @throws VerificationCodeIsntValidException
      * @throws UserNotFoundException
+     * @lrd:start
+     * Verification route
+     * @lrd:end
      */
     public function verification(VerificationRequest $request): JsonResponse
     {
@@ -55,6 +65,9 @@ class AuthController extends Controller
      * @throws InvalidLoginException
      * @throws GuzzleException
      * @throws SMSNotSentException
+     * @lrd:start
+     * Resend SMS route
+     * @lrd:end
      */
     public function resendSms(SignUpRequest $request): JsonResponse
     {
@@ -66,6 +79,12 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Logout route
+     * @lrd:end
+     */
     public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
@@ -76,6 +95,9 @@ class AuthController extends Controller
     /**
      * @throws SMSNotSentException
      * @throws GuzzleException
+     * @lrd:start
+     * Sign Up route
+     * @lrd:end
      */
     public function signup(SignUpRequest $request): JsonResponse
     {

@@ -27,6 +27,13 @@ class ContactBookController extends Controller
 
     }
 
+    /**
+     * @param MassCreateRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Mass create contacts route (import from phone contacts)
+     * @lrd:end
+     */
     public function massCreate(MassCreateRequest $request): JsonResponse
     {
         return $this->success(
@@ -34,6 +41,13 @@ class ContactBookController extends Controller
         );
     }
 
+    /**
+     * @param GetRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Contact Book route
+     * @lrd:end
+     */
     public function get(GetRequest $request): JsonResponse
     {
         return $this->success(

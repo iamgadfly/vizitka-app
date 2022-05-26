@@ -12,6 +12,12 @@ class WorkScheduleController extends Controller
         protected WorkScheduleService $service
     ){}
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get Work Schedule route
+     * @lrd:end
+     */
     public function get(): JsonResponse
     {
         return $this->success(

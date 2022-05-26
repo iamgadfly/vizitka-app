@@ -15,6 +15,13 @@ class DummyBusinessCardController extends Controller
         protected DummyBusinessCardService $service
     ){}
 
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Dummy Business Card route
+     * @lrd:end
+     */
     public function create(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
@@ -23,6 +30,13 @@ class DummyBusinessCardController extends Controller
         );
     }
 
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Dummy Business Card route
+     * @lrd:end
+     */
     public function update(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
@@ -31,6 +45,13 @@ class DummyBusinessCardController extends Controller
         );
     }
 
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Dummy Business Card route
+     * @lrd:end
+     */
     public function delete(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
@@ -39,6 +60,13 @@ class DummyBusinessCardController extends Controller
         );
     }
 
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Dummy Business Card route
+     * @lrd:end
+     */
     public function get(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(

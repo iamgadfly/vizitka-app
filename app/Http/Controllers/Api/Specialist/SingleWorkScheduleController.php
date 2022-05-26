@@ -17,6 +17,13 @@ class SingleWorkScheduleController extends Controller
         protected SingleWorkScheduleService $service
     ){}
 
+    /**
+     * @param CreateRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Single Work Schedule route
+     * @lrd:end
+     */
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
@@ -24,6 +31,13 @@ class SingleWorkScheduleController extends Controller
         );
     }
 
+    /**
+     * @param DeleteRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Single Work Schedule route
+     * @lrd:end
+     */
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
@@ -31,6 +45,13 @@ class SingleWorkScheduleController extends Controller
         );
     }
 
+    /**
+     * @param CreateBreakRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Break for a Single Work Schedule route
+     * @lrd:end
+     */
     public function createBreak(CreateBreakRequest $request): JsonResponse
     {
         return $this->success(

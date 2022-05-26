@@ -18,6 +18,13 @@ class MaintenanceController extends Controller
         protected MaintenanceService $service
     ) {}
 
+    /**
+     * @param NewMaintenanceRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Maintenance route
+     * @lrd:end
+     */
     public function create(NewMaintenanceRequest $request): JsonResponse
     {
         return $this->success(
@@ -25,6 +32,12 @@ class MaintenanceController extends Controller
         );
     }
 
+    /**
+     * @lrd:start
+     * Get Maintenances route
+     * @lrd:end
+     * @return JsonResponse
+     */
     public function get(): JsonResponse
     {
         return $this->success(
@@ -32,6 +45,13 @@ class MaintenanceController extends Controller
         );
     }
 
+    /**
+     * @param DeleteRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Maintenance route
+     * @lrd:end
+     */
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
@@ -39,6 +59,13 @@ class MaintenanceController extends Controller
         );
     }
 
+    /**
+     * @param MaintenanceSettingsRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Maintenance Settings route
+     * @lrd:end
+     */
     public function updateSettings(MaintenanceSettingsRequest $request): JsonResponse
     {
         return $this->success(
@@ -46,6 +73,13 @@ class MaintenanceController extends Controller
         );
     }
 
+    /**
+     * @param MaintenanceRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Maintenance route
+     * @lrd:end
+     */
     public function update(MaintenanceRequest $request): JsonResponse
     {
         return $this->success(
@@ -53,6 +87,13 @@ class MaintenanceController extends Controller
         );
     }
 
+    /**
+     * @param GetAllRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get all Maintenances route
+     * @lrd:end
+     */
     public function all(GetAllRequest $request): JsonResponse
     {
         return $this->success(

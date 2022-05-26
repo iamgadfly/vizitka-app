@@ -29,6 +29,9 @@ class AuthController extends BaseAuthController
      * @throws SMSNotSentException
      * @throws GuzzleException
      * @throws InvalidLoginException
+     * @lrd:start
+     * Sign In route
+     * @lrd:end
      */
     public function signIn(SignInRequest $request): JsonResponse
     {
@@ -40,6 +43,9 @@ class AuthController extends BaseAuthController
     /**
      * @throws InvalidLoginException
      * @throws InvalidPasswordException
+     * @lrd:start
+     * Send SMS password route
+     * @lrd:end
      */
     public function sendPassword(SendPasswordRequest $request): JsonResponse
     {
