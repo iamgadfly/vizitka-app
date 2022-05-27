@@ -35,7 +35,7 @@ class BlacklistService
             $record->restore();
         }
         $recordId = $this->repository->whereFirst([
-            'blacklisted_id' => $id,
+            'client_id' => $id,
             'specialist_id' => auth()->user()->specialist->id
         ])->id;
         return $this->repository->deleteById($recordId);
