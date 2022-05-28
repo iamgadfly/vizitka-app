@@ -17,7 +17,7 @@ class BlacklistService
     {
         $record = $this->contactBookRepository->whereFirst([
             'specialist_id' => $data['specialist_id'],
-            'blacklisted_id' => $data['blacklisted_id']
+            'client_id' => $data['blacklisted_id']
         ]);
         if (!is_null($record)) {
             $record->delete();
@@ -29,13 +29,13 @@ class BlacklistService
     {
         $record = $this->contactBookRepository->whereFirst([
             'specialist_id' => $id,
-            'blacklisted_id' => auth()->user()->specialist->id
+            'client_id' => auth()->user()->specialist->id
         ]);
         if (!is_null($record) && $record->trashed()) {
             $record->restore();
         }
         $recordId = $this->repository->whereFirst([
-            'client_id' => $id,
+            'blacklisted_id' => $id,
             'specialist_id' => auth()->user()->specialist->id
         ])->id;
         return $this->repository->deleteById($recordId);
