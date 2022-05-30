@@ -273,6 +273,9 @@ Route::controller(BlacklistController::class)
 
     Route::delete('{id}', 'delete')
         ->name('blacklist.delete');
+
+    Route::get('', 'get')
+        ->name('blacklist.get');
 });
 
 // Contact book routes
@@ -284,7 +287,7 @@ Route::controller(ContactBookController::class)
     Route::post('/mass', 'massCreate')
         ->name('specialist.contactBook.create.mass');
 
-    Route::post('', 'create')
+    Route::post('{id}', 'create')
             ->name('specialist.contactBook.create');
 
     Route::delete('{id}', 'delete')

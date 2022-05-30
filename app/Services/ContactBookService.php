@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Models\Client;
 use App\Repositories\ContactBookRepository;
 
@@ -12,6 +13,28 @@ class ContactBookService
         protected ContactBookRepository $repository,
     ) {}
 
+    /**
+     * @throws RecordIsAlreadyExistsException
+     */
+    public function create(int $clientId)
+    {
+        $specialistId = auth()->user()->specialist->id;
+        $record = $this->repository->whereFirst([
+            'specialist_id' => $specialistId,
+            'client_id' => $clientId
+        ]);
+        if (!is_null($record)) {
+            throw new RecordIsAlreadyExistsException;
+        }
+        return $this->repository->create([
+            'client_id' => $clientId,
+            'specialist_id' => $specialistId
+        ]);
+    }
+
+    /**
+     * @throws RecordIsAlreadyExistsException
+     */
     public function massCreate(array $data): array
     {
         $output = [];
@@ -19,11 +42,13 @@ class ContactBookService
             $client = Client::whereHas('user', function ($q) use ($phoneNumber) {
                 return $q->where(['phone_number' => $phoneNumber]);
             })->get();
+
             if (!is_null($client->first())) {
-                $output[] = $this->repository->create([
-                    'client_id' => $client->first()->id,
-                    'specialist_id' => auth()->user()->specialist->id
-                ]);
+                try {
+                    $output[] = $this->create($client->first()->id);
+                } catch (RecordIsAlreadyExistsException $e) {
+                    continue;
+                }
             }
         }
         return $output;

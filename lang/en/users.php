@@ -58,6 +58,9 @@ return [
         'rules' => [
             'array_is_not_valid' => 'Array is not valid',
             'time_is_not_valid' => 'This period of time is busy'
+        ],
+        'exceptions' => [
+            'record_is_already_exists' => 'Record is already exists'
         ]
     ]
 ];
