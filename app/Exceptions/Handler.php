@@ -3,16 +3,16 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    protected function getJsonError(string $message, int $code): \Illuminate\Http\JsonResponse
+    protected function getJsonError(string $message, int $code): JsonResponse
     {
         return response()->json([
             'status' => 'Error',
             'message' => $message,
-            'data' => null
         ], $code);
     }
     /**

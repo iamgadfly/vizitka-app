@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\ContactBook;
+namespace App\Http\Requests\Blacklist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateRequest extends FormRequest
+class GetRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['client_id' => $this->route('id')]);
+        $this->merge(['specialist_id' => auth()->user()->specialist->id]);
     }
 
     /**
@@ -29,7 +29,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id']
+            'specialist_id' => ['required', 'exists:specialists,id']
         ];
     }
 }

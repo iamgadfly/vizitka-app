@@ -54,6 +54,10 @@ return [
         'rules' => [
             'array_is_not_valid' => 'Массив невалидный',
             'time_is_not_valid' => 'Данный отрезок времени занят'
+        ],
+        'exceptions' => [
+            'record_is_already_exists' => 'Запись уже существует',
+            'record_not_found' => 'Запись не найдена',
         ]
     ]
 ];

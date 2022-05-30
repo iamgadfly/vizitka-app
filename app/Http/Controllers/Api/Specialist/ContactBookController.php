@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactBook\CreateRequest;
 use App\Http\Requests\ContactBook\DeleteRequest;
@@ -17,9 +18,19 @@ class ContactBookController extends Controller
         protected ContactBookService $service
     ){}
 
-    public function create(CreateRequest $request)
+    /**
+     * @param CreateRequest $request
+     * @return JsonResponse
+     * @throws RecordIsAlreadyExistsException
+     * @lrd:start
+     * Add client to contact book
+     * @lrd:end
+     */
+    public function create(CreateRequest $request): JsonResponse
     {
-
+        return $this->success(
+            new ContactBookResource($this->service->create($request->client_id))
+        );
     }
 
     public function delete(DeleteRequest $request)
@@ -33,6 +44,7 @@ class ContactBookController extends Controller
      * @lrd:start
      * Mass create contacts route (import from phone contacts)
      * @lrd:end
+     * @throws RecordIsAlreadyExistsException
      */
     public function massCreate(MassCreateRequest $request): JsonResponse
     {

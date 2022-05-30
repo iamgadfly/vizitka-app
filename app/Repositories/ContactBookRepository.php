@@ -10,4 +10,13 @@ class ContactBookRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    public function thrashedRecord(int $clientId)
+    {
+        return $this->model::onlyTrashed()
+            ->where([
+                'specialist_id' => auth()->user()->specialist->id,
+                'client_id' => $clientId
+            ])->first();
+    }
 }
