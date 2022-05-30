@@ -35,13 +35,6 @@ class SpecialistService
             $data['specialist_id'] = $specialist->id;
             $this->businessCardRepository->create($data);
 
-            // Create maintenances and work schedule for specialist
-            $data['maintenance']['specialist_id'] = $specialist->id;
-            $data['schedule']['specialist_id'] = $specialist->id;
-
-            $this->maintenanceService->create($data['maintenance']);
-            $this->scheduleService->create($data['schedule']);
-
             \DB::commit();
 
             return $specialist;

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Maintenance\CreateRequest;
 use App\Http\Requests\Maintenance\DeleteRequest;
 use App\Http\Requests\Maintenance\GetAllRequest;
 use App\Http\Requests\Maintenance\MaintenanceRequest;
@@ -17,6 +19,19 @@ class MaintenanceController extends Controller
     public function __construct(
         protected MaintenanceService $service
     ) {}
+
+    /**
+     * @throws MaintenanceSettingsIsAlreadyExistingException
+     * @lrd:start
+     * Create Maintenance on create specialist stage
+     * @lrd:end
+     */
+    public function store(CreateRequest $request): JsonResponse
+    {
+        return $this->success(
+            $this->service->create($request->validated())
+        );
+    }
 
     /**
      * @param NewMaintenanceRequest $request

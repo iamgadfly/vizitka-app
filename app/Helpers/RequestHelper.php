@@ -7,6 +7,44 @@ use Illuminate\Validation\Rule;
 
 class RequestHelper
 {
+    public static function getMaintenanceRules(FormRequest $request): array
+    {
+        return [
+            'finance_analytics' => ['required', 'boolean', 'bail'],
+            'many_maintenances' => ['required', 'boolean', 'bail'],
+            'specialist_id' => ['required' , 'exists:specialists,id', 'bail'],
+            'maintenances' => ['required', 'array', 'bail'],
+            'maintenances.*.title' => ['required', 'string', 'bail'],
+            'maintenances.*.price' => ['required', 'integer', 'bail'],
+            'maintenances.*.duration' => ['required', 'integer', 'bail']
+        ];
+    }
+
+    public static function getWorkScheduleRules(FormRequest $request): array
+    {
+        $rules = [
+            'schedule' => ['required', 'array'],
+            'schedule.type' => ['required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'],
+            'schedule.break_type' => ['required', 'string', Rule::in(WorkScheduleTypeHelper::getBreakTypes()), 'bail'],
+            'schedule.smart_schedule' => ['required', 'boolean', 'bail'],
+            'schedule.confirmation' => ['required', 'boolean', 'bail'],
+            'schedule.cancel_appointment' => ['required', 'integer', 'bail'],
+            'schedule.limit_before' => ['required', 'integer', 'bail'],
+            'schedule.limit_after' => ['required', 'integer', 'bail'],
+            'schedule.workdays_count' => ['integer', 'bail', 'required_if:type,==,sliding'],
+            'schedule.weekends_count' => ['integer', 'bail', 'required_if:type,==,sliding'],
+            'schedule.start_from' => ['date_format:d.m.Y', 'bail', 'required_if:type,==,sliding'],
+            'schedule.schedules' => ['required', 'array', 'bail']
+        ];
+        if ($request->schedule['type'] == 'sliding') {
+            $rules = array_merge($rules, self::getSlidingScheduleRules());
+        } else {
+            $rules = array_merge($rules, self::getNotSlidingScheduleRules());
+        }
+
+        return $rules;
+    }
+
     public static function getAppointmentRules(FormRequest $request): array
     {
         $rules = [
@@ -138,37 +176,6 @@ class RequestHelper
             $rules['name'][] = 'required';
             $rules['activity_kind_id'][] = 'required';
             $rules['title'][] = 'required';
-            $rules['schedule'] = ['required', 'array'];
-            $rules['schedule.type'] = [
-                'required', Rule::in(WorkScheduleTypeHelper::getAllKeys()), 'bail'
-            ];
-            $rules['schedule.break_type'] = [
-                'required', 'string', Rule::in(WorkScheduleTypeHelper::getBreakTypes()), 'bail'
-            ];
-            $rules['schedule.smart_schedule'] = ['required', 'boolean', 'bail'];
-            $rules['schedule.confirmation'] = ['required', 'boolean', 'bail'];
-            $rules['schedule.cancel_appointment'] = ['required', 'integer', 'bail'];
-            $rules['schedule.limit_before'] = ['required', 'integer', 'bail'];
-            $rules['schedule.limit_after'] = ['required', 'integer', 'bail'];
-            $rules['schedule.workdays_count'] = ['integer', 'bail', 'required_if:type,==,sliding'];
-            $rules['schedule.weekends_count'] = ['integer', 'bail', 'required_if:type,==,sliding'];
-            $rules['schedule.start_from'] = ['date_format:d.m.Y', 'bail', 'required_if:type,==,sliding'];
-            $rules['schedule.schedules'] = ['required', 'array', 'bail'];
-            if ($request->schedule['type'] == 'sliding') {
-                $rules = array_merge($rules, self::getSlidingScheduleRules());
-            } else {
-                $rules = array_merge($rules, self::getNotSlidingScheduleRules());
-            }
-
-            $rules['maintenance'] = [
-                'finance_analytics' => ['required', 'boolean', 'bail'],
-                'many_maintenances' => ['required', 'boolean', 'bail'],
-                'specialist_id' => ['required' , 'exists:specialists,id', 'bail'],
-                'maintenances' => ['required', 'array', 'bail'],
-                'maintenances.*.title' => ['required', 'string', 'bail'],
-                'maintenances.*.price' => ['required', 'integer', 'bail'],
-                'maintenances.*.duration' => ['required', 'integer', 'bail']
-            ];
         } else {
             $rules['id'] = ['required', 'exists:specialists,id'];
         }

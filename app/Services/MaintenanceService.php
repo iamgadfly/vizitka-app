@@ -17,6 +17,7 @@ class MaintenanceService
         protected MaintenanceSettingsRepository $maintenanceSettingsRepository
     ) {}
 
+
     /**
      * @throws MaintenanceSettingsIsAlreadyExistingException
      */
