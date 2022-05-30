@@ -16,8 +16,11 @@ Route::controller(MaintenanceController::class)
     ->middleware('auth:sanctum')
     ->prefix('specialist/maintenance')->group(function () {
 
-    Route::post('', 'create')
+    Route::post('', 'store')
         ->name('specialist.maintenance.create');
+
+    Route::post('/new', 'create')
+        ->name('specialist.maintenance.new');
 
     Route::get('', 'get')
         ->name('specialist.maintenance.get');
@@ -39,6 +42,9 @@ Route::controller(MaintenanceController::class)
 Route::controller(WorkScheduleController::class)
     ->middleware('auth:sanctum')
     ->prefix('specialist/schedule')->group(function() {
+
+    Route::post('', 'create')
+        ->name('specialist.schedule.create');
 
     Route::get('', 'get')
         ->name('specialist.schedule.get');
