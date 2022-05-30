@@ -23,7 +23,7 @@ class BlacklistService
     {
         $blacklistRecord = $this->repository->whereFirst([
             'specialist_id' => $data['specialist_id'],
-            'blacklisted_id' => $data['blacklisted_id']
+            'client_id' => $data['blacklisted_id']
         ]);
         if (!is_null($blacklistRecord)) {
             throw new RecordIsAlreadyExistsException;
