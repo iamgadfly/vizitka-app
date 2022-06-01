@@ -1,16 +1,11 @@
 <?php
 
-namespace App\Http\Requests\ContactBook;
+namespace App\Http\Requests\ContactBookForClient;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteRequest extends FormRequest
+class MassCreateRequest extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        $this->merge(['client_id' => $this->route('id')]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,7 +24,8 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id']
+            'phone_numbers' => ['required', 'array'],
+            'phone_numbers.*' => ['required', 'string', 'max:15']
         ];
     }
 }

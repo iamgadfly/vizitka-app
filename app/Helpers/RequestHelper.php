@@ -116,12 +116,6 @@ class RequestHelper
         return $rules;
     }
 
-    public static function getBusinessCardHolderRules(FormRequest $request): array
-    {
-        // TODO: implement this
-        return [];
-    }
-
     public static function getClientRules(FormRequest $request): array
     {
         $rules = [
@@ -210,7 +204,7 @@ class RequestHelper
     {
         return [
             // Sliding schedules
-            'schedule.schedules.work.*.day' => ['integer', 'bail', 'required_if:type,==,sliding'],
+            'schedule.schedules.work.*.day' => ['string', 'bail', 'required_if:type,==,sliding'],
             'schedule.schedules.work.*.start' => [
                 'date_format:H:i', 'bail', 'nullable', 'required_if:schedules.work.*.is_weekend,false'
             ],

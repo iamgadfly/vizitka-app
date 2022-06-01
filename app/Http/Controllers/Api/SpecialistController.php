@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
 use App\Exceptions\SpecialistNotCreatedException;
-use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Helpers\CardBackgroundHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Specialist\CreateSpecialistRequest;
@@ -25,9 +23,7 @@ class SpecialistController extends Controller
     /**
      * @param CreateSpecialistRequest $request
      * @return JsonResponse
-     * @throws MaintenanceSettingsIsAlreadyExistingException
      * @throws SpecialistNotCreatedException
-     * @throws WorkScheduleSettingsIsAlreadyExistingException
      * @lrd:start
      * Create Specialist route
      * @lrd:end
@@ -64,6 +60,13 @@ class SpecialistController extends Controller
         return $this->success(
             SpecialistResource::make($this->service->getSpecialistData($request->id)),
             Response::HTTP_OK,
+        );
+    }
+
+    public function getAll()
+    {
+        return $this->success(
+            SpecialistResource::collection($this->service->all())
         );
     }
 
