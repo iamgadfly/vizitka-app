@@ -27,8 +27,10 @@ rm -f storage/app/public/images/onboarding/*
 >&2 echo --- move assets ---
 mkdir -p storage/app/public/images/card_backgrounds
 mkdir -p storage/app/public/images/onboarding
+mkdir -p storage/app/public/images/default
 cp -r resources/images/card_background/*.jpg storage/app/public/images/card_backgrounds/
 cp -r resources/images/onboarding/*.svg storage/app/public/images/onboarding/
+cp -r resources/images/default/*.png storage/app/public/images/default/
 >&2 echo --- php artisan lrd:generate ---
 php artisan lrd:generate
 
