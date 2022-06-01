@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Requests\BusinessCardHolder;
+namespace App\Http\Requests\ContactBookForClient;
 
-use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BusinessCardHolderRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        if ($this->method() != 'POST') {
-            $this->merge(['id' => $this->route('id')]);
-        }
+        $this->merge(['specialist_id' => $this->route('id')]);
     }
 
     /**
@@ -31,6 +28,8 @@ class BusinessCardHolderRequest extends FormRequest
      */
     public function rules()
     {
-        return RequestHelper::getBusinessCardHolderRules($this);
+        return [
+            'specialists_id' => ['required', 'exists:specialists,id']
+        ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Client\ContactBookController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\ClientController;
 
@@ -21,6 +22,25 @@ Route::controller(ClientController::class)
         Route::get('profile', 'me')
             ->name('client.me');
     });
+
+// Contact book routes
+
+Route::controller(ContactBookController::class)
+    ->prefix('client/contactBook')
+    ->middleware('auth:sanctum')->group(function() {
+
+        Route::post('/mass', 'massCreate')
+            ->name('client.contactBook.create.mass');
+
+        Route::post('{id}', 'create')
+            ->name('client.contactBook.create');
+
+        Route::delete('{id}', 'delete')
+            ->name('client.contactBook.delete');
+
+        Route::get('', 'get')
+            ->name('client.contactBook.get');
+});
 
 //Dummy business card routes
 Route::controller(DummyBusinessCardController::class)

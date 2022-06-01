@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests\ContactBook;
+namespace App\Http\Requests\ContactBookForClient;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteRequest extends FormRequest
+class CreateRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['client_id' => $this->route('id')]);
+        $this->merge(['specialist_id' => $this->route('id')]);
     }
 
     /**
@@ -29,7 +29,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id']
+            'specialist_id' => ['required', 'exists:specialists,id']
         ];
     }
 }

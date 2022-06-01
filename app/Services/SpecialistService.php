@@ -21,8 +21,6 @@ class SpecialistService
     ) {}
 
     /**
-     * @throws MaintenanceSettingsIsAlreadyExistingException
-     * @throws WorkScheduleSettingsIsAlreadyExistingException
      * @throws SpecialistNotCreatedException
      */
     public function create(array $data)

@@ -4,22 +4,22 @@ namespace App\Services;
 
 use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
-use App\Models\Client;
+use App\Models\Specialist;
 use App\Repositories\ContactBookRepository;
 
 
-class ContactBookService
+class ContactBookForClientService
 {
     public function __construct(
-        protected ContactBookRepository $repository,
+        protected ContactBookRepository $repository
     ) {}
 
     /**
      * @throws RecordIsAlreadyExistsException
      */
-    public function create(int $clientId)
+    public function create(int $specialistId)
     {
-        $specialistId = auth()->user()->specialist->id;
+        $clientId = auth()->user()->client->id;
         $record = $this->repository->whereFirst([
             'specialist_id' => $specialistId,
             'client_id' => $clientId
@@ -40,13 +40,13 @@ class ContactBookService
     {
         $output = [];
         foreach ($data['phone_numbers'] as $phoneNumber) {
-            $client = Client::whereHas('user', function ($q) use ($phoneNumber) {
+            $specialist = Specialist::whereHas('user', function ($q) use ($phoneNumber) {
                 return $q->where(['phone_number' => $phoneNumber]);
             })->get();
 
-            if (!is_null($client->first())) {
+            if (!is_null($specialist->first())) {
                 try {
-                    $output[] = $this->create($client->first()->id);
+                    $output[] = $this->create($specialist->first()->id);
                 } catch (RecordIsAlreadyExistsException $e) {
                     continue;
                 }
@@ -58,10 +58,10 @@ class ContactBookService
     /**
      * @throws RecordNotFoundException
      */
-    public function delete(int $clientId)
+    public function delete(int $specialistId)
     {
         $record = $this->repository->whereFirst([
-            'client_id' => $clientId
+            'specialist_id' => $specialistId
         ]);
         if (is_null($record)) {
             throw new RecordNotFoundException;
@@ -69,10 +69,10 @@ class ContactBookService
         return $record->delete();
     }
 
-    public function get(int $specialistId)
+    public function get(int $clientId)
     {
         return $this->repository->whereGet([
-            'specialist_id' => $specialistId
+            'client_id' => $clientId
         ]);
     }
 }

@@ -72,11 +72,11 @@ class WorkScheduleService
         $this->dayRepository->fillDaysForSlidingType($settings_id, $workdays_count, $weekends_count);
         // Create work days
         foreach ($workdays as $workday) {
-            $workday['day_id'] = WorkScheduleDayRepository::getDayFromInt($workday['day'])->id;
+            $workday['day_id'] = WorkScheduleDayRepository::getDayFromInt((int) $workday['day'])->id;
             $this->workRepository->create($workday);
         }
         foreach ($breaks as $break) {
-            $break['day_id'] = WorkScheduleDayRepository::getDayFromInt($break['day'])->id;
+            $break['day_id'] = WorkScheduleDayRepository::getDayFromInt((int) $break['day'])->id;
             $this->breakRepository->create($break);
         }
     }
