@@ -43,8 +43,8 @@ class RequestHelper
 
         match ($request->type['value']) {
             'standard' => $rules = array_merge($rules, self::getStandardScheduleRules($request)),
-            'flexible' => $rules = array_merge($rules, self::getFlexibleScheduleRules()),
-            'sliding' => $rules = array_merge($rules, self::getSlidingScheduleRules()),
+            'flexible' => $rules = array_merge($rules, self::getFlexibleScheduleRules($request)),
+            'sliding' => $rules = array_merge($rules, self::getSlidingScheduleRules($request)),
         };
 
         return $rules;
@@ -202,60 +202,58 @@ class RequestHelper
         ];
     }
 
-    public static function getFlexibleScheduleRules(): array
+    public static function getFlexibleScheduleRules(FormRequest $request): array
     {
+        $rule = Rule::requiredIf(function () use ($request) {
+            return $request->type['value'] == 'flexible';
+        });
         return [
-            'flexibleSchedule' => ['required_if:type.value,==,flexible', 'array', 'bail'],
-            'flexibleSchedule.data' => ['required_if:type.value,==,flexible', 'array'],
-            'flexibleSchedule.data.*.day' => ['required_if:type.value,==,flexible', 'array', 'bail'],
-            'flexibleSchedule.data.*.day.*.label' => ['required_if:type.value,==,flexible', 'string', 'bail'],
-            'flexibleSchedule.data.*.day.*.value' => [
-                'required_if:type.value,==,flexible', 'string', 'bail', Rule::in(WeekdayHelper::getAll())
-            ],
-            'flexibleSchedule.data.*.workTime' => ['required_if:type.value,==,flexible', 'array', 'bail'],
-            'flexibleSchedule.data.*.workTime.start' => [
-                'required_if:type.value,==,flexible', 'date_format:H:i', 'nullable', 'bail'
-            ],
-            'flexibleSchedule.data.*.workTime.end' => [
-                'required_if:type.value,==,flexible', 'date_format:H:i', 'nullable', 'bail'
-            ],
-            'flexibleSchedule.data.*.breaks' => ['required_if:type.value,==,flexible', 'array', 'bail'],
-            'flexibleSchedule.data.*.breaks.*.start' => [
-                'required_if:type.value,==,flexible', 'date_format:H:i', 'bail']
-            ,
-            'flexibleSchedule.data.*.breaks.*.end' => ['required_if:type.value,==,flexible', 'date_format:H:i', 'bail'],
-            'flexibleSchedule.breakType' => ['required_if:type.value,==,flexible', 'array', 'bail'],
-            'flexibleSchedule.breakType.label' => ['required_if:type.value,==,flexible', 'string', 'bail'],
-            'flexibleSchedule.breakType.value' => ['required_if:type.value,==,flexible', 'string', 'bail'],
-            'flexibleSchedule.breaks' => ['required_if:type.value,==,flexible', 'array', 'bail', 'nullable'],
-            'flexibleSchedule.breaks.*.start' => ['required_if:type.value,==,flexible', 'date_format:H:i', 'bail'],
-            'flexibleSchedule.breaks.*.end' => ['required_if:type.value,==,flexible', 'date_format:H:i', 'bail'],
+            'flexibleSchedule' => [$rule, 'array', 'bail'],
+            'flexibleSchedule.data' => [$rule, 'array'],
+            'flexibleSchedule.data.*.day' => [$rule, 'array', 'bail'],
+            'flexibleSchedule.data.*.day.label' => [$rule, 'string', 'bail'],
+            'flexibleSchedule.data.*.day.value' => [$rule, 'string', 'bail', Rule::in(WeekdayHelper::getAll())],
+            'flexibleSchedule.data.*.workTime' => [$rule, 'array', 'bail'],
+            'flexibleSchedule.data.*.workTime.start' => ['nullable', 'date_format:H:i', 'bail'],
+            'flexibleSchedule.data.*.workTime.end' => ['nullable', 'date_format:H:i', 'bail'],
+            'flexibleSchedule.data.*.breaks' => ['array', 'present', 'bail'],
+            'flexibleSchedule.data.*.breaks.*.start' => ['date_format:H:i', 'present', 'bail'],
+            'flexibleSchedule.data.*.breaks.*.end' => ['date_format:H:i', 'present', 'bail'],
+            'flexibleSchedule.breakType' => [$rule, 'array', 'bail'],
+            'flexibleSchedule.breakType.label' => [$rule, 'string', 'bail'],
+            'flexibleSchedule.breakType.value' => [$rule, 'string', 'bail'],
+            'flexibleSchedule.breaks' => ['present', $rule, 'array', 'bail'],
+            'flexibleSchedule.breaks.*.start' => [$rule, 'date_format:H:i', 'nullable', 'bail'],
+            'flexibleSchedule.breaks.*.end' => [$rule, 'date_format:H:i', 'nullable', 'bail'],
         ];
     }
 
-    public static function getSlidingScheduleRules(): array
+    public static function getSlidingScheduleRules(FormRequest $request): array
     {
+        $rule = Rule::requiredIf(function () use ($request) {
+            return $request->type['value'] == 'sliding';
+        });
         return [
-            'slidingSchedule' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'startFrom' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'startFrom.label' => ['required_if:type.value,==,sliding', 'date_format:d-m-Y', 'bail'],
-            'startFrom.value' => ['required_if:type.value,==,sliding', 'date_format:Y-m-d', 'bail'],
-            'workdaysCount' => ['required_if:type.value,==,sliding', 'integer', 'bail'],
-            'weekdaysCount' => ['required_if:type.value,==,sliding', 'integer', 'bail'],
-            'data' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'data.*.day' => ['required_if:type.value,==,sliding', 'string', 'bail'],
-            'data.*.workTime' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'data.*.workTime.start' => ['required_if:type.value,==,sliding', 'date_format:H:i', 'bail'],
-            'data.*.workTime.end' => ['required_if:type.value,==,sliding', 'date_format:H:i', 'bail'],
-            'data.*.breaks' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'data.*.breaks.*.start' => ['required_if:type.value,==,sliding', 'date_format:H:i', 'bail'],
-            'data.*.breaks.*.end' => ['required_if:type.value,==,sliding', 'date_format:H:i', 'bail'],
-            'breakType' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'breakType.label' => ['required_if:type.value,==,sliding', 'string', 'bail'],
-            'breakType.value' => ['required_if:type.value,==,sliding', 'string', 'bail'],
-            'breaks' => ['required_if:type.value,==,sliding', 'array', 'bail'],
-            'breaks.*.start' => ['required_if:type.value,==,sliding', 'date_format:H:i', 'bail'],
-            'breaks.*.end' => ['required_if:type.value,==,sliding', 'date_format:H:i', 'bail'],
+            'slidingSchedule' => [$rule, 'array', 'bail'],
+            'slidingSchedule.startFrom' => [$rule, 'array', 'bail'],
+            'slidingSchedule.startFrom.label' => [$rule, 'date_format:d.m.Y', 'bail'],
+            'slidingSchedule.startFrom.value' => [$rule, 'date_format:Y-m-d', 'bail'],
+            'slidingSchedule.workdaysCount' => [$rule, 'integer', 'bail'],
+            'slidingSchedule.weekdaysCount' => [$rule, 'integer', 'bail'],
+            'slidingSchedule.data' => [$rule, 'array', 'bail'],
+            'slidingSchedule.data.*.day' => [$rule, 'string', 'bail'],
+            'slidingSchedule.data.*.workTime' => [$rule, 'array', 'bail'],
+            'slidingSchedule.data.*.workTime.start' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.data.*.workTime.end' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.data.*.breaks' => [$rule, 'array', 'bail'],
+            'slidingSchedule.data.*.breaks.*.start' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.data.*.breaks.*.end' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.breakType' => [$rule, 'array', 'bail'],
+            'slidingSchedule.breakType.label' => [$rule, 'string', 'bail'],
+            'slidingSchedule.breakType.value' => [$rule, 'string', 'bail'],
+            'slidingSchedule.breaks' => [$rule, 'array', 'bail'],
+            'slidingSchedule.breaks.*.start' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.breaks.*.end' => [$rule, 'date_format:H:i', 'bail'],
         ];
     }
 }
