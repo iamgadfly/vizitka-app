@@ -17,8 +17,14 @@ class MaintenanceResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'price' => $this->price,
-            'duration' => $this->duration
+            'price' => [
+                'label' => $this->price == 0 ? '' : str($this->price)->value() . '₽',
+                'value' => $this->price
+            ],
+            'duration' => [
+                'label' => str($this->duration)->value(),
+                'value' => $this->duration
+            ],
         ];
     }
 }

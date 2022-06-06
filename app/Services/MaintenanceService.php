@@ -32,6 +32,8 @@ class MaintenanceService
             DB::beginTransaction();
             $maintenanceSettings = $this->maintenanceSettingsRepository->create($data);
             foreach ($data['maintenances'] as $maintenance) {
+                $maintenance['price'] = $maintenance['price']['value'];
+                $maintenance['duration'] = $maintenance['duration']['value'];
                 $maintenance['settings_id'] = $maintenanceSettings->id;
                 $maintenance['specialist_id'] = $data['specialist_id'];
                 $this->repository->create($maintenance);
@@ -47,6 +49,8 @@ class MaintenanceService
     public function addNew(array $data)
     {
         $data['settings_id'] = $this->maintenanceSettingsRepository->mySettings()->id;
+        $data['price'] = $data['price']['value'];
+        $data['duration'] = $data['duration']['value'];
         return $this->repository->create($data);
     }
 
