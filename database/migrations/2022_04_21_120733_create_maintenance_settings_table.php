@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->boolean('finance_analytics')->default(true);
             $table->boolean('many_maintenances')->default(false);
+            $table->foreignId('specialist_id')
+                ->constrained('specialists')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

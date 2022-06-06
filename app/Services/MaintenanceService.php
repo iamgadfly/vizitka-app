@@ -18,14 +18,12 @@ class MaintenanceService
     ) {}
 
 
-    /**
-     * @throws MaintenanceSettingsIsAlreadyExistingException
-     */
     public function create(array $data): MaintenanceSettingsResource
     {
         $settings = $this->maintenanceSettingsRepository->mySettings();
         if ($settings) {
-            throw new MaintenanceSettingsIsAlreadyExistingException;
+            $this->repository->deleteAllForCurrentUser($settings->id);
+//            throw new MaintenanceSettingsIsAlreadyExistingException;
         }
 
         try {
