@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ImageHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SpecialistResource extends JsonResource
@@ -21,7 +22,7 @@ class SpecialistResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'phone' => $this->user->phone_number,
-            'avatar' => $this?->avatar?->url,
+            'avatar' => !is_null($this->avatar) ? ImageHelper::getAssetFromFilename($this?->avatar?->url): null,
             'activity_kind' => $this->activity_kind?->name,
             'youtube_account' => $this->youtube_account,
             'vk_account' => $this->vk_account,

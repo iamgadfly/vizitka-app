@@ -15,8 +15,12 @@ class RequestHelper
             'specialist_id' => ['required' , 'exists:specialists,id', 'bail'],
             'maintenances' => ['required', 'array', 'bail'],
             'maintenances.*.title' => ['required', 'string', 'bail'],
-            'maintenances.*.price' => ['required', 'integer', 'bail'],
-            'maintenances.*.duration' => ['required', 'integer', 'bail']
+            'maintenances.*.price' => ['required', 'array', 'bail'],
+            'maintenances.*.price.label' => ['required', 'nullable', 'string', 'bail'],
+            'maintenances.*.price.value' => ['required', 'nullable', 'integer', 'bail'],
+            'maintenances.*.duration' => ['required', 'array', 'bail'],
+            'maintenances.*.duration.label' => ['required', 'string', 'bail'],
+            'maintenances.*.duration.value' => ['required', 'integer', 'bail']
         ];
     }
 
@@ -154,21 +158,23 @@ class RequestHelper
     public static function getSpecialistCreateOrUpdateRules(FormRequest $request): array
     {
         $rules = [
-            'user_id' => ['int', 'exists:users,id'],
-            'name' => ['string', 'max:255'],
-            'surname' => ['string', 'max:255'],
-            'avatar_id' => ['integer', 'exists:images,id'],
-            'activity_kind_id' => ['int', 'exists:activity_kinds,id'],
-            'title' => ['string'],
-            'about' => ['string'],
-            'address' => ['string'],
-            'placement' => ['string'],
-            'floor' => ['string'],
-            'instagram_account' => ['string'],
-            'youtube_account' => ['string'],
-            'vk_account' => ['string'],
-            'tiktok_account' => ['string'],
-            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files)],
+            'user_id' => ['int', 'exists:users,id', 'bail'],
+            'name' => ['string', 'max:255', 'bail'],
+            'surname' => ['string', 'max:255', 'bail'],
+            'avatar' => ['array', 'bail'],
+            'avatar.id' => ['integer', 'exists:images,id', 'bail'],
+            'avatar.url' => ['string', 'nullable', 'bail'],
+            'activity_kind_id' => ['int', 'exists:activity_kinds,id', 'bail'],
+            'title' => ['string', 'bail'],
+            'about' => ['string', 'bail'],
+            'address' => ['string', 'bail'],
+            'placement' => ['string', 'bail'],
+            'floor' => ['string', 'bail'],
+            'instagram_account' => ['string', 'bail'],
+            'youtube_account' => ['string', 'bail'],
+            'vk_account' => ['string', 'bail'],
+            'tiktok_account' => ['string', 'bail'],
+            'background_image' => ['string', Rule::in(CardBackgroundHelper::$files), 'bail'],
         ];
         if ($request->method() == 'POST') {
             $rules['user_id'][] = 'required';
@@ -176,7 +182,7 @@ class RequestHelper
             $rules['activity_kind_id'][] = 'required';
             $rules['title'][] = 'required';
         } else {
-            $rules['id'] = ['required', 'exists:specialists,id'];
+            $rules['id'] = ['required', 'exists:specialists,id', 'bail'];
         }
 
         return $rules;

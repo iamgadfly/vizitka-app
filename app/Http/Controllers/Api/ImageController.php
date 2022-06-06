@@ -27,7 +27,7 @@ class ImageController extends Controller
     public function upload(UploadImageRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->image),
+            new ImageResource($this->service->create($request->image)),
             Response::HTTP_CREATED
         );
     }

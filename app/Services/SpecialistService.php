@@ -27,7 +27,9 @@ class SpecialistService
     {
         try {
             \DB::beginTransaction();
-
+            if (isset($data['avatar'])) {
+                $data['avatar_id'] = $data['avatar']['id'];
+            }
             // Create specialist and his business card
             $specialist = $this->repository->create($data);
             $data['specialist_id'] = $specialist->id;

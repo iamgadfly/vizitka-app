@@ -31,13 +31,12 @@ class SpecialistController extends Controller
     public function create(CreateSpecialistRequest $request): JsonResponse
     {
         $specialist = $this->service->findByUserId($request->user_id);
-
         if (!is_null($specialist)) {
             return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
         }
 
-        if (!is_null($request->avatar_id)) {
-            $image = $this->imageService->get($request->avatar_id);
+        if (!is_null($request->avatar)) {
+            $image = $this->imageService->get($request->avatar['id']);
             $this->imageService->removeTemporary($image); // make 'deleted_at' field null
         }
 
