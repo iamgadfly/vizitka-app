@@ -35,7 +35,7 @@ class SpecialistController extends Controller
 //            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
 //        }
 
-        if (!is_null($request->avatar)) {
+        if (!is_null($request->avatar['id'])) {
             $image = $this->imageService->get($request->avatar['id']);
             $this->imageService->removeTemporary($image); // make 'deleted_at' field null
         }
