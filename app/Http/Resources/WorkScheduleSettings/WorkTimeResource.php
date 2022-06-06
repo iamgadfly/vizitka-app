@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\WorkScheduleSettings;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WorkTimeResource extends JsonResource
@@ -24,8 +25,8 @@ class WorkTimeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'start' => $this->start,
-            'end' => $this->end
+            'start' => Carbon::parse($this->start)->format('H:i'),
+            'end' => Carbon::parse($this->end)->format('H:i')
         ];
     }
 }

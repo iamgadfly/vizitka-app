@@ -22,17 +22,14 @@ class StandardScheduleResource extends JsonResource
             return [];
         }
         $work = WorkScheduleWorkRepository::getWorks($this->id);
+        $weekends = WorkScheduleWorkRepository::getWeekends($this->id);
         $break = WorkScheduleBreakRepository::getBreaks($this->id)->first();
         return [
-            'weekends' => DayResource::collection($work),
-            'workTime' => [
-                'start' => Carbon::parse($work->first()->start)->format('H:i'),
-                'end' => Carbon::parse($work->first()->end)->format('H:i')
-            ],
-            'breaks' => [
-                'start' => Carbon::parse($break->first()->start)->format('H:i'),
-                'end' => Carbon::parse($break->first()->end)->format('H:i')
-            ],
+            'weekends' => !is_null($work) ? DayResource::collection($weekends) : [],
+            'workTime' => !is_null($work?->first())
+                ? WorkTimeResource::make($work->first()->start, $work->first()->end)
+                : [],
+            'breaks' => !is_null($break) ? WorkTimeResource::make($break->start, $break->end) : [],
         ];
     }
 }

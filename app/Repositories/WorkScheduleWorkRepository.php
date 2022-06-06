@@ -29,6 +29,18 @@ class WorkScheduleWorkRepository extends Repository
         })->get();
     }
 
+    public static function getWeekends($settingsId)
+    {
+        return WorkScheduleWork::whereHas('day', function ($q) use ($settingsId) {
+            return $q->whereHas('settings', function ($qb) use ($settingsId) {
+                return $qb->where('id', $settingsId);
+            });
+        })->where([
+            'start' => null,
+            'end' => null
+        ])->get();
+    }
+
     public static function getWorkDay(string $date)
     {
         // Try to get single work schedule for a day
