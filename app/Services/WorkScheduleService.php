@@ -65,7 +65,7 @@ class WorkScheduleService
             } elseif ($type == 'flexible') {
                 $workTime = $data['flexibleSchedule']['data'];
                 $breaks = $data['flexibleSchedule']['breaks'];
-                $this->createFlexbileScedule(
+                $this->createFlexibleScedule(
                     $settingsId, $workTime, $breakType, $breaks
                 );
             } elseif ($type == 'sliding') {
@@ -114,7 +114,7 @@ class WorkScheduleService
                 ]);
             }
         }
-        foreach (range(0, $weekends_count - 1) as $index) {
+        foreach (range(1, $weekends_count) as $index) {
             $day = $workdays_count + $index;
             $dayId = WorkScheduleDayRepository::getDayFromInt($day)->id;
             $this->workRepository->create([
@@ -155,7 +155,7 @@ class WorkScheduleService
         }
     }
 
-    private function createFlexbileScedule(int $settingsId, array $data, string $breakType, ?array $breaks): void
+    private function createFlexibleScedule(int $settingsId, array $data, string $breakType, ?array $breaks): void
     {
         $this->dayRepository->fillDaysNotForSlidingType($settingsId);
 
