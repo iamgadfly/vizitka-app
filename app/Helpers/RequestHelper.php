@@ -164,8 +164,10 @@ class RequestHelper
             'avatar' => ['array', 'bail'],
             'avatar.id' => ['integer', 'exists:images,id', 'bail'],
             'avatar.url' => ['string', 'nullable', 'bail'],
-            'activity_kind_id' => ['int', 'exists:activity_kinds,id', 'bail'],
-            'title' => ['string', 'bail'],
+            'activity_kind' => ['array', 'bail'],
+            'activity_kind.label' => ['string', 'bail'],
+            'activity_kind.id' => ['int', 'exists:activity_kinds,id', 'bail'],
+            'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'address' => ['string', 'nullable', 'bail'],
             'placement' => ['string', 'nullable', 'bail'],
@@ -179,8 +181,9 @@ class RequestHelper
         if ($request->method() == 'POST') {
             $rules['user_id'][] = 'required';
             $rules['name'][] = 'required';
-            $rules['activity_kind_id'][] = 'required';
-            $rules['title'][] = 'required';
+            $rules['activity_kind'][] = 'required';
+            $rules['activity_kind.label'][] = 'required';
+            $rules['activity_kind.id'][] = 'required';
         } else {
             $rules['id'] = ['required', 'exists:specialists,id', 'bail'];
         }

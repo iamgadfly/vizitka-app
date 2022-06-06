@@ -20,7 +20,7 @@ return new class extends Migration
                 ->constrained('specialists')
                 ->onDelete('cascade');
             $table->string('background_image');
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->string('about')->nullable();
             $table->string('address')->nullable();
             $table->string('placement')->nullable();

@@ -30,6 +30,9 @@ class SpecialistService
             if (isset($data['avatar'])) {
                 $data['avatar_id'] = $data['avatar']['id'];
             }
+            if (!isset($data['title'])) {
+                $data['title'] = $data['activity_kind']['label'];
+            }
             // Create specialist and his business card
             $specialist = $this->repository->create($data);
             $data['specialist_id'] = $specialist->id;
