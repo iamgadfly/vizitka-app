@@ -162,7 +162,7 @@ class RequestHelper
             'name' => ['string', 'max:255', 'bail'],
             'surname' => ['string', 'nullable',  'max:255', 'bail'],
             'avatar' => ['array', 'bail'],
-            'avatar.id' => ['integer', 'exists:images,id', 'bail'],
+            'avatar.id' => ['integer', 'nullable', 'exists:images,id', 'bail'],
             'avatar.url' => ['string', 'nullable', 'bail'],
             'activity_kind' => ['array', 'bail'],
             'activity_kind.label' => ['string', 'bail'],

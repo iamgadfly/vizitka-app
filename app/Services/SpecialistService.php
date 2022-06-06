@@ -27,7 +27,7 @@ class SpecialistService
     {
         try {
             \DB::beginTransaction();
-            if (isset($data['avatar'])) {
+            if (!is_null($data['avatar']['id'])) {
                 $data['avatar_id'] = $data['avatar']['id'];
             }
             if (!isset($data['title'])) {
