@@ -166,7 +166,7 @@ class RequestHelper
             'avatar.url' => ['string', 'nullable', 'bail'],
             'activity_kind' => ['array', 'bail'],
             'activity_kind.label' => ['string', 'bail'],
-            'activity_kind.id' => ['int', 'exists:activity_kinds,id', 'bail'],
+            'activity_kind.value' => ['int', 'exists:activity_kinds,id', 'bail'],
             'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'address' => ['string', 'nullable', 'bail'],
@@ -183,7 +183,7 @@ class RequestHelper
             $rules['name'][] = 'required';
             $rules['activity_kind'][] = 'required';
             $rules['activity_kind.label'][] = 'required';
-            $rules['activity_kind.id'][] = 'required';
+            $rules['activity_kind.value'][] = 'required';
         } else {
             $rules['id'] = ['required', 'exists:specialists,id', 'bail'];
         }
