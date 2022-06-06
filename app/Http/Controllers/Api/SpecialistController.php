@@ -23,17 +23,17 @@ class SpecialistController extends Controller
     /**
      * @param CreateSpecialistRequest $request
      * @return JsonResponse
-     * @throws SpecialistNotCreatedException
      * @lrd:start
      * Create Specialist route
      * @lrd:end
+     * @throws SpecialistNotCreatedException
      */
     public function create(CreateSpecialistRequest $request): JsonResponse
     {
-        $specialist = $this->service->findByUserId($request->user_id);
-        if (!is_null($specialist)) {
-            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
-        }
+//        $specialist = $this->service->findByUserId($request->user_id);
+//        if (!is_null($specialist)) {
+//            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
+//        }
 
         if (!is_null($request->avatar)) {
             $image = $this->imageService->get($request->avatar['id']);

@@ -10,4 +10,12 @@ class BusinessCardRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    public function create(array $data)
+    {
+        return $this->model::updateOrCreate(
+            ['specialist_id' => $data['specialist_id']],
+            $data
+        );
+    }
 }

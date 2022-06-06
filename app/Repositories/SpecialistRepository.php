@@ -11,6 +11,14 @@ class SpecialistRepository extends Repository
         parent::__construct($model);
     }
 
+    public function create(array $data)
+    {
+        return $this->model::updateOrCreate(
+            ['user_id' => $data['user_id']],
+            $data
+        );
+    }
+
     public function findByUserId($id): ?Specialist
     {
         return $this->model::where('user_id', $id)->first();
