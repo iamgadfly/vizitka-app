@@ -198,16 +198,16 @@ class RequestHelper
         });
         return [
             'standardSchedule' => [$rule, 'array', 'bail'],
-            'standardSchedule.weekends' => [$rule, 'array', 'bail'],
-            'standardSchedule.weekends.*.label' => [$rule, 'string', 'bail'],
-            'standardSchedule.weekends.*.cut' => [$rule, 'string', 'bail'],
-            'standardSchedule.weekends.*.value' => [$rule, 'string', 'bail', Rule::in(WeekdayHelper::getAll())],
-            'standardSchedule.workTime' => [$rule, 'array', 'bail'],
-            'standardSchedule.workTime.start' => [$rule, 'date_format:H:i', 'bail'],
-            'standardSchedule.workTime.end' => [$rule, 'date_format:H:i', 'bail'],
-            'standardSchedule.breaks' => [$rule, 'array', 'bail'],
-            'standardSchedule.breaks.*.start' => [$rule, 'date_format:H:i', 'bail'],
-            'standardSchedule.breaks.*.end' => [$rule, 'date_format:H:i', 'bail']
+            'standardSchedule.weekends' => ['array', 'bail'],
+            'standardSchedule.weekends.*.label' => ['string', 'bail'],
+            'standardSchedule.weekends.*.cut' => ['string', 'bail'],
+            'standardSchedule.weekends.*.value' => ['string', 'bail', Rule::in(WeekdayHelper::getAll())],
+            'standardSchedule.workTime' => ['array', 'bail'],
+            'standardSchedule.workTime.start' => ['date_format:H:i', 'bail'],
+            'standardSchedule.workTime.end' => ['date_format:H:i', 'bail'],
+            'standardSchedule.breaks' => ['array', 'present', 'bail'],
+            'standardSchedule.breaks.*.start' => ['date_format:H:i', 'bail'],
+            'standardSchedule.breaks.*.end' => ['date_format:H:i', 'bail']
         ];
     }
 
@@ -229,11 +229,11 @@ class RequestHelper
             'flexibleSchedule.data.*.breaks.*.start' => ['date_format:H:i', 'present', 'bail'],
             'flexibleSchedule.data.*.breaks.*.end' => ['date_format:H:i', 'present', 'bail'],
             'flexibleSchedule.breakType' => [$rule, 'array', 'bail'],
-            'flexibleSchedule.breakType.label' => [$rule, 'string', 'bail'],
-            'flexibleSchedule.breakType.value' => [$rule, 'string', 'bail'],
-            'flexibleSchedule.breaks' => ['present', $rule, 'array', 'bail'],
-            'flexibleSchedule.breaks.*.start' => [$rule, 'date_format:H:i', 'nullable', 'bail'],
-            'flexibleSchedule.breaks.*.end' => [$rule, 'date_format:H:i', 'nullable', 'bail'],
+            'flexibleSchedule.breakType.label' => ['string', 'bail'],
+            'flexibleSchedule.breakType.value' => ['string', 'bail'],
+            'flexibleSchedule.breaks' => ['present', 'array', 'bail'],
+            'flexibleSchedule.breaks.*.start' => ['date_format:H:i', 'nullable', 'bail'],
+            'flexibleSchedule.breaks.*.end' => ['date_format:H:i', 'nullable', 'bail'],
         ];
     }
 
@@ -254,15 +254,15 @@ class RequestHelper
             'slidingSchedule.data.*.workTime' => [$rule, 'array', 'bail'],
             'slidingSchedule.data.*.workTime.start' => [$rule, 'date_format:H:i', 'bail'],
             'slidingSchedule.data.*.workTime.end' => [$rule, 'date_format:H:i', 'bail'],
-            'slidingSchedule.data.*.breaks' => [$rule, 'array', 'bail'],
-            'slidingSchedule.data.*.breaks.*.start' => [$rule, 'date_format:H:i', 'bail'],
-            'slidingSchedule.data.*.breaks.*.end' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.data.*.breaks' => ['array', 'bail'],
+            'slidingSchedule.data.*.breaks.*.start' => ['date_format:H:i', 'bail'],
+            'slidingSchedule.data.*.breaks.*.end' => ['date_format:H:i', 'bail'],
             'slidingSchedule.breakType' => [$rule, 'array', 'bail'],
             'slidingSchedule.breakType.label' => [$rule, 'string', 'bail'],
             'slidingSchedule.breakType.value' => [$rule, 'string', 'bail'],
-            'slidingSchedule.breaks' => [$rule, 'array', 'bail'],
-            'slidingSchedule.breaks.*.start' => [$rule, 'date_format:H:i', 'bail'],
-            'slidingSchedule.breaks.*.end' => [$rule, 'date_format:H:i', 'bail'],
+            'slidingSchedule.breaks' => ['array', 'bail'],
+            'slidingSchedule.breaks.*.start' => ['date_format:H:i', 'bail'],
+            'slidingSchedule.breaks.*.end' => ['date_format:H:i', 'bail'],
         ];
     }
 }

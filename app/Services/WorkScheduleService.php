@@ -32,6 +32,8 @@ class WorkScheduleService
             \DB::beginTransaction();
             $breakType = null;
             $startFrom = null;
+            $workdaysCount = null;
+            $weekdaysCount = null;
             if ($data['type']['value'] == 'flexible') {
                 $breakType = $data['flexibleSchedule']['breakType']['value'];
             } elseif($data['type']['value'] == 'sliding') {

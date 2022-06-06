@@ -14,6 +14,9 @@ class DayResource extends JsonResource
     public function toArray($request)
     {
         if (is_null($this->day->day)) {
+            return null;
+        }
+        if (!is_null($this->day->day_index)) {
             return (string) $this->day->day_index;
         }
         return [
