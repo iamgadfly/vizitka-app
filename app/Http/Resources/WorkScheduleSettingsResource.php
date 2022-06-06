@@ -2,6 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\WorkScheduleSettings\BreakTypeResource;
+use App\Http\Resources\WorkScheduleSettings\DayResource;
+use App\Http\Resources\WorkScheduleSettings\FlexibleScheduleResource;
+use App\Http\Resources\WorkScheduleSettings\SlidingScheduleResource;
+use App\Http\Resources\WorkScheduleSettings\StandardScheduleResource;
+use App\Http\Resources\WorkScheduleSettings\TimeResource;
+use App\Http\Resources\WorkScheduleSettings\TypeResource;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleWorkRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,17 +25,16 @@ class WorkScheduleSettingsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'type' => TypeResource::make($this),
             'smart_schedule' => $this->smart_schedule,
             'confirmation' => $this->confirmation,
-            'cancel_appointment' => $this->cancel_appointment,
-            'limit_before' => $this->limit_before,
-            'limit_after' => $this->limit_after,
-            'type' => $this->type,
-            'break_type' => $this->break_type,
-            'schedules' => [
-                'work' => WorkScheduleWorkResource::collection(WorkScheduleWorkRepository::getWorks($this->id)),
-                'breaks' => WorkScheduleBreakResource::collection(WorkScheduleBreakRepository::getBreaks($this->id))
-            ],
+            'cancel_appointment' => TimeResource::make($this->cancel_appointment),
+            'limit_before' => TimeResource::make($this->limit_before),
+            'limit_after' => TimeResource::make($this->limit_after),
+            'break_type' => BreakTypeResource::make($this),
+            'standardSchedule' => StandardScheduleResource::make($this),
+            'flexibleSchedule' => FlexibleScheduleResource::make($this),
+            'slidingSchedule' => SlidingScheduleResource::make($this),
             'specialist' => SpecialistResource::make($this->specialist)
         ];
     }

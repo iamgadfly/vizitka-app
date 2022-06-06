@@ -23,6 +23,26 @@ class WorkScheduleBreakRepository extends Repository
         })->get();
     }
 
+    public static function getBreaksForADay($day)
+    {
+        return WorkScheduleBreak::whereHas('day', function ($q) use ($day) {
+            $q->where('day', $day);
+            return $q->whereHas('settings', function ($qb) {
+                return $qb->where('specialist_id', auth()->user()->specialist->id);
+            });
+        })->get();
+    }
+
+    public static function getBreaksForADayIndex($index)
+    {
+        return WorkScheduleBreak::whereHas('day', function ($q) use ($index) {
+            $q->where('day_index', $index);
+            return $q->whereHas('settings', function ($qb) {
+                return $qb->where('specialist_id', auth()->user()->specialist->id);
+            });
+        })->get();
+    }
+
     public static function getBreaksForDay(string $date)
     {
         $result = [];

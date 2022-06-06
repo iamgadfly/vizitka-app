@@ -15,8 +15,12 @@ return new class extends Migration
     {
         Schema::create('contact_books', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('specialist_id')->constrained('specialists');
-            $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('specialist_id')
+                ->constrained('specialists')
+                ->onDelete('cascade');
+            $table->foreignId('client_id')
+                ->constrained('clients')
+                ->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

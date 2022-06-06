@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
+use App\Helpers\WeekdayHelper;
 use App\Http\Resources\WorkScheduleSettingsResource;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleDayRepository;
@@ -29,14 +30,51 @@ class WorkScheduleService
         }
         try {
             \DB::beginTransaction();
-            $settings = $this->settingsRepository->create($data);
-            $schedule = $data['schedules'];
-            if ($data['type'] !== 'sliding') {
-                $this->createNotSlidingSchedule($settings->id, $schedule['work'], $schedule['breaks']);
-            } elseif($data['type']) {
+            $breakType = null;
+            $startFrom = null;
+            if ($data['type']['value'] == 'flexible') {
+                $breakType = $data['flexibleSchedule']['breakType']['value'];
+            } elseif($data['type']['value'] == 'sliding') {
+                $breakType = $data['slidingSchedule']['breakType']['value'];
+                $startFrom = $data['slidingSchedule']['startFrom']['value'];
+                $workdaysCount = $data['slidingSchedule']['workdaysCount'];
+                $weekdaysCount = $data['slidingSchedule']['weekdaysCount'];
+            }
+            $settings = $this->settingsRepository->create([
+                'smart_schedule' => $data['smart_schedule'],
+                'confirmation' => $data['confirmation'],
+                'cancel_appointments' => $data['cancel_appointment']['value'],
+                'limit_before' => $data['limit_before']['value'],
+                'limit_after' => $data['limit_after']['value'],
+                'specialist_id' => $data['specialist_id'],
+                'type' => $data['type']['value'],
+                'break_type' => $breakType,
+                'start_from' => $startFrom,
+                'workdays_count' => $workdaysCount,
+                'weekdays_count' => $weekdaysCount
+            ]);
+            $settingsId = $settings->id;
+            $type = $data['type']['value'];
+            if ($type == 'standard') {
+                $weekends = $data['standardSchedule']['weekends'];
+                $workTime = $data['standardSchedule']['workTime'];
+                $breaks   = $data['standardSchedule']['breaks'];
+                $this->createStandardSchedule(
+                    $settingsId, $weekends, $workTime, $breaks
+                );
+            } elseif ($type == 'flexible') {
+                $workTime = $data['flexibleSchedule']['data'];
+                $breaks = $data['flexibleSchedule']['breaks'];
+                $this->createFlexibleScedule(
+                    $settingsId, $workTime, $breakType, $breaks
+                );
+            } elseif ($type == 'sliding') {
+                $workdaysCount = $data['slidingSchedule']['workdaysCount'];
+                $weekdaysCount = $data['slidingSchedule']['weekdaysCount'];
+                $work = $data['slidingSchedule']['data'];
+                $breaks = $data['slidingSchedule']['breaks'];
                 $this->createSlidingSchedule(
-                    $settings->id, $schedule['work'], $schedule['breaks'],
-                    $data['workdays_count'], $data['weekends_count']
+                    $settingsId, $workdaysCount, $weekdaysCount, $work, $breakType, $breaks
                 );
             }
             \DB::commit();
@@ -52,32 +90,101 @@ class WorkScheduleService
         return new WorkScheduleSettingsResource($this->settingsRepository->mySettings());
     }
 
-    private function createNotSlidingSchedule(int $settings_id, array $workdays, array $breaks): void
-    {
-        $this->dayRepository->fillDaysNotForSlidingType($settings_id);
-        foreach ($workdays as $workday) {
-            $workday['day_id'] = WorkScheduleDayRepository::getDayFromString($workday['day'])->id;
-            $this->workRepository->create($workday);
-        }
-        foreach ($breaks as $break) {
-            $break['day_id'] = WorkScheduleDayRepository::getDayFromString($break['day'])->id;
-            $this->breakRepository->create($break);
-        }
-    }
-
     private function createSlidingSchedule(
-        int $settings_id, array $workdays, array $breaks, int $workdays_count, int $weekends_count
+        int $settings_id, int $workdays_count, int $weekends_count, array $data, string $breakType, ?array $breaks
     ): void
     {
         $this->dayRepository->fillDaysForSlidingType($settings_id, $workdays_count, $weekends_count);
-        // Create work days
-        foreach ($workdays as $workday) {
-            $workday['day_id'] = WorkScheduleDayRepository::getDayFromInt((int) $workday['day'])->id;
-            $this->workRepository->create($workday);
+        foreach (range(0, $workdays_count - 1) as $index) {
+            $day = $data[$index];
+            $dayNum = (int) $day['day'];
+            $dayId = WorkScheduleDayRepository::getDayFromInt($dayNum)->id;
+
+            $this->workRepository->create([
+                'start' => $day['workTime']['start'],
+                'end' => $day['workTime']['end'],
+                'day_id' => $dayId
+            ]);
+
+            foreach ($day['breaks'] as $break) {
+                $this->breakRepository->create([
+                    'start' => $break['start'],
+                    'end' => $break['end'],
+                    'day_id' => $dayId
+                ]);
+            }
         }
-        foreach ($breaks as $break) {
-            $break['day_id'] = WorkScheduleDayRepository::getDayFromInt((int) $break['day'])->id;
-            $this->breakRepository->create($break);
+        foreach (range(1, $weekends_count) as $index) {
+            $day = $workdays_count + $index;
+            $dayId = WorkScheduleDayRepository::getDayFromInt($day)->id;
+            $this->workRepository->create([
+                'start' => null,
+                'end' => null,
+                'day_id' => $dayId
+            ]);
+        }
+    }
+
+    private function createStandardSchedule(int $settingsId, array $weekends, array $workTime, array $breaks): void
+    {
+        $this->dayRepository->fillDaysNotForSlidingType($settingsId);
+        // Create workdays
+        foreach (WeekdayHelper::getAll() as $weekday) {
+            $dayId = WorkScheduleDayRepository::getDayFromString($weekday)->id;
+            if (in_array($weekday, array_column($weekends, 'value'))) {
+                $this->workRepository->create([
+                    'start' => null,
+                    'end' => null,
+                    'day_id' => $dayId,
+                ]);
+            } else {
+                $this->workRepository->create([
+                    'start' => $workTime['start'],
+                    'end' => $workTime['end'],
+                    'day_id' => $dayId
+                ]);
+                // And create breaks
+                foreach ($breaks as $break) {
+                    $this->breakRepository->create([
+                        'start' => $break['start'],
+                        'end' => $break['end'],
+                        'day_id' => $dayId
+                    ]);
+                }
+            }
+        }
+    }
+
+    private function createFlexibleScedule(int $settingsId, array $data, string $breakType, ?array $breaks): void
+    {
+        $this->dayRepository->fillDaysNotForSlidingType($settingsId);
+
+        foreach ($data as $item) {
+            $dayId = WorkScheduleDayRepository::getDayFromString($item['day']['value'])->id;
+            $this->workRepository->create([
+                'day_id' => $dayId,
+                'start' => $item['workTime']['start'],
+                'end' => $item['workTime']['end'],
+            ]);
+
+            // Create breaks
+            if ($breakType == 'united') {
+                foreach ($breaks as $break) {
+                    $this->breakRepository->create([
+                        'day_id' => $dayId,
+                        'start' => $break['start'],
+                        'end' => $break['end']
+                    ]);
+                }
+            } else {
+                foreach ($item['breaks'] as $break) {
+                    $this->breakRepository->create([
+                        'day_id' => $dayId,
+                        'start' => $break['start'],
+                        'end' => $break['end']
+                    ]);
+                }
+            }
         }
     }
 }
