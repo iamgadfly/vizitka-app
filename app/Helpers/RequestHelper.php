@@ -16,11 +16,11 @@ class RequestHelper
             'maintenances' => ['required', 'array', 'bail'],
             'maintenances.*.title' => ['required', 'string', 'bail'],
             'maintenances.*.price' => ['required', 'array', 'bail'],
-            'maintenances.*.price.label' => ['required', 'nullable', 'string', 'bail'],
-            'maintenances.*.price.value' => ['required', 'nullable', 'integer', 'bail'],
+            'maintenances.*.price.label' => ['nullable', 'string', 'bail'],
+            'maintenances.*.price.value' => ['nullable', 'integer', 'bail'],
             'maintenances.*.duration' => ['required', 'array', 'bail'],
-            'maintenances.*.duration.label' => ['required', 'string', 'bail'],
-            'maintenances.*.duration.value' => ['required', 'integer', 'bail']
+            'maintenances.*.duration.label' => ['nullable', 'string', 'bail'],
+            'maintenances.*.duration.value' => ['nullable', 'integer', 'bail']
         ];
     }
 
