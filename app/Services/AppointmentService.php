@@ -99,16 +99,18 @@ class AppointmentService
         return $output;
     }
 
-    public function getSvgForPeriod(string $date): array
+    public function getSvgForPeriod(array $dates): array
     {
         $output = [];
-        $dates = TimeHelper::getMonthInterval($date);
         foreach ($dates as $date) {
-            $schedule = WorkScheduleWorkRepository::getWorkDay($date);
-            if (is_null($schedule)) {
-                continue;
+            $days = TimeHelper::getMonthInterval($date);
+            foreach ($days as $day) {
+                $schedule = WorkScheduleWorkRepository::getWorkDay($day);
+                if (is_null($schedule)) {
+                    continue;
+                }
+                $output[$day] = $this->getSvgForDate($day, $schedule[0], $schedule[1]);
             }
-            $output[$date] = $this->getSvgForDate($date, $schedule[0], $schedule[1]);
         }
 
         return $output;

@@ -24,7 +24,8 @@ class GetSvgRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required|date_format:Y-m-d'
+            'dates' => 'required|array',
+            'dates.*' => 'required|date_format:Y-m-d'
         ];
     }
 }
