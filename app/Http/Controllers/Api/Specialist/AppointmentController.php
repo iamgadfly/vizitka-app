@@ -127,7 +127,7 @@ class AppointmentController extends Controller
     public function svgByMonth(GetSvgRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->getSvgForPeriod($request->date)
+            $this->service->getSvgForPeriod($request->dates)
         );
     }
 
