@@ -57,12 +57,12 @@ class RequestHelper
     public static function getAppointmentRules(FormRequest $request): array
     {
         $rules = [
-            'client_id' => ['exclude_if:dummy_clients_id,!=,null', 'exists:clients,id', 'bail'],
-            'dummy_client_id' => ['exclude_if:client_id,!=,null', 'exists:dummy_clients,id', 'bail'],
+            'client_id' => ['nullable', 'exists:clients,id', 'bail'],
+            'dummy_client_id' => ['nullable', 'exists:dummy_clients,id', 'bail'],
+            'date' => ['required', 'date_format:Y-m-d', 'bail'],
             'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
             'appointments' => ['required', 'array'],
             'appointments.*.maintenance_id' => ['required', 'exists:maintenances,id', 'bail'],
-            'appointments.*.date' => ['required', 'date_format:Y-m-d', 'bail'],
             'appointments.*.time_start' => ['required', 'date_format:H:i', 'bail'],
             'appointments.*.time_end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
         ];

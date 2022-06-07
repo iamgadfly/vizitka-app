@@ -27,11 +27,12 @@ class AppointmentService
         $orderNumber = Random::generate(5, '0-9');
         $output = [];
         foreach ($data['appointments'] as $appointment) {
-            $this->isInInterval($appointment);
             $appointment['dummy_client_id'] = $data['dummy_client_id'] ?? null;
             $appointment['client_id'] = $data['client_id'] ?? null;
             $appointment['specialist_id'] = $data['specialist_id'];
             $appointment['order_number'] = $orderNumber;
+            $appointment['date'] = $data['date'];
+            $this->isInInterval($appointment);
             $output[] = $this->repository->create($appointment);
         }
         return $output;
