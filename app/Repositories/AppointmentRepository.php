@@ -13,20 +13,37 @@ class AppointmentRepository extends Repository
         parent::__construct($model);
     }
 
-    public function confirm(int $id)
+    public function confirm(string $orderNumber): bool
     {
-        $item = $this->getById($id) ?? throw new NotFoundHttpException;
-        $item->status = 'confirmed';
-        $item->save();
-        return $item;
+        $items = $this->getAllByOrderNumber($orderNumber);
+        if (empty($items)) {
+            throw new  NotFoundHttpException;
+        }
+        foreach ($items as $item) {
+            $item->status = 'confirmed';
+            $item->save();
+        }
+        return true;
     }
 
-    public function skipped(int $id)
+    public function skipped(string $orderNumber): bool
     {
-        $item = $this->getById($id) ?? throw new  NotFoundHttpException;
-        $item->status = 'skipped';
-        $item->save();
-        return $item;
+        $items = $this->getAllByOrderNumber($orderNumber);
+        if (empty($items)) {
+            throw new  NotFoundHttpException;
+        }
+        foreach ($items as $item) {
+            $item->status = 'skipped';
+            $item->save();
+        }
+        return true;
+    }
+
+    public function getAllByOrderNumber(string $orderNumber)
+    {
+        return $this->model::where([
+            'order_number' => $orderNumber
+        ])->get();
     }
 
     public function getAllByDate(string $date)
