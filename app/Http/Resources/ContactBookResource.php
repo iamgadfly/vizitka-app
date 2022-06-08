@@ -24,7 +24,7 @@ class ContactBookResource extends JsonResource
                     'full_name' => "$this->name $this->surname",
                     'discount' => $this->discount * 100,
                     'phone_number' => $this->phone_number,
-                    'avatar' => ImageHelper::getAssetFromFilename($this->avatar->url),
+                    'avatar' => ImageHelper::getAssetFromFilename($this->avatar?->url),
                     'type' => $this->type
                 ],
                 'specialist' => SpecialistResource::make($this->specialist)
@@ -33,11 +33,11 @@ class ContactBookResource extends JsonResource
         return [
             'id' => $this->id,
             'client' => [
-                'id' => $this->id,
-                'name' => $this->name,
-                'surname' => $this->surname,
+                'id' => $this->client->id,
+                'name' => $this->client->name,
+                'surname' => $this->client->surname,
                 'phone' => $this->client->user->phone_number,
-                'avatar' => $this?->avatar?->url,
+                'avatar' => $this->client?->avatar?->url ?? null,
                 'type' => $this->type
             ],
             'specialist' => SpecialistResource::make($this->specialist)

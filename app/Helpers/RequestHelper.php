@@ -58,18 +58,33 @@ class RequestHelper
     {
         $rules = [
             'type' => ['required', 'in:client,dummy', 'bail'],
-            'time_start' => ['required', 'date_format:H:i', 'bail'],
-            'time_end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
+            'time' => ['required', 'array', 'bail'],
+            'time.start' => ['required', 'date_format:H:i', 'bail'],
+            'time.end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
             'date' => ['required', 'date_format:Y-m-d', 'bail'],
             'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
-            'maintenance_ids' => ['required', 'array', 'bail'],
-            'maintenance_ids.*' => ['required', 'exists:maintenances,id', 'bail'],
+            'maintenance' => ['required', 'array', 'bail'],
+            'maintenance.*.id' => ['required', 'exists:maintenances,id', 'bail'],
+            'maintenance.*.title' => ['nullable', 'string', 'bail'],
+            'maintenance.*.duration' => ['array', 'bail'],
+            'maintenance.*.duration.label' => ['nullable', 'string', 'bail'],
+            'maintenance.*.duration.price' => ['nullable', 'integer', 'bail'],
+            'maintenance.*.price' => ['array', 'bail'],
+            'maintenance.*.price.label' => ['nullable', 'string', 'bail'],
+            'maintenance.*.price.value' => ['nullable', 'integer', 'bail'],
+            'client' => ['required', 'array', 'bail'],
+            'client.avatar' => ['nullable', 'string', 'bail'],
+            'client.discount' => ['nullable', 'integer', 'bail'],
+            'client.full_name' => ['nullable', 'string', 'bail'],
+            'client.name' => ['nullable', 'string', 'bail'],
+            'client.surname' => ['nullable', 'string', 'bail'],
+            'client.phone_number' => ['nullable', 'string', 'bail']
         ];
 
         if ($request->type == 'client') {
-            $rules['client_id'] = ['nullable', 'exists:clients,id', 'bail'];
+            $rules['client.id'] = ['nullable', 'exists:clients,id', 'bail'];
         } else {
-            $rules['client_id'] = ['nullable', 'exists:dummy_clients,id', 'bail'];
+            $rules['client.id'] = ['nullable', 'exists:dummy_clients,id', 'bail'];
         }
 
         if ($request->method() == 'PUT') {

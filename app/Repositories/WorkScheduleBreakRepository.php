@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleBreak;
 use App\Models\WorkScheduleDay;
+use App\Models\WorkScheduleSettings;
 use Carbon\Carbon;
 
 class WorkScheduleBreakRepository extends Repository
@@ -43,25 +44,35 @@ class WorkScheduleBreakRepository extends Repository
         })->get();
     }
 
-    public static function getBreaksForDay(string $date)
+    public static function getBreaksForDay(string $date, bool $forCalendar = false)
     {
         $result = [];
         // Try to get single work schedule for a day
-        $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
-//        $day_id = WorkScheduleDay::whereHas([
-//            'specialist_id' => ,
-//            'day' => $weekday
-//        ])->first()->id;
-        $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
-            return $q->where('specialist_id', auth()->user()->specialist->id);
-        })->where('day', $weekday)->first()->id;
+        $settings = WorkScheduleSettings::where([
+            'specialist_id' => auth()->user()->specialist->id
+        ])->first();
+        if ($settings->type == 'sliding') {
+            $index = WorkScheduleDayRepository::getDayIndexFromDate($date);
+            $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
+                return $q->where('specialist_id', auth()->user()->specialist->id);
+            })->where('day_index', $index->id)->first();
+            $day_id = $day_id->id;
+        } else {
+            $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
+            $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
+                return $q->where('specialist_id', auth()->user()->specialist->id);
+            })->where('day', $weekday)->first()->id;
+        }
         $single = SingleWorkSchedule::where([
             'date' => $date,
             'day_id' => $day_id,
             'is_break' => true
         ])->get();
 
-        if (!empty($single)) {
+        if ($single->isNotEmpty()) {
+            if ($forCalendar) {
+                return $single;
+            }
             foreach ($single as $break) {
                 $result[] = [
                     $break->start,
@@ -72,19 +83,45 @@ class WorkScheduleBreakRepository extends Repository
             return $result;
         }
         // If not found single work schedule
-        $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($weekday) {
-            $q->where('day', $weekday);
-            return $q->whereHas('settings', function ($qb) {
-                return $qb->where('specialist_id', auth()->user()->specialist->id);
-            });
-        })->get();
+        if ($settings->type == 'sliding') {
+            $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($index) {
+                $q->where('day_index', $index->id);
+                return $q->whereHas('settings', function ($qb) {
+                    return $qb->where('specialist_id', auth()->user()->specialist->id);
+                });
+            })->get();
+        } else {
+            $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($weekday) {
+                $q->where('day', $weekday);
+                return $q->whereHas('settings', function ($qb) {
+                    return $qb->where('specialist_id', auth()->user()->specialist->id);
+                });
+            })->get();
+        }
+        if ($forCalendar) {
+            return $breaks;
+        }
         foreach ($breaks as $break) {
             $result[] = [
                 $break->start,
-                $break->end
+                $break->end,
             ];
         }
 
         return $result;
+    }
+
+    public static function getBreaksForCalendar(string $date)
+    {
+        $breaks = self::getBreaksForADay($date);
+        foreach ($breaks as $break) {
+            $break = [
+                'start' => $break[0],
+                'end' => $break[1],
+                'type' => 'break'
+            ];
+        }
+
+        return $breaks;
     }
 }

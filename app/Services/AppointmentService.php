@@ -27,18 +27,18 @@ class AppointmentService
     public function create(array $data, ?string $orderNumber = null): array
     {
         $orderNumber = $orderNumber ?? Random::generate(5, '0-9');
-        $start = Carbon::parse($data['time_start']);
+        $start = Carbon::parse($data['time']['start']);
         $output = [];
-        foreach ($data['maintenance_ids'] as $maintenanceId) {
+        foreach ($data['maintenance'] as $maintenance) {
             $maintenance = $this->maintenanceRepository->whereFirst([
-                'id' => $maintenanceId
+                'id' => $maintenance['id']
             ]);
             $appointment = [
-                'dummy_client_id' => $data['type'] == 'dummy' ? $data['client_id'] : null,
-                'client_id' => $data['type'] == 'client' ? $data['client_id'] : null,
+                'dummy_client_id' => $data['type'] == 'dummy' ? $data['client']['id'] : null,
+                'client_id' => $data['type'] == 'client' ? $data['client']['id'] : null,
                 'specialist_id' => $data['specialist_id'],
                 'date' => $data['date'],
-                'maintenance_id' => $maintenanceId,
+                'maintenance_id' => $maintenance['id'],
                 'time_start' => $start->format('H:i'),
                 'time_end' => $start->addMinutes($maintenance->duration)->format('H:i'),
                 'order_number' => $orderNumber
@@ -86,10 +86,11 @@ class AppointmentService
     public function getAllByDay(string $date): Collection
     {
         $output = collect();
-        $appointments = $this->repository->getAllByDate($date);
-        // TODO: Uncomment this in future
-//        $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
-//        $output->breaks = $breaks;
+        $appointments = collect($this->repository->getAllByDate($date));
+
+        $breaks = collect(WorkScheduleBreakRepository::getBreaksForDay($date, true));
+
+        $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
         $times = WorkScheduleWorkRepository::getWorkDay($date) ?? null;
         if (!is_null($times)) {
