@@ -24,10 +24,14 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'dates' => ['required', 'array'],
-            'dates.*' => ['required', 'date_format:Y-m-d', 'bail'],
-            'start' => ['required', 'date_format:H:i', 'bail', 'nullable'],
-            'end' => ['required', 'date_format:H:i', 'bail', 'nullable'],
+            'break' => ['required', 'array', 'bail'],
+            'break.time' => ['required', 'array', 'bail'],
+            'break.date' => ['date_format:Y-m-d', 'nullable', 'bail'],
+            'break.time.start' => ['date_format:H:i', 'nullable', 'bail'],
+            'break.time.end' => ['date_format:H:i', 'nullable', 'bail'],
+            'weekend' => ['required', 'array', 'bail'],
+            'weekend.start' => ['date_format:Y-m-d', 'nullable', 'bail'],
+            'weekend.end' => ['date_format:Y-m-d', 'nullable', 'bail'],
             'is_break' => ['required', 'boolean', 'bail']
         ];
     }

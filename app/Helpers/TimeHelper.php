@@ -34,6 +34,19 @@ class TimeHelper
         return $output;
     }
 
+    public static function getDateInterval(string $start, string $end): array
+    {
+        $first = Carbon::parse($start);
+        $last = Carbon::parse($end);
+
+        $output = [$first->format('Y-m-d')];
+        while ($first->addDay() < $last) {
+            $output[] = $first->format('Y-m-d');
+        }
+        $output[] = $last->format('Y-m-d');
+        return $output;
+    }
+
     public static function getTimeIntervalAsFreeAppointment(?string $start, ?string $end): array
     {
         $interval = self::getTimeInterval($start, $end);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ImageHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContactBookResource extends JsonResource
@@ -14,9 +15,31 @@ class ContactBookResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->type == 'dummy') {
+            return [
+                'id' => $this->id,
+                'client' => [
+                    'name' => $this->name,
+                    'surname' => $this->surname,
+                    'full_name' => "$this->name $this->surname",
+                    'discount' => $this->discount * 100,
+                    'phone_number' => $this->phone_number,
+                    'avatar' => ImageHelper::getAssetFromFilename($this->avatar->url),
+                    'type' => $this->type
+                ],
+                'specialist' => SpecialistResource::make($this->specialist)
+            ];
+        }
         return [
             'id' => $this->id,
-            'client' => ClientResource::make($this->client),
+            'client' => [
+                'id' => $this->id,
+                'name' => $this->name,
+                'surname' => $this->surname,
+                'phone' => $this->client->user->phone_number,
+                'avatar' => $this?->avatar?->url,
+                'type' => $this->type
+            ],
             'specialist' => SpecialistResource::make($this->specialist)
         ];
     }

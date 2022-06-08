@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Helpers\WeekdayHelper;
 use App\Models\WorkScheduleDay;
+use App\Models\WorkScheduleSettings;
+use Carbon\Carbon;
 
 class WorkScheduleDayRepository extends Repository
 {
@@ -35,6 +37,25 @@ class WorkScheduleDayRepository extends Repository
         }
 
         return $output;
+    }
+
+    public static function getDayIndexFromDate(string $date)
+    {
+        $settings = WorkScheduleSettings::where([
+            'specialist_id' => auth()->user()->specialist->id
+        ])->first();
+        $dateFrom = Carbon::parse($settings->start_from);
+        $date = Carbon::parse($date);
+        $maxIndex = $settings->weekdays_count  + $settings->workdays_count;
+        $index = 1;
+        while ($dateFrom < $date) {
+            $index++;
+            if ($index > $maxIndex) {
+                $index = 1;
+            }
+            $dateFrom->addDay();
+        }
+        return self::getDayFromInt($index);
     }
 
     public static function getDayFromString(string $day)
