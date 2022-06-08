@@ -72,7 +72,7 @@ class AppointmentController extends Controller
     public function delete(IdRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->delete($request->id)
+            $this->service->delete($request->order_number)
         );
     }
 
@@ -86,7 +86,7 @@ class AppointmentController extends Controller
     public function confirm(IdRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->confirm($request->id)
+            $this->service->confirm($request->order_number)
         );
     }
 
@@ -100,7 +100,7 @@ class AppointmentController extends Controller
     public function skipped(IdRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->skipped($request->id)
+            $this->service->skipped($request->order_number)
         );
     }
 

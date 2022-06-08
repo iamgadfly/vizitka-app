@@ -27,7 +27,7 @@ class AppointmentResource extends JsonResource
             ],
             'client' => [
                 'name' => $this->client?->name ?? $this->dummyClient?->name,
-                'surname' => $this->client?->name ?? $this->dummyClient?->surname,
+                'surname' => $this->client?->surname ?? $this->dummyClient?->surname,
                 'phone_number' => $this->client?->user->phone_number ?? $this->dummyClient?->phone_number,
                 'photo' => ImageHelper::getAssetFromFilename($this->client?->avatar->url
                     ?? $this->dummyClient?->avatar->url),
