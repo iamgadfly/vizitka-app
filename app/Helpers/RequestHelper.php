@@ -57,8 +57,7 @@ class RequestHelper
     public static function getAppointmentRules(FormRequest $request): array
     {
         $rules = [
-            'client_id' => ['nullable', 'exists:clients,id', 'bail'],
-            'dummy_client_id' => ['nullable', 'exists:dummy_clients,id', 'bail'],
+            'type' => ['required', 'in:client,dummy', 'bail'],
             'time_start' => ['required', 'date_format:H:i', 'bail'],
             'time_end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
             'date' => ['required', 'date_format:Y-m-d', 'bail'],
@@ -66,6 +65,12 @@ class RequestHelper
             'maintenance_ids' => ['required', 'array', 'bail'],
             'maintenance_ids.*' => ['required', 'exists:maintenances,id', 'bail'],
         ];
+
+        if ($request->type == 'client') {
+            $rules['client_id'] = ['nullable', 'exists:clients,id', 'bail'];
+        } else {
+            $rules['client_id'] = ['nullable', 'exists:dummy_clients,id', 'bail'];
+        }
 
         if ($request->method() == 'PUT') {
             $rules['order_number'] = ['required', 'exists:appointments,order_number', 'bail'];
