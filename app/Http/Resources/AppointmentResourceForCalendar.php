@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ConstantHelper;
 use App\Helpers\TimeHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,8 +19,7 @@ class AppointmentResourceForCalendar extends JsonResource
         return [
             'data' => AppointmentResource::collection($this->appointments),
             'workSchedule' => TimeHelper::getTimeInterval($this->workSchedule?->start, $this->workSchedule?->end),
-            //TODO: move to constant
-            'time_interval' => TimeHelper::getTimeInterval('00:00', '23:45')
+            'time_interval' => TimeHelper::getTimeInterval(ConstantHelper::DAY_START, ConstantHelper::DAY_END)
         ];
     }
 }
