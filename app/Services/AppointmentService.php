@@ -69,14 +69,14 @@ class AppointmentService
         return $this->repository->whereGet(['order_number' => $orderNumber]);
     }
 
-    public function confirm(int $id)
+    public function confirm(string $orderNumber): bool
     {
-        return $this->repository->confirm($id);
+        return $this->repository->confirm($orderNumber);
     }
 
-    public function skipped(int $id)
+    public function skipped(string $orderNumber): bool
     {
-        return $this->repository->skipped($id);
+        return $this->repository->skipped($orderNumber);
     }
 
     public function getAllByDay(string $date): Collection
