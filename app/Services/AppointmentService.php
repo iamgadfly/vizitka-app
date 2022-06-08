@@ -6,6 +6,7 @@ use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
 use App\Repositories\AppointmentRepository;
+use App\Repositories\MaintenanceRepository;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleWorkRepository;
 use Carbon\Carbon;
@@ -16,22 +17,32 @@ use Nette\Utils\Random;
 class AppointmentService
 {
     public function __construct(
-        protected AppointmentRepository $repository
+        protected AppointmentRepository $repository,
+        protected MaintenanceRepository $maintenanceRepository
     ) {}
 
     /**
      * @throws TimeIsNotValidException
      */
-    public function create(array $data): array
+    public function create(array $data, ?string $orderNumber = null): array
     {
-        $orderNumber = Random::generate(5, '0-9');
+        $orderNumber = $orderNumber ?? Random::generate(5, '0-9');
+        $start = Carbon::parse($data['time_start']);
         $output = [];
-        foreach ($data['appointments'] as $appointment) {
-            $appointment['dummy_client_id'] = $data['dummy_client_id'] ?? null;
-            $appointment['client_id'] = $data['client_id'] ?? null;
-            $appointment['specialist_id'] = $data['specialist_id'];
-            $appointment['order_number'] = $orderNumber;
-            $appointment['date'] = $data['date'];
+        foreach ($data['maintenance_ids'] as $maintenanceId) {
+            $maintenance = $this->maintenanceRepository->whereFirst([
+                'id' => $maintenanceId
+            ]);
+            $appointment = [
+                'dummy_client_id' => $data['dummy_client_id'] ?? null,
+                'client_id' => $data['client_id'] ?? null,
+                'specialist_id' => $data['specialist_id'],
+                'date' => $data['date'],
+                'maintenance_id' => $maintenanceId,
+                'time_start' => $start->format('H:i'),
+                'time_end' => $start->addMinutes($maintenance->duration)->format('H:i'),
+                'order_number' => $orderNumber
+            ];
             $this->isInInterval($appointment);
             $output[] = $this->repository->create($appointment);
         }
@@ -43,20 +54,13 @@ class AppointmentService
      */
     public function update(array $data): array
     {
-
-        $output = [];
-        foreach ($data['appointments'] as $appointment) {
-            $this->repository->deleteById($appointment['id']);
+        $appointments = $this->repository->whereGet([
+            'order_number' => $data['order_number']
+        ]);
+        foreach ($appointments as $appointment) {
+            $this->repository->deleteById($appointment->id);
         }
-        foreach ($data['appointments'] as $appointment) {
-            $this->isInInterval($appointment);
-            $appointment['dummy_client_id'] = $data['dummy_client_id'] ?? null;
-            $appointment['client_id'] = $data['client_id'] ?? null;
-            $appointment['specialist_id'] = $data['specialist_id'];
-            $appointment['order_number'] = $data['order_number'];
-            $output[] = $this->repository->create($appointment);
-        }
-        return $output;
+        return $this->create($data, $data['order_number']);
     }
 
     public function delete(int $id)

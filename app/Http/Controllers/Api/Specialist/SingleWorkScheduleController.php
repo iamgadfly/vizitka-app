@@ -27,7 +27,7 @@ class SingleWorkScheduleController extends Controller
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            SingleWorkSchueduleResource::collection($this->service->create($request->validated()))
+            $this->service->create($request->validated())
         );
     }
 

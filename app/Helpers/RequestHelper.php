@@ -59,12 +59,12 @@ class RequestHelper
         $rules = [
             'client_id' => ['nullable', 'exists:clients,id', 'bail'],
             'dummy_client_id' => ['nullable', 'exists:dummy_clients,id', 'bail'],
+            'time_start' => ['required', 'date_format:H:i', 'bail'],
+            'time_end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
             'date' => ['required', 'date_format:Y-m-d', 'bail'],
             'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
-            'appointments' => ['required', 'array'],
-            'appointments.*.maintenance_id' => ['required', 'exists:maintenances,id', 'bail'],
-            'appointments.*.time_start' => ['required', 'date_format:H:i', 'bail'],
-            'appointments.*.time_end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
+            'maintenance_ids' => ['required', 'array', 'bail'],
+            'maintenance_ids.*' => ['required', 'exists:maintenances,id', 'bail'],
         ];
 
         if ($request->method() == 'PUT') {
@@ -82,14 +82,13 @@ class RequestHelper
             'surname' => ['string', 'bail'],
             'phone_number' => ['string', 'bail', 'unique:dummy_clients,phone_number'],
             'discount' => ['integer', 'min:0', 'max:100', 'bail'],
-            'avatar_id' => ['exists:images,id', 'bail']
+            'avatar_id' => ['exists:images,id', 'nullable', 'bail']
         ];
         if ($request->method() == 'POST') {
             $rules['name'][] = 'required';
             $rules['surname'][] = 'required';
             $rules['phone_number'][] = 'required';
             $rules['discount'][] = 'required';
-            $rules['avatar_id'][] = 'required';
             $rules['specialist_id'] = ['required', 'exists:specialists,id', 'bail'];
         } elseif ($request->method() == 'PUT') {
             $rules['id'] = ['required', 'exists:dummy_clients,id', 'bail'];

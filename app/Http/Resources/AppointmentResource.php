@@ -23,7 +23,7 @@ class AppointmentResource extends JsonResource
             'services' => [
                 'interval' => TimeHelper::getTimeInterval($this->time_start, $this->time_end),
                 'status' => $this->status,
-                'service' => MaintenanceResource::make($this->maintenance),
+                'service' => $this->maintenance->title,
             ],
             'client' => [
                 'name' => $this->client?->name ?? $this->dummyClient?->name,
