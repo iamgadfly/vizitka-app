@@ -90,7 +90,6 @@ class ContactBookService
                 $client->type = 'dummy';
             });
         }
-
-        return $clients->merge($dummies);
+        return $clients->concat($dummies);
     }
 }
