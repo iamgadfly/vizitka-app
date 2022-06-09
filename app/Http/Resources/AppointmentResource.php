@@ -26,6 +26,7 @@ class AppointmentResource extends JsonResource
                 'order_number' => $this->order_number,
                 'date' => $this->date,
                 'services' => [
+                    'id' => $this->maintenance->id,
                     'interval' => TimeHelper::getTimeInterval($this->time_start, $this->time_end),
                     'status' => $this->status,
                     'title' => $this->maintenance->title,
