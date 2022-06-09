@@ -32,7 +32,14 @@ class SingleWorkScheduleController extends Controller
         );
     }
 
-    public function createWorkday(CreateWorkdayRequest $request)
+    /**
+     * @param CreateWorkdayRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Single Workday route
+     * @lrd:end
+     */
+    public function createWorkday(CreateWorkdayRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->createWorkday($request->validated())
