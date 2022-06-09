@@ -89,7 +89,6 @@ class RequestHelper
 
         if ($request->method() == 'PUT') {
             $rules['order_number'] = ['required', 'exists:appointments,order_number', 'bail'];
-            $rules['appointments.*.id'] = ['required', 'exists:appointments,id', 'bail'];
         }
 
         return $rules;
