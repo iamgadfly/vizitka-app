@@ -53,7 +53,7 @@ class WorkScheduleWorkRepository extends Repository
         if ($settings->type == 'sliding') {
             $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
                 return $q->where('specialist_id', auth()->user()->specialist->id);
-            })->where('day_index', $index->id)->first()->id;
+            })->where('day_index', $index->day_index)->first()->id;
         } else {
             $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
                 return $q->where('specialist_id', auth()->user()->specialist->id);
@@ -75,7 +75,7 @@ class WorkScheduleWorkRepository extends Repository
         // If not found single work schedule
         if ($settings->type == 'sliding') {
             $day = WorkScheduleWork::whereHas('day', function ($q) use ($index) {
-                $q->where('day_index', $index->id);
+                $q->where('day_index', $index->day_index);
                 return $q->whereHas('settings', function ($qb) {
                     return $qb->where('specialist_id', auth()->user()->specialist->id);
                 });
