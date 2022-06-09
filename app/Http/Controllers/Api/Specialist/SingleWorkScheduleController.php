@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Specialist;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SingleWorkSchedule\CreateBreakRequest;
 use App\Http\Requests\SingleWorkSchedule\CreateRequest;
+use App\Http\Requests\SingleWorkSchedule\CreateWorkdayRequest;
 use App\Http\Requests\SingleWorkSchedule\DeleteRequest;
 use App\Http\Resources\SingleWorkSchueduleResource;
 use App\Services\SingleWorkScheduleService;
@@ -28,6 +29,13 @@ class SingleWorkScheduleController extends Controller
     {
         return $this->success(
             $this->service->create($request->validated())
+        );
+    }
+
+    public function createWorkday(CreateWorkdayRequest $request)
+    {
+        return $this->success(
+            $this->service->createWorkday($request->validated())
         );
     }
 

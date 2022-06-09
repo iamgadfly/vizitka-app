@@ -13,7 +13,6 @@ class SingleWorkScheduleService
 {
     public function __construct(
         protected SingleWorkScheduleRepository $repository,
-        protected WorkScheduleDayRepository $dayRepository,
     ) {}
 
     public function create(array $data): bool
@@ -27,7 +26,7 @@ class SingleWorkScheduleService
             $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
             $weekend = [
                 'day_id' => WorkScheduleDayRepository::getDayFromString($weekday)->id
-                    ?? $this->dayRepository->getDayIndexFromDate($date)->id,
+                    ?? WorkScheduleDayRepository::getDayIndexFromDate($date)->id,
                 'date' => $date,
                 'start' => null,
                 'end' => null,
@@ -39,12 +38,39 @@ class SingleWorkScheduleService
         return true;
     }
 
+    public function createWorkday(array $data)
+    {
+        foreach ($data['dates'] as $date) {
+            $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
+            $dayId = WorkScheduleDayRepository::getDayFromString($weekday)->id
+                ?? WorkScheduleDayRepository::getDayIndexFromDate($date)->id;
+            $recordWorkday = [
+                'day_id' => $dayId,
+                'date' => $date,
+                'start' => $data['workTime']['start'],
+                'end' => $data['workTime']['end'],
+                'is_break' => false
+            ];
+            $this->repository->create($recordWorkday);
+            foreach ($data['breaks'] as $break) {
+                $recordBreak = [
+                    'day_id' => $dayId,
+                    'date' => $date,
+                    'start' => $break['start'],
+                    'end' => $break['end'],
+                    'is_break' => true
+                ];
+                $this->repository->create($recordBreak);
+            }
+        }
+    }
+
     public function createBreak(array $data): bool
     {
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
         $data['is_break'] = true;
         $data['day_id'] = WorkScheduleDayRepository::getDayFromString($weekday)?->id
-            ?? $this->dayRepository->getDayIndexFromDate($data['date'])?->id;
+            ?? WorkScheduleDayRepository::getDayIndexFromDate($data['date'])?->id;
         $data['start'] = $data['time']['start'];
         $data['end'] = $data['time']['end'];
         $this->repository->create($data);

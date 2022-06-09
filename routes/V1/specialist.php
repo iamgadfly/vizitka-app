@@ -146,6 +146,9 @@ Route::controller(SingleWorkScheduleController::class)
     Route::post('break', 'createBreak')
         ->name('specialist.schedule.single.create.break');
 
+    Route::post('workday', 'createWorkday')
+        ->name('specialist.schedule.single.create.workday');
+
     Route::delete('{id}', 'delete')
         ->name('specialist.schedule.single.delete');
 });
