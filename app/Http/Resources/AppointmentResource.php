@@ -40,6 +40,7 @@ class AppointmentResource extends JsonResource
                     ]
                 ],
                 'client' => [
+                    'id' => $this->client?->id ?? $this->dummyClient?->id,
                     'name' => $this->client?->name ?? $this->dummyClient?->name,
                     'surname' => $this->client?->surname ?? $this->dummyClient?->surname,
                     'phone_number' => $this->client?->user->phone_number ?? $this->dummyClient?->phone_number,
