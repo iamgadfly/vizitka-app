@@ -38,7 +38,7 @@ class SingleWorkScheduleService
         return true;
     }
 
-    public function createWorkday(array $data)
+    public function createWorkday(array $data): bool
     {
         foreach ($data['dates'] as $date) {
             $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
@@ -63,6 +63,7 @@ class SingleWorkScheduleService
                 $this->repository->create($recordBreak);
             }
         }
+        return true;
     }
 
     public function createBreak(array $data): bool
