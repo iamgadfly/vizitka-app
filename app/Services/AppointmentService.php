@@ -63,9 +63,16 @@ class AppointmentService
         return $this->create($data, $data['order_number']);
     }
 
-    public function delete(int $id)
+    public function delete(string $orderNumber): bool
     {
-        return $this->repository->deleteById($id);
+        $records = $this->repository->whereGet([
+            'order_number' => $orderNumber
+        ]);
+        foreach ($records as $record) {
+            $record->delete();
+        }
+
+        return true;
     }
 
     public function get(string $orderNumber)
