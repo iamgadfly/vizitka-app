@@ -265,6 +265,11 @@ class AppointmentService
                 }
             }
         }
+        $svg[] = [
+            'stroke' => SvgHelper::getColorFromType('free'),
+            'strokeDasharray' => 30,
+            'strokeDashoffset' => -70
+        ];
         return $svg;
     }
 }
