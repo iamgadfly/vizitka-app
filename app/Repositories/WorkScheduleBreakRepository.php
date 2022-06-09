@@ -53,10 +53,7 @@ class WorkScheduleBreakRepository extends Repository
         ])->first();
         if ($settings->type == 'sliding') {
             $index = WorkScheduleDayRepository::getDayIndexFromDate($date);
-            $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
-                return $q->where('specialist_id', auth()->user()->specialist->id);
-            })->where('day_index', $index->id)->first();
-            $day_id = $day_id->id;
+            $day_id = $index->id;
         } else {
             $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
             $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
@@ -84,12 +81,7 @@ class WorkScheduleBreakRepository extends Repository
         }
         // If not found single work schedule
         if ($settings->type == 'sliding') {
-            $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($index) {
-                $q->where('day_index', $index->id);
-                return $q->whereHas('settings', function ($qb) {
-                    return $qb->where('specialist_id', auth()->user()->specialist->id);
-                });
-            })->get();
+            $breaks = WorkScheduleBreak::where(['day_id' => $index->id])->get();
         } else {
             $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($weekday) {
                 $q->where('day', $weekday);
