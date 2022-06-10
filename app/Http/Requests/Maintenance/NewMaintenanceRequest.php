@@ -31,9 +31,9 @@ class NewMaintenanceRequest extends FormRequest
         return [
             'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
             'title' => ['required', 'string', 'bail'],
-            'price' => ['required', 'array', 'bail'],
-            'price.label' => ['required', 'nullable', 'string', 'bail'],
-            'price.value' => ['required', 'nullable', 'integer', 'bail'],
+            'price' => ['array', 'bail'],
+            'price.label' => ['nullable', 'string', 'bail'],
+            'price.value' => ['nullable', 'integer', 'bail'],
             'duration' => ['required', 'array', 'bail'],
             'duration.label' => ['required', 'string', 'bail'],
             'duration.value' => ['required', 'integer', 'bail']
