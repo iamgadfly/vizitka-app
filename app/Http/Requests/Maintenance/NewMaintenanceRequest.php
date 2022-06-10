@@ -35,7 +35,7 @@ class NewMaintenanceRequest extends FormRequest
             'price.label' => ['nullable', 'string', 'bail'],
             'price.value' => ['nullable', 'integer', 'bail'],
             'duration' => ['required', 'array', 'bail'],
-            'duration.label' => ['required', 'string', 'bail'],
+            'duration.label' => ['string', 'nullable', 'bail'],
             'duration.value' => ['required', 'integer', 'bail']
         ];
     }
