@@ -111,7 +111,7 @@ class AppointmentService
         $output->workSchedule = $timesobj;
         $output->smartSchedule = WorkScheduleSettings::where([
             'specialist_id' => auth()->user()->specialist->id
-        ])->smart_schedule;
+        ])->first()->smart_schedule;
 
         return $output;
     }
