@@ -5,10 +5,10 @@ namespace App\Helpers;
 class SvgHelper
 {
     public static array $colors = [
-        'unconfirmed' => '#0000FF',
-        'confirmed' => '#00FF00',
-        'skipped' => '#FF0000',
-        'break' => '#888888',
+        'unconfirmed' => '#38B8E0',
+        'confirmed' => '#52AA63',
+        'skipped' => '#D64641',
+        'break' => '#EBEDEF',
         'free' => '#FFFFFF'
     ];
 
