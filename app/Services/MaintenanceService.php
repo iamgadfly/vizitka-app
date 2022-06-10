@@ -47,7 +47,7 @@ class MaintenanceService
     public function addNew(array $data)
     {
         $data['settings_id'] = $this->maintenanceSettingsRepository->mySettings()->id;
-        $data['price'] = $data['price']['value'];
+        $data['price'] = $data['price']['value'] ?? null;
         $data['duration'] = $data['duration']['value'];
         return $this->repository->create($data);
     }
