@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
+use App\Models\WorkScheduleSettings;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\WorkScheduleBreakRepository;
@@ -108,6 +109,10 @@ class AppointmentService
             $timesobj = null;
         }
         $output->workSchedule = $timesobj;
+        $output->smartSchedule = WorkScheduleSettings::where([
+            'specialist_id' => auth()->user()->specialist->id
+        ])->smart_schedule;
+
         return $output;
     }
 
