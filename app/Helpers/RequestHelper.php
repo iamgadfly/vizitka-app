@@ -107,7 +107,6 @@ class RequestHelper
             $rules['name'][] = 'required';
             $rules['surname'][] = 'required';
             $rules['phone_number'][] = 'required';
-            $rules['discount'][] = 'required';
             $rules['specialist_id'] = ['required', 'exists:specialists,id', 'bail'];
         } elseif ($request->method() == 'PUT') {
             $rules['id'] = ['required', 'exists:dummy_clients,id', 'bail'];
