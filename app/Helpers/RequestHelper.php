@@ -100,7 +100,9 @@ class RequestHelper
             'name' => ['string', 'bail'],
             'surname' => ['string', 'bail'],
             'phone_number' => ['string', 'bail', 'unique:dummy_clients,phone_number'],
-            'discount' => ['integer', 'min:0', 'max:100', 'bail'],
+            'discount' => ['array', 'bail'],
+            'discount.label' => ['string', 'nullable', 'bail'],
+            'discount.value' => ['integer', 'min:0', 'max:100', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail']
         ];
         if ($request->method() == 'POST') {
