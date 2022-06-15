@@ -25,6 +25,89 @@ class CardBackgroundHelper
         'resnizi', 'visagiste', 'browist'
     ];
 
+    private static $specialistColor = [
+        'barber' => [
+            'gradientColor' => '#414141',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#000000'
+        ],
+        'hairdresser_1' => [
+            'gradientColor' => '#C57280',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#68213D'
+        ],
+        'hairdresser_2' => [
+            'gradientColor' => '#E7BA67',
+            'textColor' => '#000000',
+            'buttonsColor' => '#301F05'
+        ],
+        'manicure_1' => [
+            'gradientColor' => '#E15D7F',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#89233D'
+        ],
+        'manicure_2' => [
+            'gradientColor' => '#FFD9EA',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#6B2E49'
+        ],
+        'neutral_beauty_1' => [
+            'gradientColor' => '#EFBAB8',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#5E1A1F'
+        ],
+        'neutral_beauty_2' => [
+            'gradientColor' => '#416780',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#314D5E'
+        ],
+        'neutral_man_1' => [
+            'gradientColor' => '#312A28',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#120B10'
+        ],
+        'neutral_man_2' => [
+            'gradientColor' => '#3C4556',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#1F2634'
+        ],
+        'neutral_woman_1' => [
+            'gradientColor' => '#E4D1F0',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#2D163D'
+        ],
+        'neutral_woman_2' => [
+            'gradientColor' => '#F7D6D9',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#904348'
+        ],
+        'psychology_1' => [
+            'gradientColor' => '#5EB7AA',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#196358'
+        ],
+        'psychology_2' => [
+            'gradientColor' => '#6CC4D7',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#095A7C'
+        ],
+        'resnizi' => [
+            'gradientColor' => '#7B4ACB',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#5B2F8C'
+        ],
+        'visagiste' => [
+            'gradientColor' => '#BD637B',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#753A49'
+        ],
+        'browist' => [
+            'gradientColor' => '#9D8071',
+            'textColor' => '#FFFFFF',
+            'buttonsColor' => '#715A4F'
+        ],
+    ];
+
     /**
      * @var array<array<string>>
      */
@@ -145,6 +228,11 @@ class CardBackgroundHelper
         }
 
         return null;
+    }
+
+    public static function getSpecialistColorFromActivityKind(string $activityKind): ?array
+    {
+        return self::$specialistColor[$activityKind];
     }
 
     public static function getAll(): Collection

@@ -7,6 +7,7 @@ use App\Helpers\CardBackgroundHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Specialist\CreateSpecialistRequest;
 use App\Http\Requests\Specialist\GetSpecialistRequest;
+use App\Http\Resources\SpecialistDetailedDataResource;
 use App\Http\Resources\SpecialistResource;
 use App\Services\ImageService;
 use App\Services\SpecialistService;
@@ -57,7 +58,7 @@ class SpecialistController extends Controller
     public function get(GetSpecialistRequest $request): JsonResponse
     {
         return $this->success(
-            SpecialistResource::make($this->service->getSpecialistData($request->id)),
+            SpecialistDetailedDataResource::make($this->service->getSpecialistData($request->id)),
             Response::HTTP_OK,
         );
     }
