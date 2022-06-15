@@ -19,15 +19,28 @@ class SpecialistRepository extends Repository
         );
     }
 
-    public function findByUserId($id): ?Specialist
+    public function findByUserId($id, bool $isRegistered = true): ?Specialist
     {
-        return $this->model::where('user_id', $id)->first();
+        return $this->model::where([
+            'user_id' => $id,
+            'is_registered' => $isRegistered
+        ])->first();
     }
 
-    public function findByPhoneNumber(string $phoneNumber)
+    public function findById(int $id, bool $isRegistered = true)
+    {
+        return $this->model::where([
+            'id' => $id,
+            'is_registered' => $isRegistered
+        ])->first();
+    }
+
+    public function findByPhoneNumber(string $phoneNumber, bool $isRegistered = true)
     {
         return $this->model::whereHas('user', function ($q) use ($phoneNumber) {
             return $q->where('phone_number', $phoneNumber);
-        })->get()->first();
+        })->where([
+            'is_registered' => $isRegistered
+        ])->get()->first();
     }
 }

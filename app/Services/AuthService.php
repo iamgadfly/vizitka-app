@@ -12,6 +12,7 @@ use App\Exceptions\UserNotFoundException;
 use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Models\User;
+use App\Repositories\SpecialistRepository;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -21,7 +22,8 @@ class AuthService
 {
     public function __construct(
         protected SMSService $SMSService,
-        protected UserService $service
+        protected UserService $service,
+        protected SpecialistRepository $specialistRepository
     ){}
 
     public function isUserExists(string $phoneNumber): array
@@ -30,7 +32,7 @@ class AuthService
         $user = $this->service->searchByPhoneNumber($phoneNumber);
         if (!is_null($user)) {
             $output['user'] = true;
-            $output['specialist'] = !is_null($user->specialist);
+            $output['specialist'] = !is_null($this->specialistRepository->findByPhoneNumber($phoneNumber));
             $output['client'] = !is_null($user->client);
         } else {
             $output['user'] = false;
