@@ -40,6 +40,7 @@ Route::controller(ImageController::class)
 });
 
 Route::post('/test', [TestController::class, 'test'])->middleware('auth:sanctum');
+Route::post('/test/deleteUser', [TestController::class, 'deleteUser']);
 
 // No auth routes
 Route::post('/isUserExists', [AuthController::class, 'isUserExists']);
