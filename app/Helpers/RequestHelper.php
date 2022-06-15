@@ -119,13 +119,13 @@ class RequestHelper
     public static function getDummyBusinessCardRules(FormRequest $request): array
     {
         $rules = [
-            'client_id' => ['exists:clients,id'],
-            'name' => ['string'],
-            'surname' => ['string'],
-            'title' => ['string'],
-            'about' => ['string'],
-            'avatar_id' => ['exists:images,id'],
-            'phone_number' => ['string|min:8|max:16']
+            'client_id' => ['exists:clients,id', 'bail'],
+            'name' => ['string', 'bail'],
+            'surname' => ['string', 'bail'],
+            'title' => ['string', 'bail'],
+            'about' => ['string', 'bail'],
+            'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
+            'phone_number' => ['string', 'bail']
         ];
         if ($request->method() == 'POST') {
             $rules['client_id'][] = 'required';
