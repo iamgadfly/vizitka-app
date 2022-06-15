@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Helpers\WeekdayHelper;
 use App\Http\Resources\WorkScheduleSettingsResource;
+use App\Repositories\SpecialistRepository;
 use App\Repositories\WorkScheduleBreakRepository;
 use App\Repositories\WorkScheduleDayRepository;
 use App\Repositories\WorkScheduleSettingsRepository;
@@ -17,6 +18,7 @@ class WorkScheduleService
         protected WorkScheduleBreakRepository $breakRepository,
         protected WorkScheduleDayRepository $dayRepository,
         protected WorkScheduleWorkRepository $workRepository,
+        protected SpecialistRepository $specialistRepository
     ) {}
 
     /**
@@ -79,6 +81,10 @@ class WorkScheduleService
                     $settingsId, $workdaysCount, $weekdaysCount, $work, $breakType, $breaks
                 );
             }
+            //make specialist registered
+            $specialist = $this->specialistRepository->findById($data['specialist_id'], false);
+            $specialist->is_registered = true;
+            $specialist->save();
             \DB::commit();
             return new WorkScheduleSettingsResource($settings);
         } catch (\PDOException $e) {
