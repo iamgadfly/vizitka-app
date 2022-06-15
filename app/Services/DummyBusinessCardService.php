@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Http\Resources\ContactBookResource;
+use App\Http\Resources\BusinessCardResource;
 use App\Http\Resources\DummyBusinessCardResource;
-use App\Repositories\BusinessCardHolderRepository;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyBusinessCardRepository;
 use App\Repositories\SpecialistRepository;
@@ -18,14 +17,22 @@ class DummyBusinessCardService
         protected ContactBookRepository $contactBookRepository
     ) {}
 
-    public function create(array $data): DummyBusinessCardResource|ContactBookResource
+    public function create(array $data)
     {
         $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
         if (!is_null($record)) {
-            return new ContactBookResource($this->contactBookRepository->create([
+            $record = $this->contactBookRepository->whereFirst([
                 'client_id' => auth()->user()->client->id,
                 'specialist_id' => $record->id
-            ]));
+            ]);
+            if (!is_null($record)) {
+                return new BusinessCardResource($record->specialist->card);
+            }
+            $record = $this->contactBookRepository->create([
+                'client_id' => auth()->user()->client->id,
+                'specialist_id' => $record->id
+            ]);
+            return new BusinessCardResource($record->specialist->card);
         }
         return new DummyBusinessCardResource($this->repository->create($data));
     }
