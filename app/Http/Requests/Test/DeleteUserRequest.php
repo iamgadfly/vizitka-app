@@ -24,7 +24,8 @@ class DeleteUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => ['required', 'exists:users,phone_number']
+            'phone_number' => ['required', 'exists:users,phone_number'],
+            'as_specialist' => ['required', 'boolean']
         ];
     }
 }
