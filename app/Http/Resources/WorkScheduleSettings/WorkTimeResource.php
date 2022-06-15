@@ -7,8 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class WorkTimeResource extends JsonResource
 {
-    protected string $start;
-    protected string $end;
+    protected ?string $start;
+    protected ?string $end;
     public function __construct($start, $end)
     {
         parent::__construct($start, $end);
@@ -25,8 +25,8 @@ class WorkTimeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'start' => Carbon::parse($this->start)->format('H:i'),
-            'end' => Carbon::parse($this->end)->format('H:i')
+            'start' => !is_null($this->start) ? Carbon::parse($this->start)->format('H:i') : null,
+            'end' => !is_null($this->end) ? Carbon::parse($this->end)->format('H:i') : null
         ];
     }
 }
