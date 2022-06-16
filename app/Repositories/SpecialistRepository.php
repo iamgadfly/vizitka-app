@@ -14,7 +14,7 @@ class SpecialistRepository extends Repository
     public function create(array $data)
     {
         return $this->model::updateOrCreate(
-            ['user_id' => $data['user_id']],
+            ['user_id' => auth()->id()],
             $data
         );
     }
