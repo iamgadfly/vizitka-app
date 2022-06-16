@@ -14,7 +14,7 @@ class BusinessCardRepository extends Repository
     public function create(array $data)
     {
         return $this->model::updateOrCreate(
-            ['specialist_id' => $data['specialist_id']],
+            ['specialist_id' => auth()->user()->specialist->id],
             $data
         );
     }
