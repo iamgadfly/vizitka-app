@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\TimeIsNotValidException;
+use App\Helpers\ImageHelper;
 use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
 use App\Models\WorkScheduleSettings;
@@ -94,9 +95,8 @@ class AppointmentService
     public function getAllByDay(string $date): Collection
     {
         $output = collect();
-        $appointments = collect($this->repository->getAllByDate($date));
-
-        $breaks = collect(WorkScheduleBreakRepository::getBreaksForDay($date, true));
+        $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date)));
+        $breaks = $this->convertBreakToOrderType(collect(WorkScheduleBreakRepository::getBreaksForDay($date, true)));
 
         $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
@@ -112,7 +112,6 @@ class AppointmentService
         $output->smartSchedule = WorkScheduleSettings::where([
             'specialist_id' => auth()->user()->specialist->id
         ])->first()->smart_schedule;
-
         return $output;
     }
 
@@ -165,6 +164,71 @@ class AppointmentService
             $this->repository->deleteById($id);
         }
         return true;
+    }
+
+    private function convertBreakToOrderType(Collection $breaks): Collection
+    {
+        $output = [];
+        foreach ($breaks as $break) {
+            $item = [
+                'date' => $break->date,
+                'status' => 'break',
+                'interval' => TimeHelper::getTimeInterval($break->start, $break->end),
+            ];
+            $output[] = $item;
+        }
+
+        return collect($output);
+    }
+
+    private function convertToOrderType(Collection $appointments): Collection
+    {
+        $usedOrders = [];
+        $output = [];
+        foreach ($appointments as $appointment) {
+            $order = $appointment->order_number;
+            if (in_array($order, $usedOrders)) {
+                continue;
+            }
+            $records = $appointments->where('order_number', '=', $order);
+            $minTime = min(array_column($records->toArray(), 'time_start'));
+            $maxTime = max(array_column($records->toArray(), 'time_end'));
+            $item = [
+                'order_number' => $order,
+                'date' => $records->first()->date,
+                'status' => $records->first()->status,
+                'interval' => TimeHelper::getTimeInterval($minTime, $maxTime),
+                'services' => [],
+                'client' => [
+                    'id' => $records->first()->client?->id ?? $records->first()->dummyClient?->id,
+                    'name' => $records->first()->client?->name ?? $records->first()->dummyClient?->name,
+                    'surname' => $records->first()->client?->surname ?? $records->first()->dummyClient?->surname,
+                    'phone_number' => $records->first()->client?->user->phone_number
+                        ?? $records->first()->dummyClient?->phone_number,
+                    'photo' => ImageHelper::getAssetFromFilename($records->first()->client?->avatar?->url
+                        ?? $records->first()->dummyClient?->avatar?->url),
+                    'discount' => $records->first()?->dummyClient?->discount * 100 ?? null
+                ]
+            ];
+            foreach ($records as $record) {
+                $item['services'][] = [
+                    'id' => $record->maintenance->id,
+                    'title' => $record->maintenance->title,
+                    'price' => [
+                        'label' => str($record->maintenance->price)->value(),
+                        'value' => $record->maintenance->price
+                    ],
+                    'duration' => [
+                        'label' => str($record->maintenance->duration)->value(),
+                        'value' => $record->maintenance->duration
+                    ]
+                ];
+            }
+            $usedOrders[] = $order;
+            $output[] = collect($item);
+        }
+
+        return collect($output);
     }
 
     /**
