@@ -122,7 +122,11 @@ class AppointmentController extends Controller
                     "order_number": "22667",
                     "date": "2022-06-16",
                     "status": "unconfirmed",
-                    "interval": [],
+                    "interval": [
+                        "11:00",
+                        "11:15",
+                        "11:30"
+                    ],
                     "services": [
                       {
                         "id": 90,
