@@ -10,6 +10,7 @@ use App\Models\WorkScheduleSettings;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\WorkScheduleBreakRepository;
+use App\Repositories\WorkScheduleSettingsRepository;
 use App\Repositories\WorkScheduleWorkRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -20,7 +21,8 @@ class AppointmentService
 {
     public function __construct(
         protected AppointmentRepository $repository,
-        protected MaintenanceRepository $maintenanceRepository
+        protected MaintenanceRepository $maintenanceRepository,
+        protected WorkScheduleSettingsRepository $settingsRepository
     ) {}
 
     /**
@@ -118,8 +120,14 @@ class AppointmentService
     public function getSvgForPeriod(array $dates): array
     {
         $output = [];
+        $settings = $this->settingsRepository->mySettings();
         foreach ($dates as $date) {
             $days = TimeHelper::getMonthInterval($date);
+            if ($settings->type == 'sliding') {
+                $days = array_filter($days, function ($a) use ($settings) {
+                    return Carbon::parse($settings->start_from) <= Carbon::parse($a);
+                });
+            }
             foreach ($days as $day) {
                 $schedule = WorkScheduleWorkRepository::getWorkDay($day);
                 if (is_null($schedule)) {
