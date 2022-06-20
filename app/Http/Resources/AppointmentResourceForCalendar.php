@@ -16,11 +16,13 @@ class AppointmentResourceForCalendar extends JsonResource
      */
     public function toArray($request)
     {
+        $timeInterval = TimeHelper::getTimeInterval(ConstantHelper::DAY_START, ConstantHelper::DAY_END);
+        $timeInterval[] = "23:59";
         return [
             'smart_schedule' => $this->smartSchedule,
             'data' => $this->appointments,
             'workSchedule' => TimeHelper::getTimeInterval($this->workSchedule?->start, $this->workSchedule?->end),
-            'time_interval' => TimeHelper::getTimeInterval(ConstantHelper::DAY_START, ConstantHelper::DAY_END)
+            'time_interval' =>
         ];
     }
 }
