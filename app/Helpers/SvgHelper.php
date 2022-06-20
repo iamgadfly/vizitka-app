@@ -8,8 +8,8 @@ class SvgHelper
         'unconfirmed' => '#38B8E0',
         'confirmed' => '#52AA63',
         'skipped' => '#D64641',
-        'break' => '#EBEDEF',
-        'free' => '#FFFFFF'
+        'break' => '#FFFFFF',
+        'free' => '#EBEDEF'
     ];
 
     public static function getColorFromType(string $color)
