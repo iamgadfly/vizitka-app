@@ -21,18 +21,18 @@ class DummyBusinessCardService
     {
         $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
         if (!is_null($record)) {
-            $record = $this->contactBookRepository->whereFirst([
+            $recordItem = $this->contactBookRepository->whereFirst([
                 'client_id' => auth()->user()->client->id,
                 'specialist_id' => $record->id
             ]);
-            if (!is_null($record)) {
+            if (!is_null($recordItem)) {
                 return new BusinessCardResource($record->specialist->card);
             }
-            $record = $this->contactBookRepository->create([
+            $recordItem = $this->contactBookRepository->create([
                 'client_id' => auth()->user()->client->id,
                 'specialist_id' => $record->id
             ]);
-            return new BusinessCardResource($record->specialist->card);
+            return new BusinessCardResource($recordItem->specialist->card);
         }
         return new DummyBusinessCardResource($this->repository->create($data));
     }
