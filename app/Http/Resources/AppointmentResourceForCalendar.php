@@ -22,7 +22,7 @@ class AppointmentResourceForCalendar extends JsonResource
             'smart_schedule' => $this->smartSchedule,
             'data' => $this->appointments,
             'workSchedule' => TimeHelper::getTimeInterval($this->workSchedule?->start, $this->workSchedule?->end),
-            'time_interval' =>
+            'time_interval' => $timeInterval
         ];
     }
 }
