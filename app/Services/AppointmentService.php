@@ -130,21 +130,24 @@ class AppointmentService
             }
             foreach ($days as $day) {
                 $schedule = WorkScheduleWorkRepository::getWorkDay($day);
+                $minMax = $this->getMinMaxTimes($day);
                 if (is_null($schedule)) {
                     continue;
                 }
-                $output[$day] = $this->getSvgForDate($day, $schedule[0], $schedule[1]);
+                $output[$day] = $this->getSvgForDate($day, $minMax[0], $minMax[1], $schedule[0], $schedule[1]);
             }
         }
 
         return $output;
     }
 
-    public function getSvgForDate(string $date, string $minTime, string $maxTime): array
+    public function getSvgForDate(
+        string $date, string $minTime, string $maxTime, string $startDay, string $endDay
+    ): array
     {
         $appointments = $this->repository->getAllByDate($date);
         $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
-        return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime);
+        return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime, $startDay, $endDay);
     }
 
     public function getMinMaxTimes(string $date): array
@@ -260,7 +263,9 @@ class AppointmentService
         }
     }
 
-    private function convertToScheduleType($appointments, $breaks, string $minTime, string $maxTime): array
+    private function convertToScheduleType(
+        $appointments, $breaks, string $minTime, string $maxTime, string $startDay, string $endDay
+    ): array
     {
         /*
             Worship Allah, and be of those who give thanks.
@@ -280,7 +285,7 @@ class AppointmentService
         $intervalsCount = TimeHelper::getTimeIntervalAsInt($minTime, $maxTime) / 15;
         $sectionOffset = 70 / $intervalsCount;
         $sectionOffsetValue = $sectionOffset;
-        $interval = TimeHelper::getTimeIntervalAsFreeAppointment($minTime, $maxTime);
+        $interval = TimeHelper::getTimeIntervalAsFreeAppointment($minTime, $maxTime, $startDay, $endDay);
         $convertedAppointments = [];
         $convertedBreaks = [];
         foreach ($appointments as $appointment)
