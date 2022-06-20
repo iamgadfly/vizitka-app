@@ -144,7 +144,8 @@ class AppointmentService
     {
         $appointments = $this->repository->getAllByDate($date);
         $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
-        return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime);
+        $work = WorkScheduleWorkRepository::getWorkDay($date);
+        return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime, $work[0], $work[1]);
     }
 
     public function getMinMaxTimes(string $date): array
@@ -260,7 +261,9 @@ class AppointmentService
         }
     }
 
-    private function convertToScheduleType($appointments, $breaks, string $minTime, string $maxTime): array
+    private function convertToScheduleType(
+        $appointments, $breaks, string $minTime, string $maxTime, string $startDay, string $endDay
+    ): array
     {
         /*
             Worship Allah, and be of those who give thanks.
@@ -280,7 +283,7 @@ class AppointmentService
         $intervalsCount = TimeHelper::getTimeIntervalAsInt($minTime, $maxTime) / 15;
         $sectionOffset = 70 / $intervalsCount;
         $sectionOffsetValue = $sectionOffset;
-        $interval = TimeHelper::getTimeIntervalAsFreeAppointment($minTime, $maxTime);
+        $interval = TimeHelper::getTimeIntervalAsFreeAppointment($minTime, $maxTime, $startDay, $endDay);
         $convertedAppointments = [];
         $convertedBreaks = [];
         foreach ($appointments as $appointment)

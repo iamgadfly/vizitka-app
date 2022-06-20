@@ -47,11 +47,21 @@ class TimeHelper
         return $output;
     }
 
-    public static function getTimeIntervalAsFreeAppointment(?string $start, ?string $end): array
+    public static function getTimeIntervalAsFreeAppointment(
+        ?string $start, ?string $end, ?string $startDay, ?string $endDay
+    ): array
     {
         $interval = self::getTimeInterval($start, $end);
         $output = [];
         for ($i = 0; $i < count($interval) - 1; $i++) {
+            if ($interval[$i] < $startDay || $interval[$i + 1] > $endDay) {
+                $output[] = [
+                    'start' => $interval[$i],
+                    'end' => $interval[$i + 1],
+                    'status' => 'break'
+                ];
+                continue;
+            }
             $output[] = [
                 'start' => $interval[$i],
                 'end' => $interval[$i + 1],
