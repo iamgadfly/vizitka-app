@@ -19,4 +19,9 @@ class ContactBookRepository extends Repository
                 'client_id' => $clientId
             ])->first();
     }
+
+    public function create(array $data)
+    {
+        return $this->model::updateOrCreate($data, $data);
+    }
 }
