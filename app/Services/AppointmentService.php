@@ -335,7 +335,7 @@ class AppointmentService
             }
         }
         $svg[] = [
-            'stroke' => SvgHelper::getColorFromType('free'),
+            'stroke' => SvgHelper::getColorFromType('break'), // cause of white
             'strokeDasharray' => 30,
             'strokeDashoffset' => -70
         ];
