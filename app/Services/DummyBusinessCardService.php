@@ -25,13 +25,12 @@ class DummyBusinessCardService
                 'client_id' => auth()->user()->client->id,
                 'specialist_id' => $record->id
             ]);
-            if (!is_null($recordItem)) {
-                return new BusinessCardResource($record->specialist->card);
+            if (is_null($recordItem)) {
+                $recordItem = $this->contactBookRepository->create([
+                    'client_id' => auth()->user()->client->id,
+                    'specialist_id' => $record->id
+                ]);
             }
-            $recordItem = $this->contactBookRepository->create([
-                'client_id' => auth()->user()->client->id,
-                'specialist_id' => $record->id
-            ]);
             return new BusinessCardResource($recordItem->specialist->card);
         }
         return new DummyBusinessCardResource($this->repository->create($data));
