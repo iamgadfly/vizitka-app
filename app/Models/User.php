@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'pin',
         'phone_number',
+        'verification_code'
     ];
 
     /**
@@ -42,12 +44,12 @@ class User extends Authenticatable
         'phone_number_verified_at' => 'datetime',
     ];
 
-    public function specialist(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function specialist(): HasOne
     {
-        return $this->belongsTo(Specialist::class, 'user_id', 'id');
+        return $this->hasOne(Specialist::class, 'user_id', 'id');
     }
 
-    public function client()
+    public function client(): HasOne
     {
         return $this->hasOne(Client::class, 'user_id', 'id');
     }

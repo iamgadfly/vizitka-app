@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\UserNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateClientRequest;
-use App\Http\Requests\GetClientRequest;
+use App\Http\Requests\Client\GetClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Services\ClientService;
 use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ClientController extends Controller
@@ -17,7 +19,14 @@ class ClientController extends Controller
         protected ImageService $imageService
     ) {}
 
-    public function create(CreateClientRequest $request)
+    /**
+     * @param CreateClientRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Client route
+     * @lrd:end
+     */
+    public function create(CreateClientRequest $request): JsonResponse
     {
         $client = $this->service->findByUserId($request->user_id);
 
@@ -37,12 +46,17 @@ class ClientController extends Controller
         );
     }
 
-    public function update(CreateClientRequest $request)
+    /**
+     * @param CreateClientRequest $request
+     * @return JsonResponse
+     * @throws UserNotFoundException
+     * @lrd:start
+     * Update Client route
+     * @lrd:end
+     */
+    public function update(CreateClientRequest $request): JsonResponse
     {
-        if (
-            !is_null($request->avatar_id)
-            && !is_null($this->service->getMe()->avatar_id)
-        ) {
+        if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
                 $this->service->getMe()->avatar_id
             );
@@ -54,7 +68,14 @@ class ClientController extends Controller
         );
     }
 
-    public function get(GetClientRequest $request)
+    /**
+     * @param GetClientRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Client route
+     * @lrd:end
+     */
+    public function get(GetClientRequest $request): JsonResponse
     {
         return $this->success(
             ClientResource::make($this->service->getClientData($request->id)),
@@ -62,7 +83,14 @@ class ClientController extends Controller
         );
     }
 
-    public function me()
+    /**
+     * @return JsonResponse
+     * @throws UserNotFoundException
+     * @lrd:start
+     * Get current Client route
+     * @lrd:end
+     */
+    public function me(): JsonResponse
     {
         return $this->success(
             ClientResource::make($this->service->getMe()),

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Resources\ImageResource;
 use App\Models\Image;
 use App\Repositories\ImageRepository;
 use Carbon\Carbon;
@@ -18,20 +17,15 @@ class ImageService
 
     /**
      * @param UploadedFile $image
-     * @return void
+     * @return Image|null
      */
-    public function create(UploadedFile $image)
+    public function create(UploadedFile $image): ?Image
     {
         $path = $this->storeImage($image);
 
         return $this->repository->create([
             'url' => $path
         ]);
-    }
-
-    public function getByUrl(string $url)
-    {
-        return $this->repository->getByUrl($url);
     }
 
     public function get(int $id)
@@ -45,7 +39,7 @@ class ImageService
 
         if (is_null($item)) return false;
 
-        Storage::disk('public')->delete($item->url);
+        \Storage::disk('public')->delete($item->url);
         $item->delete();
 
         return true;

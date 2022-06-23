@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends Repository
 {
@@ -12,14 +11,18 @@ class UserRepository extends Repository
         parent::__construct($model);
     }
 
-    public function searchByPhoneNumberNotNull(string $number)
+    public function create(array $data)
     {
-        return $this->model::where('phone_number', $number)
-            ->whereNotNull('phone_number_verified_at')->firstOrFail();
+        return $this->model::updateOrCreate([
+            'phone_number' => $data['phone_number']
+        ], $data);
     }
 
-    public function searchByPhoneNumber(string $number)
+    public function searchByPhoneNumber(string $number, bool $verified = true): ?User
     {
-        return $this->model::where('phone_number', $number)->firstOrFail();
+        return $this->model::where([
+            'phone_number' => $number,
+            'is_verified' => $verified
+        ])->first();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Client;
-use Illuminate\Database\Eloquent\Model;
 
 class ClientRepository extends Repository
 {
@@ -12,7 +11,7 @@ class ClientRepository extends Repository
         parent::__construct($model);
     }
 
-    public function findByUserId($id)
+    public function findByUserId($id): ?Client
     {
         return $this->model::where('user_id', $id)->first();
     }

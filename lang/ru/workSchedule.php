@@ -1,0 +1,78 @@
+<?php
+
+return [
+    'settings' => [
+        'type' => [
+            'standard' => 'Стадартный',
+            'flexible' => 'Гибкий',
+            'sliding' => 'Скользящий'
+        ],
+        'days' => [
+            'mon' => 'Понедельник',
+            'tue' => 'Вторник',
+            'wed' => 'Среда',
+            'thu' => 'Четверг',
+            'fri' => 'Пятиница',
+            'sat' => 'Суббота',
+            'sun' => 'Воскресенье'
+        ],
+        'daysCut' => [
+            'mon' => 'Пн',
+            'tue' => 'Вт',
+            'wed' => 'Ср',
+            'thu' => 'Чт',
+            'fri' => 'Пт',
+            'sat' => 'Сб',
+            'sun' => 'Вс'
+        ],
+        'breakType' => [
+            'united' => 'Единый',
+            'individual' => 'Индивидуальный'
+        ],
+    ],
+    'time' => [
+        'zeroMinutes' => '0 мин',
+        'fifteenMinutes' => '15 мин',
+        'halfHour' => '30 мин',
+        'threeQuarters' => '45 мин',
+        'oneHour' => '1 ч.',
+        'oneHourFifteenMinutes' => '1 ч. 15 мин',
+        'oneHourHalfHour' => '1 ч. 30 мин',
+        'oneHourThreeQuarters' => '1 ч. 45 мин',
+        'twoHours' => '2 ч. ',
+        'twoHoursFifteenMinutes' => '2 ч. 15 мин',
+        'twoHoursHalfHour' => '2 ч. 30 мин',
+        'twoHoursThreeQuarters' => '2 ч. 45 мин',
+        'threeHours' => '3 ч. ',
+        'threeHoursFifteenMinutes' => '3 ч. 15 мин',
+        'threeHoursHalfHour' => '3 ч. 30 мин',
+        'threeHoursThreeQuarters' => '3 ч. 45 мин',
+        'fourHours' => '4 ч. ',
+        'fourHoursFifteenMinutes' => '4 ч. 15 мин',
+        'fourHoursHalfHour' => '4 ч. 30 мин',
+        'fourHoursThreeQuarters' => '4 ч. 45 мин',
+        'fiveHours' => '5 ч. ',
+        'fiveHoursFifteenMinutes' => '5 ч. 15 мин',
+        'fiveHoursHalfHour' => '5 ч. 30 мин',
+        'fiveHoursThreeQuarters' => '5 ч. 45 мин',
+        'sixHours' => '6 ч. ',
+        'sixHoursFifteenMinutes' => '6 ч. 15 мин',
+        'sixHoursHalfHour' => '6 ч. 30 мин',
+        'sixHoursThreeQuarters' => '6 ч. 45 мин',
+        'sevenHours' => '7 ч. ',
+        'sevenHoursFifteenMinutes' => '7 ч. 15 мин',
+        'sevenHoursHalfMinutes' => '7 ч. 30 мин',
+        'sevenHoursThreeQuarters' => '7 ч. 45 мин',
+        'eightHours' => '7 ч. ',
+        'oneDay' => '1 день',
+        'twoDays' => '2 дня',
+        'threeDays' => '3 дня',
+        'oneWeek' => '1 нед.',
+        'twoWeek' => '2 нед.',
+        'oneMonth' => '1 мес.',
+        'twoMonths' => '2 мес.',
+        'threeMonths' => '3 мес.',
+        'sixMonths' => '6 мес.',
+        'oneYear' => '1 год',
+    ],
+];

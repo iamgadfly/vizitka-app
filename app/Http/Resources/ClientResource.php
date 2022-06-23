@@ -20,7 +20,7 @@ class ClientResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'phone' => $this->user->phone_number,
-            'avatar' => ImageResource::make($this?->avatar),
+            'avatar' => $this?->avatar?->url,
         ];
     }
 }

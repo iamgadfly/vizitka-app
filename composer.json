@@ -13,15 +13,14 @@
     "require": {
         "php": "^8.1",
         "benjacho/belongs-to-many-field": "^2.0",
-        "geocoder-php/yandex-provider": "^4.4",
         "guzzlehttp/guzzle": "^7.2",
+        "jenssegers/date": "^4.0",
         "laravel/framework": "^9.2",
         "laravel/nova": "~3.0",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "mattkingshott/axiom": "^3.2",
-        "orlyapps/nova-belongsto-depend": "^3.0",
-        "toin0u/geocoder-laravel": "^4.5"
+        "orlyapps/nova-belongsto-depend": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -29,6 +28,7 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
+        "rakutentech/laravel-request-docs": "^1.22",
         "spatie/laravel-ignition": "^1.0"
     },
     "autoload": {

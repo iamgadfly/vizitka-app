@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
-            $table->string('surname');
+            $table->string('surname')->nullable();
             $table->foreignId('activity_kind_id')->constrained('activity_kinds');
             $table->string('vk_account')->nullable();
             $table->string('youtube_account')->nullable();

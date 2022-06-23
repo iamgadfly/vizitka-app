@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\SMSNotSentException;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 
 class SMSService
 {
@@ -13,14 +15,20 @@ class SMSService
 
     public function __construct()
     {
-        $this->hostSmsUrl = env('SMS_SERVICE_HOST');
-        $this->login = env('SMS_SERVICE_LOGIN');
-        $this->password = env('SMS_SERVICE_PASSWORD');
-        $this->sender = env('SMS_SERVICE_SENDER');
+        $this->hostSmsUrl = config('custom.sms_host');
+        $this->login = config('custom.sms_login');
+        $this->password = config('custom.sms_password');
+        $this->sender = config('custom.sms_sender');
     }
 
+    /**
+     * @throws SMSNotSentException
+     * @throws GuzzleException
+     */
     public function sendSms(string $text, string $phone)
     {
+        $phone = str($phone)->replace('+', '')->value();
+
         $client = new GuzzleClient();
         $body = [
             'security' => [
@@ -45,6 +53,9 @@ class SMSService
             ]
         ]);
 
-        return json_decode($response->getBody(), true);
+        $response =  json_decode($response->getBody(), true);
+        if (isset($response['sms'][0]['error'])) {
+            throw new SMSNotSentException;
+        }
     }
 }

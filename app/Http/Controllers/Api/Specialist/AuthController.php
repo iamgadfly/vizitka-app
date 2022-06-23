@@ -2,52 +2,58 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\InvalidLoginException;
+use App\Exceptions\SMSNotSentException;
+use App\Exceptions\UnauthorizedException;
+use App\Exceptions\UserPinException;
+use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Api\AuthController as BaseAuthController;
-use App\Http\Requests\SetPinRequest;
-use App\Http\Requests\SignInRequest;
+use App\Http\Requests\User\PinResetRequest;
+use App\Http\Requests\User\SendPinResetRequest;
+use App\Http\Requests\User\SetPinRequest;
+use App\Http\Requests\User\SignInRequest;
+use App\Services\AuthService;
 use App\Services\SMSService;
 use App\Services\UserService;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Response;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use function auth;
 
 class AuthController extends BaseAuthController
 {
     public function __construct(
         protected UserService $service,
+        protected AuthService $authService,
         protected SMSService $SMSService
     ) {}
 
-    public function signin(SignInRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * @throws UserPinException
+     * @throws InvalidLoginException
+     * @lrd:start
+     * Sing In route
+     * @lrd:end
+     */
+    public function signIn(SignInRequest $request): JsonResponse
     {
-        $user = $this->service->searchByPhoneNumber($request->phone_number);
-        if (!$user) {
-            return $this->error('Invalid login', Response::HTTP_UNAUTHORIZED);
-        }
-
-        if (is_null($user->phone_number_verified_at)) {
-            return $this->error('User is not verified ', Response::HTTP_UNAUTHORIZED);
-        }
-
-        if (!$this->attempt($user, $request->pin)) {
-            return $this->error('PIN is invalid', Response::HTTP_UNAUTHORIZED);
-        }
-
+        $token = $this->authService->specialistSignIn($request->phone_number, $request->pin);
         return $this->success(
-            $user->createToken("Token for user #$user->id")->plainTextToken,
+            $token,
             Response::HTTP_OK,
             'Authenticated'
         );
     }
 
-    public function setPin(SetPinRequest $request)
+    /**
+     * @throws UnauthorizedException
+     * @lrd:start
+     * Set PIN route
+     * @lrd:end
+     */
+    public function setPin(SetPinRequest $request): JsonResponse
     {
-        $user = auth()->user();
-        if (is_null($user)) {
-            return $this->error('Unauthorized', Response::HTTP_UNAUTHORIZED);
-        }
-        $user->pin = $request->pin;
-        $user->save();
+        $this->authService->specialistSetPin(auth()->user(), $request->pin);
 
         return $this->success(
             null,
@@ -56,12 +62,37 @@ class AuthController extends BaseAuthController
         );
     }
 
-    protected function attempt(Authenticatable $user, string $pin): bool
+    /**
+     * @throws InvalidLoginException
+     * @throws GuzzleException
+     * @throws SMSNotSentException
+     * @lrd:start
+     * Send PIN reset request route
+     * @lrd:end
+     */
+    public function sendPinResetRequest(SendPinResetRequest $request): JsonResponse
     {
-        if ($user->pin == $pin) {
-            return true;
-        }
+        return $this->success(
+            $this->authService->sendPinResetRequest($request->phone_number),
+            Response::HTTP_OK
+        );
+    }
 
-        return false;
+    /**
+     * @throws InvalidLoginException
+     * @throws VerificationCodeIsntValidException
+     * @lrd:start
+     * PIN reset route
+     * @lrd:end
+     */
+    public function pinReset(PinResetRequest $request): JsonResponse
+    {
+        return $this->success(
+            $this->authService->pinReset(
+                $request->phone_number,
+                $request->verification_code,
+                $request->pin
+            )
+        );
     }
 }

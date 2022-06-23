@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Image;
 
-use Axiom\Rules\EncodedImage;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UploadImageRequest extends FormRequest

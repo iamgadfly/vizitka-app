@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Jobs\ImageJob;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Console\PruneCommand;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new ImageJob)->everyMinute();
+//        $schedule->job(new ImageJob)->everyFifteenMinutes();
+        $schedule->command(PruneCommand::class)->dailyAt('00:00');
     }
 
     /**

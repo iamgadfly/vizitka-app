@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('pin')->nullable();
             $table->string('verification_code')->nullable();
             $table->timestamp('phone_number_verified_at')->nullable();
+            $table->boolean('is_verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -2,19 +2,38 @@
 
 namespace App\Services;
 
-use App\Helpers\CardBackgroundHelper;
+use App\Http\Resources\BusinessCardResource;
+use App\Http\Resources\DummyBusinessCardResource;
+use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyBusinessCardRepository;
+use App\Repositories\SpecialistRepository;
 
 
 class DummyBusinessCardService
 {
     public function __construct(
-        protected DummyBusinessCardRepository $repository
+        protected DummyBusinessCardRepository $repository,
+        protected SpecialistRepository $specialistRepository,
+        protected ContactBookRepository $contactBookRepository
     ) {}
 
     public function create(array $data)
     {
-        return $this->repository->create($data);
+        $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
+        if (!is_null($record)) {
+            $recordItem = $this->contactBookRepository->whereFirst([
+                'client_id' => auth()->user()->client->id,
+                'specialist_id' => $record->id
+            ]);
+            if (is_null($recordItem)) {
+                $recordItem = $this->contactBookRepository->create([
+                    'client_id' => auth()->user()->client->id,
+                    'specialist_id' => $record->id
+                ]);
+            }
+            return new BusinessCardResource($recordItem->specialist->card);
+        }
+        return new DummyBusinessCardResource($this->repository->create($data));
     }
 
     public function update(array $data)

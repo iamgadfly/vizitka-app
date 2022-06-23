@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as Model;
 
 class Repository
 {
@@ -22,7 +22,7 @@ class Repository
 
     public function create(array $data)
     {
-        return $this->model::create($data);
+        return $this->model->create($data);
     }
 
     public function update($id, array $data)
@@ -37,5 +37,25 @@ class Repository
         $model = $this->model::find($id);
 
         return $model->delete();
+    }
+
+    public function whereFirst(array $condition)
+    {
+        return $this->model::where($condition)->first();
+    }
+
+    public function whereGet(array $condition)
+    {
+        return $this->model::where($condition)->get();
+    }
+
+    protected static function getSpecialistIdFromAuth(): ?int
+    {
+        return auth()->user()->specialist->id;
+    }
+
+    protected static function getClientIdFromAuth(): ?int
+    {
+        return auth()->user()->client->id;
     }
 }

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DummyBusinessCardRequest;
+use App\Http\Requests\DummyBusinessCard\DummyBusinessCardRequest;
 use App\Http\Resources\DummyBusinessCardResource;
 use App\Services\DummyBusinessCardService;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DummyBusinessCardController extends Controller
 {
@@ -15,7 +15,14 @@ class DummyBusinessCardController extends Controller
         protected DummyBusinessCardService $service
     ){}
 
-    public function create(DummyBusinessCardRequest $request)
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Dummy Business Card route
+     * @lrd:end
+     */
+    public function create(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->create($request->validated()),
@@ -23,7 +30,14 @@ class DummyBusinessCardController extends Controller
         );
     }
 
-    public function update(DummyBusinessCardRequest $request)
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Dummy Business Card route
+     * @lrd:end
+     */
+    public function update(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->update($request->validated()),
@@ -31,7 +45,14 @@ class DummyBusinessCardController extends Controller
         );
     }
 
-    public function delete(DummyBusinessCardRequest $request)
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Dummy Business Card route
+     * @lrd:end
+     */
+    public function delete(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->delete($request->id),
@@ -39,7 +60,14 @@ class DummyBusinessCardController extends Controller
         );
     }
 
-    public function get(DummyBusinessCardRequest $request)
+    /**
+     * @param DummyBusinessCardRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Dummy Business Card route
+     * @lrd:end
+     */
+    public function get(DummyBusinessCardRequest $request): JsonResponse
     {
         return $this->success(
             DummyBusinessCardResource::make(

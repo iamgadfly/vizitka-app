@@ -2,62 +2,74 @@
 
 namespace App\Services;
 
-use App\Enums\ActivityKind;
-use App\Models\User;
+use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
+use App\Exceptions\SpecialistNotCreatedException;
+use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
+use App\Models\Specialist;
 use App\Repositories\BusinessCardRepository;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class SpecialistService
 {
     public function __construct(
         protected SpecialistRepository $repository,
         protected BusinessCardRepository $businessCardRepository,
-        protected UserRepository $userRepository
+        protected UserRepository $userRepository,
+        protected MaintenanceService $maintenanceService,
+        protected WorkScheduleService $scheduleService
     ) {}
 
-    public function create(array $data): bool
+    /**
+     * @throws SpecialistNotCreatedException
+     */
+    public function create(array $data)
     {
         try {
-            DB::beginTransaction();
-
+            \DB::beginTransaction();
+            if (!is_null($data['avatar']['id'])) {
+                $data['avatar_id'] = $data['avatar']['id'];
+            }
+            if (!isset($data['title'])) {
+                $data['title'] = $data['activity_kind']['label'];
+            }
+            $data['activity_kind_id'] = $data['activity_kind']['value'];
+            // Create specialist and his business card
             $specialist = $this->repository->create($data);
             $data['specialist_id'] = $specialist->id;
             $this->businessCardRepository->create($data);
 
-            DB::commit();
+            \DB::commit();
 
-            return true;
-        } catch (\PDOException) {
-            DB::rollBack();
-            return false;
+            return $specialist;
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            throw new SpecialistNotCreatedException;
         }
     }
 
-    public function update($data)
+    public function update($data): bool
     {
         try {
-            DB::beginTransaction();
+            \DB::beginTransaction();
             $this->repository->update($data['id'], $data);
             $data['card_id'] = $this->repository->getById($data['id'])->card->id;
             $this->businessCardRepository->update($data['card_id'], $data);
-            DB::commit();
+            \DB::commit();
 
             return true;
         } catch (\PDOException) {
-            DB::rollBack();
+            \DB::rollBack();
             return false;
         }
     }
 
-    public function findByUserId(int $id)
+    public function findByUserId(int $id): ?Specialist
     {
         return $this->repository->findByUserId($id);
     }
 
-    public function getSpecialistData($id)
+    public function getSpecialistData($id): ?Specialist
     {
         if (is_null($id)) {
             $item = $this->repository->findByUserId(auth()->id());
@@ -68,7 +80,7 @@ class SpecialistService
         return $item;
     }
 
-    public function getMe()
+    public function getMe(): ?Specialist
     {
         return $this->getSpecialistData(null);
     }

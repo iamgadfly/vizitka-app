@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\SpecialistNotCreatedException;
 use App\Helpers\CardBackgroundHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetSpecialistRequest;
 use App\Http\Requests\Specialist\CreateSpecialistRequest;
+use App\Http\Requests\Specialist\GetSpecialistRequest;
+use App\Http\Resources\SpecialistDetailedDataResource;
 use App\Http\Resources\SpecialistResource;
 use App\Services\ImageService;
 use App\Services\SpecialistService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpecialistController extends Controller
@@ -18,42 +21,65 @@ class SpecialistController extends Controller
         protected ImageService $imageService
     ) {}
 
-    public function create(CreateSpecialistRequest $request)
+    /**
+     * @param CreateSpecialistRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create Specialist route
+     * @lrd:end
+     * @throws SpecialistNotCreatedException
+     */
+    public function create(CreateSpecialistRequest $request): JsonResponse
     {
-        $specialist = $this->service->findByUserId($request->user_id);
+//        $specialist = $this->service->findByUserId($request->user_id);
+//        if (!is_null($specialist)) {
+//            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
+//        }
 
-        if (!is_null($specialist)) {
-            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
-        }
-
-        if (!is_null($request->avatar_id)) {
-            $image = $this->imageService->get($request->avatar_id);
+        if (!is_null($request->avatar['id'])) {
+            $image = $this->imageService->get($request->avatar['id']);
             $this->imageService->removeTemporary($image); // make 'deleted_at' field null
         }
 
         $request->merge(['background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image)]);
 
         return $this->success(
-            SpecialistResource::make(
-                $this->service->create($request->toArray())
-            ),
+            new SpecialistResource($this->service->create($request->toArray())),
             Response::HTTP_CREATED,'Specialist created');
     }
 
-    public function get(GetSpecialistRequest $request)
+    /**
+     * @param GetSpecialistRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Specialist route
+     * @lrd:end
+     */
+    public function get(GetSpecialistRequest $request): JsonResponse
     {
         return $this->success(
-            SpecialistResource::make($this->service->getSpecialistData($request->id)),
+            SpecialistDetailedDataResource::make($this->service->getSpecialistData($request->id)),
             Response::HTTP_OK,
         );
     }
 
-    public function update(CreateSpecialistRequest $request)
+    public function getAll()
     {
-        if (
-            !is_null($request->avatar_id)
-            && !is_null($this->service->getMe()->avatar_id)
-        ) {
+        return $this->success(
+            SpecialistResource::collection($this->service->all())
+        );
+    }
+
+    /**
+     * @param CreateSpecialistRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Update Specialist route
+     * @lrd:end
+     */
+    public function update(CreateSpecialistRequest $request): JsonResponse
+    {
+        if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
                 $this->service->getMe()->avatar_id
             );
@@ -66,7 +92,13 @@ class SpecialistController extends Controller
         );
     }
 
-    public function me()
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get current Specialist route
+     * @lrd:end
+     */
+    public function me(): JsonResponse
     {
         return $this->success(
             SpecialistResource::make($this->service->getMe()),

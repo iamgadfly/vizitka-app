@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\BusinessCard;
-use JetBrains\PhpStorm\Pure;
 
 class BusinessCardRepository extends Repository
 {
@@ -12,11 +11,11 @@ class BusinessCardRepository extends Repository
         parent::__construct($model);
     }
 
-    public function getCardInfo(): array
+    public function create(array $data)
     {
-        $card = null;
-        return [
-
-        ];
+        return $this->model::updateOrCreate(
+            ['specialist_id' => auth()->user()->specialist->id],
+            $data
+        );
     }
 }

@@ -3,10 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Image;
-use App\Services\ImageService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,13 +29,13 @@ class ImageJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $images = Image::all();
         $nowDate = Carbon::now();
         foreach ($images as $image) {
             if ($image->deleted_at <= $nowDate) {
-                \Storage::disk('public')->delete($images->url);
+                \Storage::disk('public')->delete($image->url);
                 $image->delete();
             }
         }

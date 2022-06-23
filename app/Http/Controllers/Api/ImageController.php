@@ -8,8 +8,8 @@ use App\Http\Requests\Image\GetImageRequest;
 use App\Http\Requests\Image\UploadImageRequest;
 use App\Http\Resources\ImageResource;
 use App\Services\ImageService;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImageController extends Controller
 {
@@ -17,22 +17,43 @@ class ImageController extends Controller
         protected ImageService $service
     ) {}
 
-    public function upload(UploadImageRequest $request)
+    /**
+     * @param UploadImageRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Upload Image route
+     * @lrd:end
+     */
+    public function upload(UploadImageRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->image),
+            new ImageResource($this->service->create($request->image)),
             Response::HTTP_CREATED
         );
     }
 
-    public function delete(DeleteImageRequest $request)
+    /**
+     * @param DeleteImageRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Image route
+     * @lrd:end
+     */
+    public function delete(DeleteImageRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->delete($request->id)
         );
     }
 
-    public function get(GetImageRequest $request)
+    /**
+     * @param GetImageRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Image route
+     * @lrd:end
+     */
+    public function get(GetImageRequest $request): JsonResponse
     {
         return $this->success(
             ImageResource::make($this->service->get($request->id))
