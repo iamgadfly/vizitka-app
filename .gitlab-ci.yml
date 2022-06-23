@@ -23,5 +23,5 @@ deploy_dev:
     ENV: dev
   tags:
     - viz-dev-shell
-  # only:
-  #   - develop
+  only:
+    - develop
