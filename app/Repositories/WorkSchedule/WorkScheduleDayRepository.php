@@ -58,7 +58,7 @@ class WorkScheduleDayRepository extends Repository
             }
             $dateFrom->addDay();
         }
-        return self::getDayFromInt($index);
+        return self::getDayFromInt($index, $specialistId);
     }
 
     public static function getDayFromString(string $day, ?int $specialistId = null)
