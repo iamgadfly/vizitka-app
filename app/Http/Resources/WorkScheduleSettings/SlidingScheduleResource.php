@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\WorkScheduleSettings;
 
-use App\Repositories\WorkScheduleWorkRepository;
+use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 

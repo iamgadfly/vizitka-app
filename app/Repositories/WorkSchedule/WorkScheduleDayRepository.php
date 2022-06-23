@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\WorkSchedule;
 
 use App\Helpers\WeekdayHelper;
 use App\Models\WorkScheduleDay;
@@ -14,7 +14,7 @@ class WorkScheduleDayRepository extends Repository
         parent::__construct($model);
     }
 
-    public function fillDaysNotForSlidingType(int $settings_id)
+    public function fillDaysNotForSlidingType(int $settings_id): array
     {
         $output = [];
         foreach (WeekdayHelper::getAll() as $day) {
@@ -26,7 +26,7 @@ class WorkScheduleDayRepository extends Repository
         return $output;
     }
 
-    public function fillDaysForSlidingType(int $settings_id, int $workdays, int $weekends)
+    public function fillDaysForSlidingType(int $settings_id, int $workdays, int $weekends): array
     {
         $output = [];
         foreach (range(1, $workdays + $weekends) as $day) {
@@ -39,10 +39,13 @@ class WorkScheduleDayRepository extends Repository
         return $output;
     }
 
-    public static function getDayIndexFromDate(string $date)
+    public static function getDayIndexFromDate(string $date, ?int $specialistId = null)
     {
+        if (is_null($specialistId)) {
+            $specialistId = Repository::getSpecialistIdFromAuth();
+        }
         $settings = WorkScheduleSettings::where([
-            'specialist_id' => auth()->user()->specialist->id
+            'specialist_id' => $specialistId
         ])->first();
         $dateFrom = Carbon::parse($settings->start_from);
         $date = Carbon::parse($date);
@@ -58,20 +61,22 @@ class WorkScheduleDayRepository extends Repository
         return self::getDayFromInt($index);
     }
 
-    public static function getDayFromString(string $day)
+    public static function getDayFromString(string $day, ?int $specialistId = null)
     {
-        $day = WorkScheduleDay::whereHas('settings', function($q) {
-            return $q->where('specialist_id', auth()->user()->specialist->id);
-        })->where('day', $day)->get();
+        if (is_null($specialistId)) {
+            $specialistId = Repository::getSpecialistIdFromAuth();
+        }
+        $day = Repository::getDayForNotSlidingSchedule($specialistId, $day);
 
         return $day->first();
     }
 
-    public static function getDayFromInt(int $id)
+    public static function getDayFromInt(int $index, ?int $specialistId = null)
     {
-        $day = WorkScheduleDay::whereHas('settings', function($q) {
-            return $q->where('specialist_id', auth()->user()->specialist->id);
-        })->where('day_index', $id)->get();
+        if (is_null($specialistId)) {
+            $specialistId = Repository::getSpecialistIdFromAuth();
+        }
+        $day = Repository::getDayForSlidingSchedule($specialistId, $index);
 
         return $day->first();
     }

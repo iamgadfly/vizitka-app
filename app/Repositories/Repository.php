@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as Model;
 
 class Repository
 {
@@ -47,5 +47,15 @@ class Repository
     public function whereGet(array $condition)
     {
         return $this->model::where($condition)->get();
+    }
+
+    protected static function getSpecialistIdFromAuth(): ?int
+    {
+        return auth()->user()->specialist->id;
+    }
+
+    protected static function getClientIdFromAuth(): ?int
+    {
+        return auth()->user()->client->id;
     }
 }

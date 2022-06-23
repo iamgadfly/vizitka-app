@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\WorkScheduleSettings;
 
-use App\Repositories\WorkScheduleBreakRepository;
-use App\Repositories\WorkScheduleWorkRepository;
+use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
+use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FlexibleScheduleResource extends JsonResource

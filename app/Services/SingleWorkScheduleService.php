@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Helpers\TimeHelper;
-use App\Repositories\SingleWorkScheduleRepository;
-use App\Repositories\WorkScheduleDayRepository;
-use App\Repositories\WorkScheduleSettingsRepository;
+use App\Repositories\WorkSchedule\SingleWorkScheduleRepository;
+use App\Repositories\WorkSchedule\WorkScheduleDayRepository;
 use Carbon\Carbon;
 
 

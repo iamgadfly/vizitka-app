@@ -9,9 +9,9 @@ use App\Helpers\TimeHelper;
 use App\Models\WorkScheduleSettings;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\MaintenanceRepository;
-use App\Repositories\WorkScheduleBreakRepository;
-use App\Repositories\WorkScheduleSettingsRepository;
-use App\Repositories\WorkScheduleWorkRepository;
+use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
+use App\Repositories\WorkSchedule\WorkScheduleSettingsRepository;
+use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Nette\Utils\Random;
@@ -22,7 +22,9 @@ class AppointmentService
     public function __construct(
         protected AppointmentRepository $repository,
         protected MaintenanceRepository $maintenanceRepository,
-        protected WorkScheduleSettingsRepository $settingsRepository
+        protected WorkScheduleSettingsRepository $settingsRepository,
+        protected WorkScheduleWorkRepository $workRepository,
+        protected WorkScheduleBreakRepository $breakRepository
     ) {}
 
     /**
@@ -98,7 +100,7 @@ class AppointmentService
     {
         $output = collect();
         $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date)));
-        $breaks = $this->convertBreakToOrderType(collect(WorkScheduleBreakRepository::getBreaksForDay($date, true)));
+        $breaks = $this->convertBreakToOrderType(collect($this->breakRepository->getBreaksForDay($date, true)));
 
         $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
@@ -146,7 +148,7 @@ class AppointmentService
     ): array
     {
         $appointments = $this->repository->getAllByDate($date);
-        $breaks = WorkScheduleBreakRepository::getBreaksForDay($date);
+        $breaks = $this->breakRepository->getBreaksForDay($date);
         return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime, $startDay, $endDay);
     }
 

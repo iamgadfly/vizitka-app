@@ -3,14 +3,11 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\WorkScheduleSettings\BreakTypeResource;
-use App\Http\Resources\WorkScheduleSettings\DayResource;
 use App\Http\Resources\WorkScheduleSettings\FlexibleScheduleResource;
 use App\Http\Resources\WorkScheduleSettings\SlidingScheduleResource;
 use App\Http\Resources\WorkScheduleSettings\StandardScheduleResource;
 use App\Http\Resources\WorkScheduleSettings\TimeResource;
 use App\Http\Resources\WorkScheduleSettings\TypeResource;
-use App\Repositories\WorkScheduleBreakRepository;
-use App\Repositories\WorkScheduleWorkRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WorkScheduleSettingsResource extends JsonResource
