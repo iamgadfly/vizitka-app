@@ -53,7 +53,7 @@ class WorkScheduleWorkRepository extends Repository
         ])->first();
         $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
         if ($settings->type == 'sliding') {
-            $index = WorkScheduleDayRepository::getDayIndexFromDate($date, $specialistId) ?? null;
+            $index = WorkScheduleDayRepository::getDayIndexFromDate($date, $specialistId);
             $day_id = Repository::getDayForSlidingSchedule($specialistId, $index->day_index)->id;
         } else {
             $day_id = Repository::getDayForNotSlidingSchedule($specialistId, $weekday)->id;
