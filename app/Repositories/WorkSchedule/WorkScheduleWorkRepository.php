@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\WorkSchedule;
 
 use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleDay;
@@ -42,22 +42,21 @@ class WorkScheduleWorkRepository extends Repository
         ])->get();
     }
 
-    public static function getWorkDay(string $date)
+    public static function getWorkDay(string $date, ?int $specialistId = null): ?array
     {
+        if (is_null($specialistId)) {
+            $specialistId = self::getSpecialistIdFromAuth();
+        }
         // Try to get single work schedule for a day
         $settings = WorkScheduleSettings::where([
-            'specialist_id' => auth()->user()->specialist->id
+            'specialist_id' => $specialistId
         ])->first();
         $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
-        $index = WorkScheduleDayRepository::getDayIndexFromDate($date) ?? null;
         if ($settings->type == 'sliding') {
-            $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
-                return $q->where('specialist_id', auth()->user()->specialist->id);
-            })->where('day_index', $index->day_index)->first()->id;
+            $index = WorkScheduleDayRepository::getDayIndexFromDate($date, $specialistId) ?? null;
+            $day_id = Repository::getDayForSlidingSchedule($specialistId, $index->day_index)->id;
         } else {
-            $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
-                return $q->where('specialist_id', auth()->user()->specialist->id);
-            })->where('day', $weekday)->first()->id;
+            $day_id = Repository::getDayForNotSlidingSchedule($specialistId, $weekday)->id;
         }
 
         $single = SingleWorkSchedule::where([
@@ -73,21 +72,8 @@ class WorkScheduleWorkRepository extends Repository
             ];
         }
         // If not found single work schedule
-        if ($settings->type == 'sliding') {
-            $day = WorkScheduleWork::whereHas('day', function ($q) use ($index) {
-                $q->where('day_index', $index->day_index);
-                return $q->whereHas('settings', function ($qb) {
-                    return $qb->where('specialist_id', auth()->user()->specialist->id);
-                });
-            })->get();
-        } else {
-            $day = WorkScheduleWork::whereHas('day', function ($q) use ($weekday) {
-                $q->where('day', $weekday);
-                return $q->whereHas('settings', function ($qb) {
-                    return $qb->where('specialist_id', auth()->user()->specialist->id);
-                });
-            })->get();
-        }
+        $day = WorkScheduleWork::where(['day_id' => $day_id]);
+
         if (is_null($day->first()?->start)) return null;
         return [
             Carbon::parse($day->first()->start)->format('H:i'),

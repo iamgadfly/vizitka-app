@@ -6,10 +6,10 @@ use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Helpers\WeekdayHelper;
 use App\Http\Resources\WorkScheduleSettingsResource;
 use App\Repositories\SpecialistRepository;
-use App\Repositories\WorkScheduleBreakRepository;
-use App\Repositories\WorkScheduleDayRepository;
-use App\Repositories\WorkScheduleSettingsRepository;
-use App\Repositories\WorkScheduleWorkRepository;
+use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
+use App\Repositories\WorkSchedule\WorkScheduleDayRepository;
+use App\Repositories\WorkSchedule\WorkScheduleSettingsRepository;
+use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 
 class WorkScheduleService
 {

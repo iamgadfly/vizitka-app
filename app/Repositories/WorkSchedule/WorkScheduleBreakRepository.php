@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\WorkSchedule;
 
 use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleBreak;
-use App\Models\WorkScheduleDay;
 use App\Models\WorkScheduleSettings;
 use Carbon\Carbon;
 
@@ -24,41 +23,44 @@ class WorkScheduleBreakRepository extends Repository
         })->get();
     }
 
-    public static function getBreaksForADay($day)
+    public static function getBreaksForADay(string $day, ?int $specialistId = null)
     {
-        return WorkScheduleBreak::whereHas('day', function ($q) use ($day) {
-            $q->where('day', $day);
-            return $q->whereHas('settings', function ($qb) {
-                return $qb->where('specialist_id', auth()->user()->specialist->id);
-            });
-        })->get();
+        if (is_null($specialistId)) {
+            $specialistId = Repository::getSpecialistIdFromAuth();
+        }
+        $day_id = self::getDayForNotSlidingSchedule($specialistId, $day)->id;
+        return WorkScheduleBreak::where([
+            'day_id' => $day_id
+        ])->get();
     }
 
-    public static function getBreaksForADayIndex($index)
+    public static function getBreaksForADayIndex(int $index, ?int $specialistId)
     {
-        return WorkScheduleBreak::whereHas('day', function ($q) use ($index) {
-            $q->where('day_index', $index);
-            return $q->whereHas('settings', function ($qb) {
-                return $qb->where('specialist_id', auth()->user()->specialist->id);
-            });
-        })->get();
+        if (is_null($specialistId)) {
+            $specialistId = Repository::getSpecialistIdFromAuth();
+        }
+        $day_id = self::getDayForSlidingSchedule($specialistId, $index);
+        return WorkScheduleBreak::where([
+            'day_id' => $day_id
+        ])->get();
     }
 
-    public static function getBreaksForDay(string $date, bool $forCalendar = false)
+    public function getBreaksForDay(string $date, bool $forCalendar = false, int $specialist = null)
     {
+        if (is_null($specialist)) {
+            $specialist = $this->getSpecialistIdFromAuth();
+        }
         $result = [];
         // Try to get single work schedule for a day
         $settings = WorkScheduleSettings::where([
-            'specialist_id' => auth()->user()->specialist->id
+            'specialist_id' => $specialist
         ])->first();
         if ($settings->type == 'sliding') {
             $index = WorkScheduleDayRepository::getDayIndexFromDate($date);
             $day_id = $index->id;
         } else {
             $weekday = strtolower(Carbon::parse($date)->shortEnglishDayOfWeek);
-            $day_id = WorkScheduleDay::whereHas('settings', function ($q) {
-                return $q->where('specialist_id', auth()->user()->specialist->id);
-            })->where('day', $weekday)->first()->id;
+            $day_id = self::getDayForNotSlidingSchedule($specialist, $weekday)->id;
         }
         $single = SingleWorkSchedule::where([
             'date' => $date,
@@ -80,16 +82,8 @@ class WorkScheduleBreakRepository extends Repository
             return $result;
         }
         // If not found single work schedule
-        if ($settings->type == 'sliding') {
-            $breaks = WorkScheduleBreak::where(['day_id' => $index->id])->get();
-        } else {
-            $breaks = WorkScheduleBreak::whereHas('day', function ($q) use ($weekday) {
-                $q->where('day', $weekday);
-                return $q->whereHas('settings', function ($qb) {
-                    return $qb->where('specialist_id', auth()->user()->specialist->id);
-                });
-            })->get();
-        }
+        $breaks = WorkScheduleBreak::where(['day_id' => $day_id])->get();
+
         if ($forCalendar) {
             return $breaks;
         }
@@ -103,9 +97,12 @@ class WorkScheduleBreakRepository extends Repository
         return $result;
     }
 
-    public static function getBreaksForCalendar(string $date)
+    public function getBreaksForCalendar(string $date, ?int $specialistId = null)
     {
-        $breaks = self::getBreaksForADay($date);
+        if (is_null($specialistId)) {
+            $specialistId = $this->getSpecialistIdFromAuth();
+        }
+        $breaks = self::getBreaksForADay($date, $specialistId);
         foreach ($breaks as $break) {
             $break = [
                 'start' => $break[0],

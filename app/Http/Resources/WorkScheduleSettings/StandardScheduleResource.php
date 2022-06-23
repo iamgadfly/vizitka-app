@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources\WorkScheduleSettings;
 
-use App\Http\Resources\WorkScheduleBreakResource;
-use App\Repositories\WorkScheduleBreakRepository;
-use App\Repositories\WorkScheduleWorkRepository;
-use Carbon\Carbon;
+use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
+use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StandardScheduleResource extends JsonResource
