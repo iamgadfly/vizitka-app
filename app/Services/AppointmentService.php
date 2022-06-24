@@ -55,6 +55,8 @@ class AppointmentService
         return $output;
     }
 
+
+
     /**
      * @throws TimeIsNotValidException
      */
@@ -194,7 +196,7 @@ class AppointmentService
         return collect($output);
     }
 
-    private function convertToOrderType(Collection $appointments): Collection
+    protected function convertToOrderType(Collection $appointments): Collection
     {
         $usedOrders = [];
         $output = [];

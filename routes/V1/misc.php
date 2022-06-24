@@ -22,6 +22,9 @@ Route::controller(MiscController::class)->group(function () {
 
     Route::post('/getWeekDates', 'getWeekDates')
         ->name('misc.get_week_dates');
+
+    Route::post('/isSpecialistExists', 'isSpecialistExists')
+        ->name('misc.isSpecialistExists');
 });
 
 // Image requests

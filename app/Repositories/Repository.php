@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\ClientNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use Illuminate\Database\Eloquent\Model as Model;
 
 class Repository
@@ -49,13 +52,19 @@ class Repository
         return $this->model::where($condition)->get();
     }
 
-    protected static function getSpecialistIdFromAuth(): ?int
+    /**
+     * @throws SpecialistNotFoundException
+     */
+    public static function getSpecialistIdFromAuth(): ?int
     {
-        return auth()->user()->specialist->id;
+        return AuthHelper::getSpecialistIdFromAuth();
     }
 
-    protected static function getClientIdFromAuth(): ?int
+    /**
+     * @throws ClientNotFoundException
+     */
+    public static function getClientIdFromAuth(): ?int
     {
-        return auth()->user()->client->id;
+        return AuthHelper::getClientIdFromAuth();
     }
 }
