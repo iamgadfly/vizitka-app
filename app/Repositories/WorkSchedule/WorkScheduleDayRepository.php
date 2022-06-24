@@ -66,9 +66,8 @@ class WorkScheduleDayRepository extends Repository
         if (is_null($specialistId)) {
             $specialistId = Repository::getSpecialistIdFromAuth();
         }
-        $day = Repository::getDayForNotSlidingSchedule($specialistId, $day);
 
-        return $day->first();
+        return Repository::getDayForNotSlidingSchedule($specialistId, $day);
     }
 
     public static function getDayFromInt(int $index, ?int $specialistId = null)
@@ -76,8 +75,6 @@ class WorkScheduleDayRepository extends Repository
         if (is_null($specialistId)) {
             $specialistId = Repository::getSpecialistIdFromAuth();
         }
-        $day = Repository::getDayForSlidingSchedule($specialistId, $index);
-
-        return $day->first();
+        return Repository::getDayForSlidingSchedule($specialistId, $index);
     }
 }

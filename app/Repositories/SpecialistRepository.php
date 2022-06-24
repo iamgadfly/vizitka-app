@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Models\Specialist;
 
 class SpecialistRepository extends Repository
@@ -19,28 +20,37 @@ class SpecialistRepository extends Repository
         );
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function findByUserId($id, bool $isRegistered = true): ?Specialist
     {
         return $this->model::where([
             'user_id' => $id,
             'is_registered' => $isRegistered
-        ])->first();
+        ])->first() ?? throw new SpecialistNotFoundException;
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function findById(int $id, bool $isRegistered = true)
     {
         return $this->model::where([
             'id' => $id,
             'is_registered' => $isRegistered
-        ])->first();
+        ])->first() ?? throw new SpecialistNotFoundException;
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function findByPhoneNumber(string $phoneNumber, bool $isRegistered = true)
     {
         return $this->model::whereHas('user', function ($q) use ($phoneNumber) {
             return $q->where('phone_number', $phoneNumber);
         })->where([
             'is_registered' => $isRegistered
-        ])->get()->first();
+        ])->get()->first() ?? throw new SpecialistNotFoundException;
     }
 }

@@ -69,7 +69,7 @@ class WorkScheduleService
             } elseif ($type == 'flexible') {
                 $workTime = $data['flexibleSchedule']['data'];
                 $breaks = $data['flexibleSchedule']['breaks'];
-                $this->createFlexibleScedule(
+                $this->createFlexibleSchedule(
                     $settingsId, $workTime, $breakType, $breaks
                 );
             } elseif ($type == 'sliding') {
@@ -163,7 +163,7 @@ class WorkScheduleService
         }
     }
 
-    private function createFlexibleScedule(int $settingsId, array $data, string $breakType, ?array $breaks): void
+    private function createFlexibleSchedule(int $settingsId, array $data, string $breakType, ?array $breaks): void
     {
         $this->dayRepository->fillDaysNotForSlidingType($settingsId);
 
