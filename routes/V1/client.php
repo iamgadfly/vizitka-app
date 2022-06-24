@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Client\AppointmentController;
 use App\Http\Controllers\Api\Client\ContactBookController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\Client\SpecialistDataController;
@@ -70,4 +71,18 @@ Route::controller(SpecialistDataController::class)
 
     Route::get('{id}/maintenances', 'getMaintenances')
         ->name('specialistData.maintenances');
+});
+
+Route::controller(AppointmentController::class)
+    ->prefix('client/appointment')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('specialist/{id}', 'create')
+        ->name('client.appointment.create');
+
+    Route::put('specialist/{orderNumber}', 'update')
+        ->name('client.appointment.update');
+
+    Route::get('history', 'getMyHistory')
+        ->name('client.appointment.history');
 });

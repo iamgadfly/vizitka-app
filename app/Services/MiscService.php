@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\CardBackgroundHelper;
 use App\Helpers\TimeHelper;
 use App\Http\Resources\ActivityKindResource;
 use App\Http\Resources\OnboardingResource;
 use App\Models\ActivityKind;
 use App\Models\Onboarding;
+use App\Models\Specialist;
+use App\Repositories\SpecialistRepository;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -16,6 +19,10 @@ use Illuminate\Support\Collection;
 
 class MiscService
 {
+    public function __construct(
+        protected SpecialistRepository $specialistRepository
+    ){}
+
     /**
      * @throws GuzzleException
      */
@@ -76,5 +83,15 @@ class MiscService
     public function getWeekDates(string $date): array
     {
         return TimeHelper::getWeekdays($date);
+    }
+
+    public function isSpecialistExists(string $phoneNumber): bool
+    {
+        try {
+            $this->specialistRepository->findByPhoneNumber($phoneNumber);
+            return true;
+        } catch (SpecialistNotFoundException) {
+            return false;
+        }
     }
 }

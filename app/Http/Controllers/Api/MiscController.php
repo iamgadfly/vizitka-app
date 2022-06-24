@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Misc\GetWeekDatesRequest;
+use App\Http\Requests\Misc\IsSpecialistExistsRequest;
 use App\Services\MiscService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -77,6 +78,17 @@ class MiscController extends Controller
     {
         return $this->success(
             $this->service->getWeekDates($request->date)
+        );
+    }
+
+    /**
+     * @param IsSpecialistExistsRequest $request
+     * @return JsonResponse
+     */
+    public function isSpecialistExists(IsSpecialistExistsRequest $request)
+    {
+        return $this->success(
+            $this->service->isSpecialistExists($request->phone_number)
         );
     }
 }
