@@ -15,12 +15,6 @@ class WorkScheduleWorkRepository extends Repository
         parent::__construct($model);
     }
 
-    public function createWorkday(int $day_id, array $workday)
-    {
-        $workday['day_id'] = $day_id;
-        return $this->create($workday);
-    }
-
     public static function getWorks($settingsId)
     {
         return WorkScheduleWork::whereHas('day', function ($q) use ($settingsId) {

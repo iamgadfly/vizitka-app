@@ -12,7 +12,8 @@ return [
           'verified' => 'Пользователь уже верифицирован',
           'verification_code_inst_valid' => 'Код верификации неправильный',
           'too_many_login' => 'Слишком много попыток входа. Попробуйте еще раз через 15 минут',
-          'specialist_not_created' => 'Специалист не был создан'
+          'specialist_not_created' => 'Специалист не был создан',
+          'specialist_not_found' => 'Специалист не найден'
       ],
       'specialist' => [
           'pin_exception' => 'Неврно введен PIN код',

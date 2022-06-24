@@ -34,12 +34,12 @@ class WorkScheduleBreakRepository extends Repository
         ])->get();
     }
 
-    public static function getBreaksForADayIndex(int $index, ?int $specialistId)
+    public static function getBreaksForADayIndex(int $index, ?int $specialistId = null)
     {
         if (is_null($specialistId)) {
             $specialistId = Repository::getSpecialistIdFromAuth();
         }
-        $day_id = self::getDayForSlidingSchedule($specialistId, $index);
+        $day_id = self::getDayForSlidingSchedule($specialistId, $index)->id;
         return WorkScheduleBreak::where([
             'day_id' => $day_id
         ])->get();
