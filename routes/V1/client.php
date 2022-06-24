@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Client\ContactBookController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
+use App\Http\Controllers\Api\Client\SpecialistDataController;
 use App\Http\Controllers\Api\ClientController;
 
 // Client routes
@@ -58,4 +59,15 @@ Route::controller(DummyBusinessCardController::class)
 
     Route::delete('{id}', 'delete')
         ->name('client.card.delete');
+});
+
+Route::controller(SpecialistDataController::class)
+    ->prefix('client/specialist')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::get('{id}/freeHours/{date}', 'getFreeHours')
+        ->name('specialistData.freeHours');
+
+    Route::get('{id}/maintenances', 'getMaintenances')
+        ->name('specialistData.maintenances');
 });
