@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Exceptions\ClientNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\Appointment\CreateRequest;
+use App\Http\Resources\Appointment\DuplicateResource;
 use App\Http\Resources\AppointmentResource;
 use App\Services\Client\AppointmentService;
 use Illuminate\Http\Request;
@@ -27,6 +29,16 @@ class AppointmentController extends Controller
     }
 
     /**
+     * @throws ClientNotFoundException
+     */
+    public function checkForDuplicates(CreateRequest $request)
+    {
+        return $this->success(
+            DuplicateResource::collection($this->service->checkForDuplicates($request->validated()))
+        );
+    }
+
+    /**
      * @throws TimeIsNotValidException
      */
     public function update(CreateRequest $request)
@@ -38,6 +50,7 @@ class AppointmentController extends Controller
 
     /**
      * @throws ClientNotFoundException
+     * @throws SpecialistNotFoundException
      */
     public function getMyHistory()
     {

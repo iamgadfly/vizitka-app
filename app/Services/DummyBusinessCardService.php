@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\ClientNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Http\Resources\BusinessCardResource;
 use App\Http\Resources\DummyBusinessCardResource;
 use App\Repositories\ContactBookRepository;
@@ -17,17 +20,24 @@ class DummyBusinessCardService
         protected ContactBookRepository $contactBookRepository
     ) {}
 
-    public function create(array $data)
+    /**
+     * @throws ClientNotFoundException
+     */
+    public function create(array $data): DummyBusinessCardResource|BusinessCardResource
     {
-        $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
+        try {
+            $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
+        }  catch (SpecialistNotFoundException) {
+            $record = null;
+        }
         if (!is_null($record)) {
             $recordItem = $this->contactBookRepository->whereFirst([
-                'client_id' => auth()->user()->client->id,
+                'client_id' => AuthHelper::getClientIdFromAuth(),
                 'specialist_id' => $record->id
             ]);
             if (is_null($recordItem)) {
                 $recordItem = $this->contactBookRepository->create([
-                    'client_id' => auth()->user()->client->id,
+                    'client_id' => AuthHelper::getClientIdFromAuth(),
                     'specialist_id' => $record->id
                 ]);
             }
