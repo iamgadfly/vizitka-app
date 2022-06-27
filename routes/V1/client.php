@@ -87,6 +87,9 @@ Route::controller(AppointmentController::class)
 
     Route::get('history', 'getMyHistory')
         ->name('client.appointment.history');
+
+    Route::post('specialist/{id}/checkForDuplicates', 'checkForDuplicates')
+        ->name('client.appointment.duplicates');
 });
 
 // Report routes

@@ -8,6 +8,7 @@ use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\AuthHelper;
 use App\Helpers\ImageHelper;
 use App\Http\Resources\SpecialistResource;
+use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\MaintenanceRepository;
 use App\Services\AppointmentService as BaseAppointmentService;
@@ -82,6 +83,18 @@ class AppointmentService extends BaseAppointmentService
             'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
             'client_id' => $clientId
         ]));
+    }
+
+    /**
+     * @throws ClientNotFoundException
+     */
+    public function checkForDuplicates(array $data)
+    {
+        return Appointment::where([
+            'client_id' => AuthHelper::getClientIdFromAuth(),
+            'specialist_id' => $data['specialist_id'],
+            ['date', '>=', $data['date']]
+        ])->whereIn('maintenance_id', $data['maintenances'])->get();
     }
 
     protected function convertToOrderType(Collection $appointments): Collection
