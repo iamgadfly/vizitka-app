@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Specialist\AppointmentController;
 use App\Http\Controllers\Api\Specialist\BlacklistController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
+use App\Http\Controllers\Api\Specialist\ClientController;
 use App\Http\Controllers\Api\Specialist\ContactBookController;
 use App\Http\Controllers\Api\Specialist\DummyClientController;
 use App\Http\Controllers\Api\Specialist\MaintenanceController;
@@ -186,4 +187,13 @@ Route::controller(ContactBookController::class)
 
     Route::get('', 'get')
         ->name('specialist.contactBook.get');
+});
+
+// Client Data routes
+Route::controller(ClientController::class)
+    ->prefix('specialist/clientData')
+    ->middleware('auth:sanctum')->group(function() {
+
+    Route::get('{id}/history', 'getClientHistory')
+        ->name('specialist.client.data.history');
 });
