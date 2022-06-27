@@ -56,6 +56,13 @@ return [
             ]
         ]
     ],
+    'reports' => [
+        'offence' => 'Insults and manifestations of intolerance',
+        'wrong_description' => 'The description of the profile or services does not correspond to reality',
+        'violence' => 'Propaganda of violence',
+        'sexual_content' => 'Sexual content',
+        'other' => 'Other'
+    ],
     'other' => [
         'rules' => [
             'array_is_not_valid' => 'Array is not valid',

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Client\AppointmentController;
 use App\Http\Controllers\Api\Client\ContactBookController;
 use App\Http\Controllers\Api\Client\DummyBusinessCardController;
+use App\Http\Controllers\Api\Client\ReportController;
 use App\Http\Controllers\Api\Client\SpecialistDataController;
 use App\Http\Controllers\Api\ClientController;
 
@@ -73,6 +74,7 @@ Route::controller(SpecialistDataController::class)
         ->name('specialistData.maintenances');
 });
 
+// Appointment routes
 Route::controller(AppointmentController::class)
     ->prefix('client/appointment')
     ->middleware('auth:sanctum')->group(function () {
@@ -85,4 +87,17 @@ Route::controller(AppointmentController::class)
 
     Route::get('history', 'getMyHistory')
         ->name('client.appointment.history');
+});
+
+// Report routes
+
+Route::controller(ReportController::class)
+    ->prefix('client/report')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('{id}', 'createReport')
+        ->name('client.report.create');
+
+    Route::get('reasons', 'getReportReasons')
+        ->name('client.report.reasons');
 });
