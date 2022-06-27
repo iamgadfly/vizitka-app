@@ -3,6 +3,7 @@
 namespace App\Services\Client;
 
 use App\Exceptions\ClientNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\AuthHelper;
 use App\Helpers\ImageHelper;
@@ -68,11 +69,17 @@ class AppointmentService extends BaseAppointmentService
 
     /**
      * @throws ClientNotFoundException
+     * @throws SpecialistNotFoundException
      */
-    public function getMyHistory()
+    public function getMyHistory(?int $clientId = null): Collection
     {
-        $clientId = AuthHelper::getClientIdFromAuth();
+        if (is_null($clientId)) {
+            return $this->convertToOrderType($this->repository->whereGet([
+                'client_id' => AuthHelper::getClientIdFromAuth()
+            ]));
+        }
         return $this->convertToOrderType($this->repository->whereGet([
+            'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
             'client_id' => $clientId
         ]));
     }
