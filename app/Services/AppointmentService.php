@@ -41,8 +41,8 @@ class AppointmentService
                 'id' => $maintenance['id']
             ]);
             $appointment = [
-                'dummy_client_id' => $data['type'] == 'dummy' ? $data['client']['id'] : null,
-                'client_id' => $data['type'] == 'client' ? $data['client']['id'] : null,
+                'dummy_client_id' => $data['client']['type'] == 'dummy' ? $data['client']['id'] : null,
+                'client_id' => $data['client']['type'] == 'client' ? $data['client']['id'] : null,
                 'specialist_id' => $data['specialist_id'],
                 'date' => $data['date']['value'],
                 'maintenance_id' => $maintenance['id'],

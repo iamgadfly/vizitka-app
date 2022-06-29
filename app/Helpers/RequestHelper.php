@@ -57,7 +57,6 @@ class RequestHelper
     public static function getAppointmentRules(FormRequest $request): array
     {
         $rules = [
-            'type' => ['required', 'in:client,dummy', 'bail'],
             'time' => ['required', 'array', 'bail'],
             'time.start' => ['required', 'date_format:H:i', 'bail'],
             'time.end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
@@ -79,7 +78,8 @@ class RequestHelper
             'client.full_name' => ['nullable', 'string', 'bail'],
             'client.name' => ['nullable', 'string', 'bail'],
             'client.surname' => ['nullable', 'string', 'bail'],
-            'client.phone_number' => ['nullable', 'string', 'bail']
+            'client.phone_number' => ['nullable', 'string', 'bail'],
+            'client.type' => ['required', 'in:client,dummy', 'bail'],
         ];
 
         if ($request->type == 'client') {
