@@ -98,10 +98,8 @@ class ContactBookService
 
     public function get(int $specialistId)
     {
-        $clients = $this->repository->whereGet([
+        return $this->repository->whereGet([
             'specialist_id' => $specialistId
         ]);
-
-        return $clients;
     }
 }
