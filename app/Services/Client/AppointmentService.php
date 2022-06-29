@@ -114,6 +114,7 @@ class AppointmentService extends BaseAppointmentService
                 'date' => $records->first()->date,
                 'status' => $records->first()->status,
                 'services' => [],
+                'specialist' => SpecialistResource::make($records->first()->specialist)
             ];
             foreach ($records as $record) {
                 $item['services'][] = [
