@@ -46,7 +46,7 @@ class AppointmentResource extends JsonResource
                     'phone_number' => $this->client?->user->phone_number ?? $this->dummyClient?->phone_number,
                     'photo' => ImageHelper::getAssetFromFilename($this->client?->avatar?->url
                         ?? $this->dummyClient?->avatar?->url),
-                    'discount' => $this?->dummyClient?->discount * 100 ?? null
+                    'discount' => $this?->dummyClient?->discount * 100 ?? null,
                 ]
             ];
         } else {
