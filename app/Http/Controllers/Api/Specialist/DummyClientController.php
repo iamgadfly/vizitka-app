@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DummyClient\CreateOrUpdateRequest;
 use App\Http\Requests\DummyClient\DeleteRequest;
@@ -20,6 +22,8 @@ class DummyClientController extends Controller
     /**
      * @param CreateOrUpdateRequest $request
      * @return JsonResponse
+     * @throws RecordIsAlreadyExistsException
+     * @throws SpecialistNotFoundException
      * @lrd:start
      * Create Dummy Client route
      * @lrd:end
