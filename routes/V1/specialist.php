@@ -49,6 +49,9 @@ Route::controller(WorkScheduleController::class)
 
     Route::get('', 'get')
         ->name('specialist.schedule.get');
+
+    Route::put('', 'update')
+        ->name('specialist.schedule.update');
 });
 
 // Business card routes
