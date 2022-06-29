@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Specialist;
 
 use App\Exceptions\RecordIsAlreadyExistsException;
+use App\Exceptions\RecordNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactBook\CreateRequest;
 use App\Http\Requests\ContactBook\DeleteRequest;
@@ -33,9 +34,14 @@ class ContactBookController extends Controller
         );
     }
 
+    /**
+     * @throws RecordNotFoundException
+     */
     public function delete(DeleteRequest $request)
     {
-
+        return $this->success(
+            $this->service->delete($request->id)
+        );
     }
 
     /**

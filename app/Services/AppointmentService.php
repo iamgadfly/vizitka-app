@@ -32,6 +32,7 @@ class AppointmentService
      */
     public function create(array $data, ?string $orderNumber = null): array
     {
+        $settings = $this->settingsRepository->whereFirst(['specialist_id' => $data['specialist_id']]);
         $orderNumber = $orderNumber ?? Random::generate(5, '0-9');
         $start = Carbon::parse($data['time']['start']);
         $output = [];
@@ -43,11 +44,12 @@ class AppointmentService
                 'dummy_client_id' => $data['type'] == 'dummy' ? $data['client']['id'] : null,
                 'client_id' => $data['type'] == 'client' ? $data['client']['id'] : null,
                 'specialist_id' => $data['specialist_id'],
-                'date' => $data['date'],
+                'date' => $data['date']['value'],
                 'maintenance_id' => $maintenance['id'],
                 'time_start' => $start->format('H:i'),
                 'time_end' => $start->addMinutes($maintenance->duration)->format('H:i'),
-                'order_number' => $orderNumber
+                'order_number' => $orderNumber,
+                'status' => $settings->confirmation ? 'unconfirmed' : 'confirmed'
             ];
             $this->isInInterval($appointment);
             $output[] = $this->repository->create($appointment);

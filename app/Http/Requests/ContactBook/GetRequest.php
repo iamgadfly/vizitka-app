@@ -2,13 +2,18 @@
 
 namespace App\Http\Requests\ContactBook;
 
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetRequest extends FormRequest
 {
+    /**
+     * @throws SpecialistNotFoundException
+     */
     protected function prepareForValidation()
     {
-        $this->merge(['specialist_id' => auth()->user()->specialist->id]);
+        $this->merge(['specialist_id' =>  AuthHelper::getSpecialistIdFromAuth()]);
     }
 
     /**

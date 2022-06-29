@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Enums\ActivityKind;
 use App\Helpers\CardBackgroundHelper;
 use App\Helpers\ImageHelper;
+use App\Models\WorkScheduleSettings;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SpecialistDetailedDataResource extends JsonResource
@@ -19,6 +20,7 @@ class SpecialistDetailedDataResource extends JsonResource
     {
         $activityKind = str(str($this->card->background_image)->explode('/')[2])->replace('.jpg', '');
         $colors = CardBackgroundHelper::getSpecialistColorFromActivityKind($activityKind);
+        $settings = WorkScheduleSettings::where(['specialist_id' => $this->id])->first();
         return [
             'id' => $this->id,
             'photo' => !is_null($this->avatar) ? ImageHelper::getAssetFromFilename($this?->avatar?->url): null,
@@ -31,6 +33,7 @@ class SpecialistDetailedDataResource extends JsonResource
             'textColor' => $colors['textColor'],
             'buttonsColor' => $colors['buttonsColor'],
             'background_image' => ImageHelper::getAssetFromFilename($this->card->background_image),
+            'confirmation' => $settings->confirmation,
             'suggestedDaysAndTime' => []
         ];
     }
