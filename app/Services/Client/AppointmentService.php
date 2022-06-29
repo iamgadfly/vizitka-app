@@ -72,17 +72,19 @@ class AppointmentService extends BaseAppointmentService
      * @throws ClientNotFoundException
      * @throws SpecialistNotFoundException
      */
-    public function getMyHistory(?int $clientId = null): Collection
+    public function getMyHistory(?string $type = null, ?int $clientId = null): Collection
     {
         if (is_null($clientId)) {
             return $this->convertToOrderType($this->repository->whereGet([
                 'client_id' => AuthHelper::getClientIdFromAuth()
             ]));
+        } else {
+            $type_id = $type == 'client' ? 'client_id' : 'dummy_client_id';
+            return $this->convertToOrderType($this->repository->whereGet([
+                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                $type_id => $clientId
+            ]));
         }
-        return $this->convertToOrderType($this->repository->whereGet([
-            'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
-            'client_id' => $clientId
-        ]));
     }
 
     /**
@@ -112,7 +114,6 @@ class AppointmentService extends BaseAppointmentService
                 'date' => $records->first()->date,
                 'status' => $records->first()->status,
                 'services' => [],
-                'specialist' => new SpecialistResource($records->first()->specialist)
             ];
             foreach ($records as $record) {
                 $item['services'][] = [

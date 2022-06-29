@@ -44,7 +44,7 @@ class AppointmentService
                 'dummy_client_id' => $data['type'] == 'dummy' ? $data['client']['id'] : null,
                 'client_id' => $data['type'] == 'client' ? $data['client']['id'] : null,
                 'specialist_id' => $data['specialist_id'],
-                'date' => $data['date'],
+                'date' => $data['date']['value'],
                 'maintenance_id' => $maintenance['id'],
                 'time_start' => $start->format('H:i'),
                 'time_end' => $start->addMinutes($maintenance->duration)->format('H:i'),

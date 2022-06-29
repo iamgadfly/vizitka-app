@@ -24,8 +24,10 @@ class MassCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_numbers' => ['required', 'array'],
-            'phone_numbers.*' => ['required', 'string', 'max:15']
+            'data' => ['required', 'array', 'bail'],
+            'data.*.name' => ['required', 'string', 'bail'],
+            'data.*.surname' => ['required', 'string', 'bail'],
+            'data.*.phone_number' => ['required', 'string', 'max:15']
         ];
     }
 }

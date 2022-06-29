@@ -4,7 +4,10 @@ namespace App\Services;
 
 use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Models\Client;
+use App\Repositories\ClientRepository;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyClientRepository;
 
@@ -13,45 +16,67 @@ class ContactBookService
 {
     public function __construct(
         protected ContactBookRepository $repository,
-        protected DummyClientRepository $dummyClientRepository
+        protected DummyClientRepository $dummyClientRepository,
+        protected ClientRepository $clientRepository
     ) {}
 
     /**
      * @throws RecordIsAlreadyExistsException
+     * @throws SpecialistNotFoundException
      */
-    public function create(int $clientId)
+    public function create(array $data)
     {
-        $specialistId = auth()->user()->specialist->id;
+        $clientId = $data['client_id'];
+        if ($data['type'] == 'client') {
+            $type = 'client_id';
+        } else {
+            $type = 'dummy_client_id';
+        }
+        $specialistId = AuthHelper::getSpecialistIdFromAuth();
         $record = $this->repository->whereFirst([
             'specialist_id' => $specialistId,
-            'client_id' => $clientId
+            $type => $clientId
         ]);
         if (!is_null($record)) {
             throw new RecordIsAlreadyExistsException;
         }
         return $this->repository->create([
-            'client_id' => $clientId,
+            $type => $clientId,
             'specialist_id' => $specialistId
         ]);
     }
 
     /**
      * @throws RecordIsAlreadyExistsException
+     * @throws SpecialistNotFoundException
      */
     public function massCreate(array $data): array
     {
         $output = [];
-        foreach ($data['phone_numbers'] as $phoneNumber) {
-            $client = Client::whereHas('user', function ($q) use ($phoneNumber) {
-                return $q->where(['phone_number' => $phoneNumber]);
-            })->get();
+        foreach ($data['data'] as $item) {
+            $client = $this->clientRepository->findByPhoneNumber($item['phone_number']);
 
-            if (!is_null($client->first())) {
+            if (!is_null($client)) {
                 try {
-                    $output[] = $this->create($client->first()->id);
+                    $output[] = $this->create([
+                        'type' => 'client',
+                        'client_id' => $client->id
+                    ]);
                 } catch (RecordIsAlreadyExistsException $e) {
                     continue;
                 }
+            } else {
+                $client = $this->dummyClientRepository->create([
+                    'name' => $item['name'],
+                    'surname' => $item['surname'],
+                    'phone_number' => $item['phone_number'],
+                    'discount' => 0,
+                    'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+                ]);
+                $output[] = $this->create([
+                    'type' => 'dummy',
+                    'client_id' => $client->id
+                ]);
             }
         }
         return $output;
@@ -64,7 +89,7 @@ class ContactBookService
     {
         $record = $this->repository->whereFirst([
             'client_id' => $clientId
-        ]);
+        ]) ?? $this->dummyClientRepository->getById($clientId);
         if (is_null($record)) {
             throw new RecordNotFoundException;
         }
@@ -76,20 +101,7 @@ class ContactBookService
         $clients = $this->repository->whereGet([
             'specialist_id' => $specialistId
         ]);
-        if (!empty($clients)) {
-            $clients->map(function ($client) {
-                $client->type = 'client';
-            });
-        }
 
-        $dummies = $this->dummyClientRepository->whereGet([
-            'specialist_id' => $specialistId
-        ]);
-        if (!empty($dummies)) {
-            $dummies->map(function ($client) {
-                $client->type = 'dummy';
-            });
-        }
-        return $clients->concat($dummies);
+        return $clients;
     }
 }

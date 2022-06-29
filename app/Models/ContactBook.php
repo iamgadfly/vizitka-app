@@ -22,4 +22,9 @@ class ContactBook extends Model
     {
         return $this->belongsTo(Client::class, 'client_id');
     }
+
+    public function dummyClient(): BelongsTo
+    {
+        return $this->belongsTo(DummyClient::class, 'dummy_client_id');
+    }
 }

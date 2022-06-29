@@ -11,12 +11,13 @@ class ContactBookRepository extends Repository
         parent::__construct($model);
     }
 
-    public function thrashedRecord(int $clientId)
+    public function thrashedRecord(int $clientId, string $type)
     {
+        $type_id = $type == 'client' ? 'client_id' : 'dummy_client_id';
         return $this->model::onlyTrashed()
             ->where([
                 'specialist_id' => auth()->user()->specialist->id,
-                'client_id' => $clientId
+                $type_id => $clientId
             ])->first();
     }
 

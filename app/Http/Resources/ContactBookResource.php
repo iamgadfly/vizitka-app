@@ -15,17 +15,18 @@ class ContactBookResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->type == 'dummy') {
+        $type = is_null($this->dummyClient) ? 'client' : 'dummy';
+        if ($type == 'dummy') {
             return [
                 'id' => $this->id,
                 'client' => [
-                    'name' => $this->name,
-                    'surname' => $this->surname,
-                    'full_name' => "$this->name $this->surname",
-                    'discount' => $this->discount * 100,
-                    'phone_number' => $this->phone_number,
-                    'avatar' => ImageHelper::getAssetFromFilename($this->avatar?->url),
-                    'type' => $this->type
+                    'id' => $this->dummyClient?->id,
+                    'name' => $this->dummyClient?->name,
+                    'surname' => $this->dummyClient?->surname,
+                    'discount' => $this->dummyClient?->discount * 100,
+                    'phone_number' => $this->dummyClient?->phone_number,
+                    'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+                    'type' => $type
                 ],
                 'specialist' => SpecialistResource::make($this->specialist)
             ];

@@ -29,7 +29,8 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id']
+            'client_id' => ['required', 'bail'],
+            'type' => ['required', 'in:client,dummy', 'bail']
         ];
     }
 }

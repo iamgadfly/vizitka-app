@@ -194,6 +194,6 @@ Route::controller(ClientController::class)
     ->prefix('specialist/clientData')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::get('{id}/history', 'getClientHistory')
+    Route::get('{id}/{type}/history', 'getClientHistory')
         ->name('specialist.client.data.history');
 });

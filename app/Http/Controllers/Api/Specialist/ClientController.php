@@ -22,7 +22,7 @@ class ClientController extends Controller
     public function getClientHistory(IdRequest $request)
     {
         return $this->success(
-            $this->service->getMyHistory($request->id)
+            $this->service->getMyHistory($request->type, $request->id)
         );
     }
 }
