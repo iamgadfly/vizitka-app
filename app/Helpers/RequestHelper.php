@@ -62,7 +62,6 @@ class RequestHelper
             'time.start' => ['required', 'date_format:H:i', 'bail'],
             'time.end' => ['required', 'date_format:H:i', 'bail', 'after:time_start'],
             'date' => ['required', 'array', 'bail'],
-            'date.label' => ['required', 'date_format:d-m-Y', 'bail'],
             'date.value' => ['required', 'date_format:Y-m-d', 'bail'],
             'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
             'maintenance' => ['required', 'array', 'bail'],
