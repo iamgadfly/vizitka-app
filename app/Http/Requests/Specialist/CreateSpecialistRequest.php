@@ -2,16 +2,21 @@
 
 namespace App\Http\Requests\Specialist;
 
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use function auth;
 
 class CreateSpecialistRequest extends FormRequest
 {
+    /**
+     * @throws SpecialistNotFoundException
+     */
     protected function prepareForValidation()
     {
         if ($this->method() == 'PUT') {
-            $this->merge(['id' => $this->route('id')]);
+            $this->merge(['id' => AuthHelper::getSpecialistIdFromAuth()]);
         } else {
             $this->merge(['user_id' => auth()->id()]);
         }

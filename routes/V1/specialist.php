@@ -74,7 +74,7 @@ Route::controller(SpecialistController::class)
     Route::get('profile/{id}', 'get')
         ->name('specialist.get');
 
-    Route::put('profile/{id}', 'update')
+    Route::put('profile', 'update')
         ->name('specialist.update');
 
     Route::get('profile', 'me')
