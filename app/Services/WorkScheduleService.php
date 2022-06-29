@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Exceptions\RecordNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
+use App\Helpers\AuthHelper;
 use App\Helpers\WeekdayHelper;
 use App\Http\Resources\WorkScheduleSettingsResource;
 use App\Repositories\SpecialistRepository;
@@ -23,8 +26,9 @@ class WorkScheduleService
 
     /**
      * @throws WorkScheduleSettingsIsAlreadyExistingException
+     * @throws SpecialistNotFoundException
      */
-    public function create(array $data): WorkScheduleSettingsResource
+    public function create(array $data, bool $onUpdate = false): WorkScheduleSettingsResource
     {
         $settings = $this->settingsRepository->mySettings();
         if ($settings) {
@@ -81,10 +85,12 @@ class WorkScheduleService
                     $settingsId, $workdaysCount, $weekdaysCount, $work, $breakType, $breaks
                 );
             }
-            //make specialist registered
-            $specialist = $this->specialistRepository->findById($data['specialist_id'], false);
-            $specialist->is_registered = true;
-            $specialist->save();
+            if (!$onUpdate) {
+                //make specialist registered
+                $specialist = $this->specialistRepository->findById($data['specialist_id'], false);
+                $specialist->is_registered = true;
+                $specialist->save();
+            }
             \DB::commit();
             return new WorkScheduleSettingsResource($settings);
         } catch (\PDOException $e) {
@@ -96,6 +102,20 @@ class WorkScheduleService
     public function mySettings(): WorkScheduleSettingsResource
     {
         return new WorkScheduleSettingsResource($this->settingsRepository->mySettings());
+    }
+
+    /**
+     * @throws SpecialistNotFoundException
+     * @throws WorkScheduleSettingsIsAlreadyExistingException
+     * @throws RecordNotFoundException
+     */
+    public function update(array $data): WorkScheduleSettingsResource
+    {
+        $settings = $this->settingsRepository->whereFirst(['specialist_id' => AuthHelper::getSpecialistIdFromAuth()])
+            ?? throw new RecordNotFoundException;
+        $settings?->delete();
+
+        return $this->create($data, true);
     }
 
     private function createSlidingSchedule(

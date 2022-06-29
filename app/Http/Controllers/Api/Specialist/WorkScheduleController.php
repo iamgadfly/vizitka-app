@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Specialist;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WorkSchedule\CreateRequest;
+use App\Http\Requests\WorkSchedule\UpdateRequest;
 use App\Services\WorkScheduleService;
 use Illuminate\Http\JsonResponse;
 
@@ -24,6 +25,13 @@ class WorkScheduleController extends Controller
     {
         return $this->success(
             $this->service->create($request->validated())
+        );
+    }
+
+    public function update(UpdateRequest $request)
+    {
+        return $this->success(
+            $this->service->update($request->validated())
         );
     }
 
