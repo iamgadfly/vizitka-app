@@ -18,30 +18,23 @@ class ContactBookResource extends JsonResource
         $type = is_null($this->dummyClient) ? 'client' : 'dummy';
         if ($type == 'dummy') {
             return [
-                'id' => $this->id,
-                'client' => [
-                    'id' => $this->dummyClient?->id,
-                    'name' => $this->dummyClient?->name,
-                    'surname' => $this->dummyClient?->surname,
-                    'discount' => $this->dummyClient?->discount * 100,
-                    'phone_number' => $this->dummyClient?->phone_number,
-                    'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
-                    'type' => $type
-                ],
-                'specialist' => SpecialistResource::make($this->specialist)
+                'id' => $this->dummyClient?->id,
+                'name' => $this->dummyClient?->name,
+                'surname' => $this->dummyClient?->surname,
+                'discount' => $this->dummyClient?->discount * 100,
+                'phone_number' => $this->dummyClient?->phone_number,
+                'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+                'type' => $type
             ];
         }
         return [
-            'id' => $this->id,
-            'client' => [
-                'id' => $this->client->id,
-                'name' => $this->client->name,
-                'surname' => $this->client->surname,
-                'phone' => $this->client->user->phone_number,
-                'avatar' => $this->client?->avatar?->url ?? null,
-                'type' => $type,
-                'discount' => 0
-            ],
+            'id' => $this->client->id,
+            'name' => $this->client->name,
+            'surname' => $this->client->surname,
+            'phone' => $this->client->user->phone_number,
+            'avatar' => $this->client?->avatar?->url ?? null,
+            'type' => $type,
+            'discount' => 0
         ];
     }
 }
