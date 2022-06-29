@@ -39,7 +39,7 @@ class ContactBookResource extends JsonResource
                 'surname' => $this->client->surname,
                 'phone' => $this->client->user->phone_number,
                 'avatar' => $this->client?->avatar?->url ?? null,
-                'type' => $this->type
+                'type' => $type
             ],
             'specialist' => SpecialistResource::make($this->specialist)
         ];
