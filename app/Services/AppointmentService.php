@@ -49,7 +49,7 @@ class AppointmentService
                 'time_start' => $start->format('H:i'),
                 'time_end' => $start->addMinutes($maintenance->duration)->format('H:i'),
                 'order_number' => $orderNumber,
-                'status' => $settings->confirmation ? 'unconfirmed' : 'confirmed'
+                'status' => $settings->confirmation ? 'confirmed' : 'unconfirmed'
             ];
             $this->isInInterval($appointment);
             $output[] = $this->repository->create($appointment);
