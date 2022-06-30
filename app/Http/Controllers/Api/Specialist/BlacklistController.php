@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
+use App\Exceptions\RecordNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Blacklist\CreateRequest;
 use App\Http\Requests\Blacklist\DeleteRequest;
@@ -19,6 +22,8 @@ class BlacklistController extends Controller
     /**
      * @param CreateRequest $request
      * @return JsonResponse
+     * @throws SpecialistNotFoundException
+     * @throws RecordIsAlreadyExistsException
      * @lrd:start
      * Add to blacklist route
      * @lrd:end
@@ -33,6 +38,8 @@ class BlacklistController extends Controller
     /**
      * @param DeleteRequest $request
      * @return JsonResponse
+     * @throws RecordNotFoundException
+     * @throws SpecialistNotFoundException
      * @lrd:start
      * Remove from blacklist route
      * @lrd:end
@@ -40,7 +47,7 @@ class BlacklistController extends Controller
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->delete($request->id)
+            $this->service->delete($request->id, $request->type)
         );
     }
 
