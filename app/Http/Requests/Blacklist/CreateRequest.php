@@ -32,8 +32,8 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'blacklisted_id' => ['required', 'exists:clients,id'],
-            'specialist_id' => ['required', 'exists:specialists,id']
+            'blacklisted_id' => ['required', 'bail'],
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail']
         ];
     }
 }
