@@ -227,7 +227,8 @@ class AppointmentService
                         ?? $records->first()->dummyClient?->phone_number,
                     'photo' => ImageHelper::getAssetFromFilename($records->first()->client?->avatar?->url
                         ?? $records->first()->dummyClient?->avatar?->url),
-                    'discount' => $records->first()?->dummyClient?->discount * 100 ?? null
+                    'discount' => $records->first()?->dummyClient?->discount * 100 ?? null,
+                    'type' => is_null($records->first()?->client) ? 'dummy' : 'client'
                 ],
                 'time' => [
                     'start' => Carbon::parse($minTime)->format('H:i'),
