@@ -33,7 +33,8 @@ class CreateRequest extends FormRequest
     {
         return [
             'blacklisted_id' => ['required', 'bail'],
-            'specialist_id' => ['required', 'exists:specialists,id', 'bail']
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
+            'type' => ['required', 'in:client,dummy', 'bail']
         ];
     }
 }

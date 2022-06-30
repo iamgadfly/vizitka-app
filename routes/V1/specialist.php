@@ -82,6 +82,9 @@ Route::controller(SpecialistController::class)
 
     Route::get('profile', 'me')
         ->name('specialist.me');
+
+    Route::get('card', 'getMyCard')
+        ->name('specialist.card');
 });
 
 // Dummy client routes
