@@ -36,7 +36,7 @@ class AppointmentService
         $orderNumber = $orderNumber ?? Random::generate(5, '0-9');
         $start = Carbon::parse($data['time']['start']);
         $output = [];
-        foreach ($data['maintenance'] as $maintenance) {
+        foreach ($data['services'] as $maintenance) {
             $maintenance = $this->maintenanceRepository->whereFirst([
                 'id' => $maintenance['id']
             ]);
@@ -245,7 +245,8 @@ class AppointmentService
                     'duration' => [
                         'label' => str($record->maintenance->duration)->value(),
                         'value' => $record->maintenance->duration
-                    ]
+                    ],
+                    'interval' => TimeHelper::getTimeInterval($record->time_start, $record->time_end)
                 ];
             }
             $usedOrders[] = $order;
