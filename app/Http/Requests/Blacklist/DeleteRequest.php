@@ -29,7 +29,8 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'blacklisted_id' => ['required', 'exists:clients,id']
+            'blacklisted_id' => ['required', 'bail'],
+            'type' => ['required', 'in:client,dummy', 'bail']
         ];
     }
 }
