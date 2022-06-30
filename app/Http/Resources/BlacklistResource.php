@@ -14,8 +14,10 @@ class BlacklistResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            ClientResource::make($this->client)
-        ];
+        if (is_null($this->dummyClient)) {
+            return ClientResource::make($this->client);
+        } else {
+            return DummyClientResource::make($this->dummyClient);
+        }
     }
 }

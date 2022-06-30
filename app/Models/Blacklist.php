@@ -21,4 +21,9 @@ class Blacklist extends Model
     {
         return $this->belongsTo(Specialist::class, 'specialist_id', 'id');
     }
+
+    public function dummyClient(): BelongsTo
+    {
+        return $this->belongsTo(DummyClient::class, 'dummy_client_id', 'id');
+    }
 }
