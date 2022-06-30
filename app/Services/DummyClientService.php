@@ -41,6 +41,7 @@ class DummyClientService
 
     public function update(array $data)
     {
+        $data['discount'] = $data['discount']['value'];
         return $this->repository->update($data['id'], $data);
     }
 
