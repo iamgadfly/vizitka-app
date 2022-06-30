@@ -100,7 +100,7 @@ class RequestHelper
         $rules = [
             'name' => ['string', 'bail'],
             'surname' => ['string', 'bail'],
-            'phone_number' => ['string', 'bail', 'unique:dummy_clients,phone_number'],
+            'phone_number' => ['string', 'bail'],
             'discount' => ['array', 'bail'],
             'discount.label' => ['string', 'nullable', 'bail'],
             'discount.value' => ['integer', 'min:0', 'max:100', 'bail'],
