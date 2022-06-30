@@ -11,11 +11,8 @@ class ShareObserver
 {
     public function creating(Share $share)
     {
-//        $share->hash = Random::generate('6', 'az-AZ0-9');
 
-        dd(\Hash::make(Carbon::now()->toString()));
-        $share->hash = 1;
-        $share->save();
+        $share->hash = str(md5(Carbon::now()->toString()))->substr(9, 10);
     }
 
     /**
