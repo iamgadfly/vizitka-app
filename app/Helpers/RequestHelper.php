@@ -104,7 +104,8 @@ class RequestHelper
             'discount' => ['array', 'bail'],
             'discount.label' => ['string', 'nullable', 'bail'],
             'discount.value' => ['integer', 'min:0', 'max:100', 'bail'],
-            'avatar_id' => ['exists:images,id', 'nullable', 'bail']
+            'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
+            'notes' => ['string', 'nullable', 'bail']
         ];
         if ($request->method() == 'POST') {
             $rules['name'][] = 'required';
