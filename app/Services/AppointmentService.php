@@ -238,7 +238,8 @@ class AppointmentService
                     'duration' => [
                         'label' => str($record->maintenance->duration)->value(),
                         'value' => $record->maintenance->duration
-                    ]
+                    ],
+                    'interval' => TimeHelper::getTimeInterval($record->time_start, $record->time_end)
                 ];
             }
             $usedOrders[] = $order;
