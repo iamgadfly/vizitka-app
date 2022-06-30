@@ -105,4 +105,11 @@ class SpecialistController extends Controller
             Response::HTTP_OK
         );
     }
+
+    public function getMyCard()
+    {
+        return $this->success(
+            $this->service->getMyCard()
+        );
+    }
 }

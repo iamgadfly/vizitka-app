@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Helpers\CardBackgroundHelper;
 use App\Helpers\TimeHelper;
 use App\Http\Resources\ActivityKindResource;

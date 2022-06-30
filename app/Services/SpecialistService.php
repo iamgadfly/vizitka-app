@@ -4,7 +4,10 @@ namespace App\Services;
 
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
 use App\Exceptions\SpecialistNotCreatedException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
+use App\Helpers\AuthHelper;
+use App\Helpers\CardBackgroundHelper;
 use App\Models\Specialist;
 use App\Repositories\BusinessCardRepository;
 use App\Repositories\SpecialistRepository;
@@ -83,5 +86,18 @@ class SpecialistService
     public function getMe(): ?Specialist
     {
         return $this->getSpecialistData(null);
+    }
+
+    /**
+     * @throws SpecialistNotFoundException
+     */
+    public function getMyCard()
+    {
+        $specialist = $this->repository->getById(AuthHelper::getSpecialistIdFromAuth());
+        $card = str($specialist->card->background_image)
+            ->replace('images/card_backgrounds/', '')
+            ->replace('.jpg', '')
+            ->value();
+        return CardBackgroundHelper::getCardFromActivityKind($card);
     }
 }
