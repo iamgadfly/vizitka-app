@@ -102,4 +102,11 @@ class ContactBookService
             'specialist_id' => $specialistId
         ]);
     }
+
+    public function getForClient(int $clientId)
+    {
+        return $this->repository->whereGet([
+            'client_id' => $clientId
+        ]);
+    }
 }

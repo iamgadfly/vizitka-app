@@ -2,13 +2,18 @@
 
 namespace App\Http\Requests\ContactBookForClient;
 
+use App\Exceptions\ClientNotFoundException;
+use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetRequest extends FormRequest
 {
+    /**
+     * @throws ClientNotFoundException
+     */
     protected function prepareForValidation()
     {
-        $this->merge(['client_id' => auth()->user()->client->id]);
+        $this->merge(['client_id' => AuthHelper::getClientIdFromAuth()]);
     }
 
     /**

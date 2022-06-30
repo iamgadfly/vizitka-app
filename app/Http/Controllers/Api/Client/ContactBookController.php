@@ -9,6 +9,7 @@ use App\Http\Requests\ContactBookForClient\CreateRequest;
 use App\Http\Requests\ContactBookForClient\DeleteRequest;
 use App\Http\Requests\ContactBookForClient\GetRequest;
 use App\Http\Requests\ContactBookForClient\MassCreateRequest;
+use App\Http\Resources\Client\ContactBookResource;
 use App\Services\ContactBookService;
 use Illuminate\Http\JsonResponse;
 
@@ -51,7 +52,7 @@ class ContactBookController extends Controller
     public function get(GetRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->get($request->client_id)
+            ContactBookResource::collection($this->service->getForClient($request->client_id))
         );
     }
 }
