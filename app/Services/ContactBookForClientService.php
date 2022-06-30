@@ -6,12 +6,14 @@ use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
 use App\Models\Specialist;
 use App\Repositories\ContactBookRepository;
+use App\Repositories\DummyBusinessCardRepository;
 
 
 class ContactBookForClientService
 {
     public function __construct(
-        protected ContactBookRepository $repository
+        protected ContactBookRepository $repository,
+        protected DummyBusinessCardRepository $businessCardRepository
     ) {}
 
     /**
@@ -71,8 +73,14 @@ class ContactBookForClientService
 
     public function get(int $clientId)
     {
-        return $this->repository->whereGet([
+        $contacts = $this->repository->whereGet([
             'client_id' => $clientId
         ]);
+
+        $dummies = $this->businessCardRepository->whereGet([
+            'client_id' => $clientId
+        ]);
+
+        return $contacts->concat($dummies);
     }
 }

@@ -235,6 +235,13 @@ class CardBackgroundHelper
         return self::$specialistColor[$activityKind];
     }
 
+    public static function getActivityKindFromFilename(string $filename)
+    {
+        return str($filename)
+               ->replace('images/card_backgrounds/', '')
+               ->replace('.jpg', '')
+               ->value();
+    }
 
     public static function getCardFromActivityKind(string $activityKind): Collection
     {

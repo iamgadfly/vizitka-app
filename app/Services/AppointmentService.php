@@ -212,7 +212,10 @@ class AppointmentService
             $maxTime = max(array_column($records->toArray(), 'time_end'));
             $item = [
                 'order_number' => $order,
-                'date' => $records->first()->date,
+                'date' => [
+                    'label' => Carbon::parse($records->first()->date)->format('d.m.Y'),
+                    'value' => $records->first()->date
+                ],
                 'status' => $records->first()->status,
                 'interval' => TimeHelper::getTimeInterval($minTime, $maxTime),
                 'services' => [],
@@ -225,6 +228,10 @@ class AppointmentService
                     'photo' => ImageHelper::getAssetFromFilename($records->first()->client?->avatar?->url
                         ?? $records->first()->dummyClient?->avatar?->url),
                     'discount' => $records->first()?->dummyClient?->discount * 100 ?? null
+                ],
+                'time' => [
+                    'start' => Carbon::parse($minTime)->format('H:i'),
+                    'end' => Carbon::parse($maxTime)->format('H:i')
                 ]
             ];
             foreach ($records as $record) {
