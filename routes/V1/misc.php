@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\MiscController;
+use App\Http\Controllers\Api\ShareController;
 use App\Http\Controllers\TestController;
 
 // Misc Routes
@@ -27,7 +28,7 @@ Route::controller(MiscController::class)->group(function () {
         ->name('misc.isSpecialistExists');
 });
 
-// Image requests
+// Image routes
 Route::controller(ImageController::class)
     ->prefix('image')
     ->middleware('auth:sanctum')->group(function () {
@@ -40,6 +41,15 @@ Route::controller(ImageController::class)
 
         Route::delete('{id}', 'delete')
             ->name('image.delete');
+});
+
+// Share routes
+Route::controller(ShareController::class)
+    ->prefix('share')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('shortlink', 'createShortlink')
+        ->name('share.createShortlink');
 });
 
 Route::post('/test', [TestController::class, 'test'])->middleware('auth:sanctum');
