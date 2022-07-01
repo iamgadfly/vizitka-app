@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShareController;
 use App\Http\Controllers\Api\Specialist\AppointmentController;
 use App\Http\Controllers\Api\Specialist\BlacklistController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
@@ -202,4 +203,14 @@ Route::controller(ClientController::class)
 
     Route::get('{id}/{type}/history', 'getClientHistory')
         ->name('specialist.client.data.history');
+});
+
+
+// Share routes
+Route::controller(ShareController::class)
+    ->prefix('share')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('qrcode', 'getQrCode')
+        ->name('specialist.share.qrcode');
 });

@@ -7,6 +7,7 @@ use App\Helpers\TimeHelper;
 use App\Http\Requests\Test\DeleteUserRequest;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
+use App\Services\QRService;
 
 class TestController extends Controller
 {
@@ -17,7 +18,6 @@ class TestController extends Controller
 
     public function test()
     {
-
     }
 
     public function deleteUser(DeleteUserRequest $request)
