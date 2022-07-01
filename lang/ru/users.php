@@ -59,6 +59,11 @@ return [
         'sexual_content' => 'Контент сексуального характера',
         'other' => 'Другое'
     ],
+    'shares' => [
+        'exceptions' => [
+            'linkHasExpired' => 'Время действия ссылки истекло'
+        ]
+    ],
     'other' => [
         'rules' => [
             'array_is_not_valid' => 'Массив невалидный',
