@@ -19,7 +19,7 @@ Route::controller(ClientController::class)
         Route::get('profile/{id}', 'get')
             ->name('client.get');
 
-        Route::put('profile/{id}', 'update')
+        Route::put('profile', 'update')
             ->name('client.update');
 
         Route::get('profile', 'me')
