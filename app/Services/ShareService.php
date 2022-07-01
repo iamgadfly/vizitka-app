@@ -40,4 +40,12 @@ class ShareService
             'url' => config('app.url') . $url
         ];
     }
+
+    public function getQrCode(string $url)
+    {
+        $link = $this->createShortlink($url);
+        $url = config('app.url') . "/shares/" . $link->hash;
+
+        return QRService::generate($url);
+    }
 }
