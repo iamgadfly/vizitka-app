@@ -63,6 +63,11 @@ return [
         'sexual_content' => 'Sexual content',
         'other' => 'Other'
     ],
+    'shares' => [
+        'exceptions' => [
+            'linkHasExpired' => 'Link has expired'
+        ]
+    ],
     'other' => [
         'rules' => [
             'array_is_not_valid' => 'Array is not valid',
