@@ -10,6 +10,7 @@ use App\Http\Requests\SingleWorkSchedule\DeleteRequest;
 use App\Http\Resources\SingleWorkSchueduleResource;
 use App\Services\SingleWorkScheduleService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class SingleWorkScheduleController extends Controller
 {
@@ -28,7 +29,8 @@ class SingleWorkScheduleController extends Controller
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->validated())
+            $this->service->create($request->validated()),
+            Response::HTTP_CREATED
         );
     }
 
@@ -42,7 +44,8 @@ class SingleWorkScheduleController extends Controller
     public function createWorkday(CreateWorkdayRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->createWorkday($request->validated())
+            $this->service->createWorkday($request->validated()),
+            Response::HTTP_CREATED
         );
     }
 
@@ -70,7 +73,8 @@ class SingleWorkScheduleController extends Controller
     public function createBreak(CreateBreakRequest $request): JsonResponse
     {
         return $this->success(
-            SingleWorkSchueduleResource::make($this->service->createBreak($request->validated()))
+            SingleWorkSchueduleResource::make($this->service->createBreak($request->validated())),
+            Response::HTTP_CREATED
         );
     }
 }

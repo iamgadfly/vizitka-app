@@ -10,7 +10,9 @@ use App\Http\Requests\Client\Appointment\CreateRequest;
 use App\Http\Resources\Appointment\DuplicateResource;
 use App\Http\Resources\AppointmentResource;
 use App\Services\Client\AppointmentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AppointmentController extends Controller
 {
@@ -19,17 +21,28 @@ class AppointmentController extends Controller
     ){}
 
     /**
+     * @param CreateRequest $request
+     * @return JsonResponse
      * @throws TimeIsNotValidException
+     * @lrd:start
+     * Create Appointment as Client
+     * @lrd:end
      */
     public function create(CreateRequest $request)
     {
         return $this->success(
-            AppointmentResource::collection($this->service->create($request->validated()))
+            AppointmentResource::collection($this->service->create($request->validated())),
+            Response::HTTP_CREATED
         );
     }
 
     /**
+     * @param CreateRequest $request
+     * @return JsonResponse
      * @throws ClientNotFoundException
+     * @lrd:start
+     * Check for duplicates route (For modals)
+     * @lrd:end
      */
     public function checkForDuplicates(CreateRequest $request)
     {
@@ -39,7 +52,12 @@ class AppointmentController extends Controller
     }
 
     /**
+     * @param CreateRequest $request
+     * @return JsonResponse
      * @throws TimeIsNotValidException
+     * @lrd:start
+     * Update Appointment as Client
+     * @lrd:end
      */
     public function update(CreateRequest $request)
     {
@@ -49,8 +67,12 @@ class AppointmentController extends Controller
     }
 
     /**
+     * @return JsonResponse
      * @throws ClientNotFoundException
      * @throws SpecialistNotFoundException
+     * @lrd:start
+     * Get History as Client
+     * @lrd:end
      */
     public function getMyHistory()
     {

@@ -13,6 +13,7 @@ use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\AppointmentResourceForCalendar;
 use App\Services\AppointmentService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class AppointmentController extends Controller
 {
@@ -29,7 +30,8 @@ class AppointmentController extends Controller
     public function create(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(
-            AppointmentResource::collection($this->service->create($request->validated()))
+            AppointmentResource::collection($this->service->create($request->validated())),
+            Response::HTTP_CREATED
         );
     }
 

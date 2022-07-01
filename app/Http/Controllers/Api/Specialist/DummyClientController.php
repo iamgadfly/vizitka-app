@@ -12,6 +12,7 @@ use App\Http\Requests\DummyClient\GetRequest;
 use App\Http\Resources\DummyClientResource;
 use App\Services\DummyClientService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DummyClientController extends Controller
 {
@@ -31,7 +32,8 @@ class DummyClientController extends Controller
     public function create(CreateOrUpdateRequest $request): JsonResponse
     {
         return $this->success(
-            new DummyClientResource($this->service->create($request->validated()))
+            new DummyClientResource($this->service->create($request->validated())),
+            Response::HTTP_CREATED
         );
     }
 
@@ -63,6 +65,13 @@ class DummyClientController extends Controller
         );
     }
 
+    /**
+     * @param DeleteRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Dummy Client
+     * @lrd:end
+     */
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
@@ -70,6 +79,13 @@ class DummyClientController extends Controller
         );
     }
 
+    /**
+     * @param GetAllRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get all Dummy Clients
+     * @lrd:end
+     */
     public function all(GetAllRequest $request): JsonResponse
     {
         return $this->success(

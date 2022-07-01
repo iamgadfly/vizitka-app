@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Client;
 
+use App\Exceptions\ClientNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DummyBusinessCard\DummyBusinessCardRequest;
 use App\Http\Resources\DummyBusinessCardResource;
@@ -21,6 +22,7 @@ class DummyBusinessCardController extends Controller
      * @lrd:start
      * Create Dummy Business Card route
      * @lrd:end
+     * @throws ClientNotFoundException
      */
     public function create(DummyBusinessCardRequest $request): JsonResponse
     {
