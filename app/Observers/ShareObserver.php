@@ -13,6 +13,7 @@ class ShareObserver
     {
 
         $share->hash = str(md5(Carbon::now()->toString()))->substr(9, 10);
+        $share->deactivated_at = Carbon::now()->addMonths(3);
     }
 
     /**

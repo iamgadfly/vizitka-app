@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShareController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,3 +13,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Share routes
+
+Route::get('/shares/{hash}', [ShareController::class, 'get'])
+    ->name('share.link');
