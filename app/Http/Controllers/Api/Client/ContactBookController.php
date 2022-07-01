@@ -12,6 +12,7 @@ use App\Http\Requests\ContactBookForClient\MassCreateRequest;
 use App\Http\Resources\ContactBookForClientResource;
 use App\Services\ContactBookForClientService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContactBookController extends Controller
 {
@@ -20,27 +21,44 @@ class ContactBookController extends Controller
     ){}
 
     /**
+     * @param CreateRequest $request
+     * @return JsonResponse
      * @throws RecordIsAlreadyExistsException
+     * @lrd:start
+     * Add to Client's contact book
+     * @lrd:end
      */
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->specialist_id)
+            $this->service->create($request->specialist_id),
+            Response::HTTP_CREATED
         );
     }
 
     /**
+     * @param MassCreateRequest $request
+     * @return JsonResponse
      * @throws RecordIsAlreadyExistsException
+     * @lrd:start
+     * Import to Client's contact book
+     * @lrd:end
      */
     public function massCreate(MassCreateRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->massCreate($request->validated())
+            $this->service->massCreate($request->validated()),
+            Response::HTTP_CREATED
         );
     }
 
     /**
+     * @param DeleteRequest $request
+     * @return JsonResponse
      * @throws RecordNotFoundException
+     * @lrd:start
+     * Remove from Client's contact book
+     * @lrd:end
      */
     public function delete(DeleteRequest $request): JsonResponse
     {
@@ -49,6 +67,13 @@ class ContactBookController extends Controller
         );
     }
 
+    /**
+     * @param GetRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Client's contact book
+     * @lrd:end
+     */
     public function get(GetRequest $request): JsonResponse
     {
         return $this->success(

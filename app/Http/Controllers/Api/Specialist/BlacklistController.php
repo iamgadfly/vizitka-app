@@ -12,6 +12,7 @@ use App\Http\Requests\Blacklist\GetRequest;
 use App\Http\Resources\BlacklistResource;
 use App\Services\BlacklistService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlacklistController extends Controller
 {
@@ -31,7 +32,8 @@ class BlacklistController extends Controller
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->validated())
+            $this->service->create($request->validated()),
+            Response::HTTP_CREATED
         );
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SpecialistData\FreeHoursRequest;
 use App\Http\Requests\SpecialistData\IdRequest;
 use App\Services\SpecialistDataService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SpecialistDataController extends Controller
@@ -14,6 +15,13 @@ class SpecialistDataController extends Controller
         protected SpecialistDataService $service
     ){}
 
+    /**
+     * @param FreeHoursRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Specialist's free hours for day
+     * @lrd:end
+     */
     public function getFreeHours(FreeHoursRequest $request)
     {
         return $this->success(
@@ -21,6 +29,13 @@ class SpecialistDataController extends Controller
         );
     }
 
+    /**
+     * @param IdRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Get Specialist's maintenances
+     * @lrd:end
+     */
     public function getMaintenances(IdRequest $request)
     {
         return $this->success(

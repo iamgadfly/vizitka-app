@@ -43,9 +43,11 @@ class AuthController extends Controller
     }
 
     /**
+     * @param VerificationRequest $request
+     * @return JsonResponse
      * @throws UserAlreadyVerifiedException
-     * @throws VerificationCodeIsntValidException
      * @throws UserNotFoundException
+     * @throws VerificationCodeIsntValidException
      * @lrd:start
      * Verification route
      * @lrd:end
@@ -62,8 +64,10 @@ class AuthController extends Controller
     }
 
     /**
-     * @throws InvalidLoginException
+     * @param SignUpRequest $request
+     * @return JsonResponse
      * @throws GuzzleException
+     * @throws InvalidLoginException
      * @throws SMSNotSentException
      * @lrd:start
      * Resend SMS route
@@ -93,8 +97,10 @@ class AuthController extends Controller
     }
 
     /**
-     * @throws SMSNotSentException
+     * @param SignUpRequest $request
+     * @return JsonResponse
      * @throws GuzzleException
+     * @throws SMSNotSentException
      * @lrd:start
      * Sign Up route
      * @lrd:end

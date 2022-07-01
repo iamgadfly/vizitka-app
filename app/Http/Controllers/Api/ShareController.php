@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\LinkHasExpiredException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Share\CreateShortlinkRequest;
 use App\Http\Requests\Share\GetByHashRequest;
 use App\Http\Resources\ShareResource;
 use App\Services\ShareService;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ShareController extends Controller
 {
@@ -14,13 +17,29 @@ class ShareController extends Controller
         protected ShareService $service
     ){}
 
+    /**
+     * @param CreateShortlinkRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Create shortlink for share
+     * @lrd:end
+     */
     public function createShortlink(CreateShortlinkRequest $request)
     {
         return $this->success(
-            new ShareResource($this->service->createShortlink($request->url))
+            new ShareResource($this->service->createShortlink($request->url)),
+            Response::HTTP_CREATED
         );
     }
 
+    /**
+     * @param GetByHashRequest $request
+     * @return JsonResponse
+     * @throws LinkHasExpiredException
+     * @lrd:start
+     * Get by hash
+     * @lrd:end
+     */
     public function get(GetByHashRequest $request)
     {
         return $this->success(
