@@ -84,6 +84,9 @@ class MiscController extends Controller
     /**
      * @param IsSpecialistExistsRequest $request
      * @return JsonResponse
+     * @lrd:start
+     * Is Specialist exists
+     * @lrd:end
      */
     public function isSpecialistExists(IsSpecialistExistsRequest $request)
     {

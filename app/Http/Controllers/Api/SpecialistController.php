@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\SpecialistNotCreatedException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\CardBackgroundHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Specialist\CreateSpecialistRequest;
@@ -31,11 +32,6 @@ class SpecialistController extends Controller
      */
     public function create(CreateSpecialistRequest $request): JsonResponse
     {
-//        $specialist = $this->service->findByUserId($request->user_id);
-//        if (!is_null($specialist)) {
-//            return $this->error('Specialist is already existing', Response::HTTP_BAD_REQUEST);
-//        }
-
         if (!is_null($request->avatar['id'])) {
             $image = $this->imageService->get($request->avatar['id']);
             $this->imageService->removeTemporary($image); // make 'deleted_at' field null
@@ -63,6 +59,12 @@ class SpecialistController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @lrd:start
+     * Get all Specialists
+     * @lrd:end
+     */
     public function getAll()
     {
         return $this->success(
@@ -106,6 +108,13 @@ class SpecialistController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     * @throws SpecialistNotFoundException
+     * @lrd:start
+     * Get my card
+     * @lrd:end
+     */
     public function getMyCard()
     {
         return $this->success(

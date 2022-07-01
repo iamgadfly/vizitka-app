@@ -13,6 +13,7 @@ use App\Http\Requests\Maintenance\NewMaintenanceRequest;
 use App\Http\Resources\MaintenanceResource;
 use App\Services\MaintenanceService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class MaintenanceController extends Controller
 {
@@ -21,7 +22,6 @@ class MaintenanceController extends Controller
     ) {}
 
     /**
-     * @throws MaintenanceSettingsIsAlreadyExistingException
      * @lrd:start
      * Create Maintenance on create specialist stage
      * @lrd:end
@@ -29,7 +29,8 @@ class MaintenanceController extends Controller
     public function store(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->validated())
+            $this->service->create($request->validated()),
+            Response::HTTP_CREATED
         );
     }
 
@@ -43,7 +44,8 @@ class MaintenanceController extends Controller
     public function create(NewMaintenanceRequest $request): JsonResponse
     {
         return $this->success(
-            new MaintenanceResource($this->service->addNew($request->validated()))
+            new MaintenanceResource($this->service->addNew($request->validated())),
+            Response::HTTP_CREATED
         );
     }
 
