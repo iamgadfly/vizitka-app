@@ -50,7 +50,7 @@ class ContactBookController extends Controller
     public function delete(DeleteRequest $request)
     {
         return $this->success(
-            $this->service->delete($request->id)
+            $this->service->delete($request->id, $request->type)
         );
     }
 
