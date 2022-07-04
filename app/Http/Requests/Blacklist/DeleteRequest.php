@@ -8,7 +8,10 @@ class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['blacklisted_id' => $this->route('id')]);
+        $this->merge([
+            'blacklisted_id' => $this->route('id'),
+            'type' => $this->route('type')
+        ]);
     }
 
     /**
