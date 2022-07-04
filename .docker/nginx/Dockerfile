@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y \
     libvpx-dev \
     netcat \
     libpq-dev \
- && docker-php-ext-configure gd --with-freetype=/usr --with-jpeg=/usr
+    && docker-php-ext-configure gd --with-freetype=/usr --with-jpeg=/usr \
+    && apt-get install -y libmagickwand-dev --no-install-recommends
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -29,6 +30,9 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
+RUN pecl install imagick
+
+RUN docker-php-ext-enable imagick
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
