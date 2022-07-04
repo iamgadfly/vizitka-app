@@ -8,7 +8,10 @@ class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['client_id' => $this->route('id')]);
+        $this->merge([
+            'client_id' => $this->route('id'),
+            'type' => $this->route('type')
+        ]);
     }
 
     /**

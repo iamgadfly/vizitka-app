@@ -46,4 +46,9 @@ class ShareController extends Controller
             $this->service->getByHash($request->hash)
         );
     }
+
+    public function getQrCode(CreateShortlinkRequest $request)
+    {
+        return $this->service->getQrCode($request->url);
+    }
 }

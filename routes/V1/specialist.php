@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShareController;
 use App\Http\Controllers\Api\Specialist\AppointmentController;
 use App\Http\Controllers\Api\Specialist\BlacklistController;
 use App\Http\Controllers\Api\Specialist\BusinessCardController;
@@ -169,7 +170,7 @@ Route::controller(BlacklistController::class)
     Route::post('{id}', 'create')
         ->name('blacklist.add');
 
-    Route::delete('{id}', 'delete')
+    Route::delete('{id}/{type}', 'delete')
         ->name('blacklist.delete');
 
     Route::get('', 'get')
@@ -188,7 +189,7 @@ Route::controller(ContactBookController::class)
     Route::post('{id}', 'create')
         ->name('specialist.contactBook.create');
 
-    Route::delete('{id}', 'delete')
+    Route::delete('{id}/{type}', 'delete')
         ->name('specialist.contactBook.delete');
 
     Route::get('', 'get')
@@ -202,4 +203,14 @@ Route::controller(ClientController::class)
 
     Route::get('{id}/{type}/history', 'getClientHistory')
         ->name('specialist.client.data.history');
+});
+
+
+// Share routes
+Route::controller(ShareController::class)
+    ->prefix('share')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('qrcode', 'getQrCode')
+        ->name('specialist.share.qrcode');
 });
