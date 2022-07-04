@@ -18,129 +18,129 @@ Route::controller(MaintenanceController::class)
     ->middleware('auth:sanctum')
     ->prefix('specialist/maintenance')->group(function () {
 
-    Route::post('', 'store')
-        ->name('specialist.maintenance.create');
+        Route::post('', 'store')
+            ->name('specialist.maintenance.create');
 
-    Route::post('/new', 'create')
-        ->name('specialist.maintenance.new');
+        Route::post('/new', 'create')
+            ->name('specialist.maintenance.new');
 
-    Route::get('', 'get')
-        ->name('specialist.maintenance.get');
+        Route::get('', 'get')
+            ->name('specialist.maintenance.get');
 
-    Route::put('/settings', 'updateSettings')
-        ->name('specialist.maintenance.settings.update');
+        Route::put('/settings', 'updateSettings')
+            ->name('specialist.maintenance.settings.update');
 
-    Route::put('{id}', 'update')
-        ->name('specialist.maintenance.update');
+        Route::put('{id}', 'update')
+            ->name('specialist.maintenance.update');
 
-    Route::delete('{id}', 'delete')
-        ->name('specialist.maintenance.delete');
+        Route::delete('{id}', 'delete')
+            ->name('specialist.maintenance.delete');
 
-    Route::get('all', 'all')
-        ->name('specialist.maintenance.all');
-});
+        Route::get('all', 'all')
+            ->name('specialist.maintenance.all');
+    });
 
 // Work schedule routes
 Route::controller(WorkScheduleController::class)
     ->middleware('auth:sanctum')
     ->prefix('specialist/schedule')->group(function() {
 
-    Route::post('', 'create')
-        ->name('specialist.schedule.create');
+        Route::post('', 'create')
+            ->name('specialist.schedule.create');
 
-    Route::get('', 'get')
-        ->name('specialist.schedule.get');
+        Route::get('', 'get')
+            ->name('specialist.schedule.get');
 
-    Route::put('', 'update')
-        ->name('specialist.schedule.update');
-});
+        Route::put('', 'update')
+            ->name('specialist.schedule.update');
+    });
 
 // Business card routes
 Route::controller(BusinessCardController::class)
     ->prefix('card')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::get('{id}', 'get')
-        ->name('card.get');
+        Route::get('{id}', 'get')
+            ->name('card.get');
 
-    Route::put('{id}', 'update')
-        ->name('card.update');
-});
+        Route::put('{id}', 'update')
+            ->name('card.update');
+    });
 
 // Specialist routes
 Route::controller(SpecialistController::class)
     ->prefix('specialist')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::post('profile','create')
-        ->name('specialist.create');
+        Route::post('profile','create')
+            ->name('specialist.create');
 
-    Route::get('profile/{id}', 'get')
-        ->name('specialist.get');
+        Route::get('profile/{id}', 'get')
+            ->name('specialist.get');
 
-    Route::put('profile', 'update')
-        ->name('specialist.update');
+        Route::put('profile', 'update')
+            ->name('specialist.update');
 
-    Route::get('profile', 'me')
-        ->name('specialist.me');
+        Route::get('profile', 'me')
+            ->name('specialist.me');
 
-    Route::get('card', 'getMyCard')
-        ->name('specialist.card');
-});
+        Route::get('card', 'getMyCard')
+            ->name('specialist.card');
+    });
 
 // Dummy client routes
 Route::controller(DummyClientController::class)
     ->prefix('specialist/client')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::post('', 'create')
-        ->name('specialist.client.create');
+        Route::post('', 'create')
+            ->name('specialist.client.create');
 
-    Route::get('{id}', 'get')
-        ->name('specialist.client.get');
+        Route::get('{id}', 'get')
+            ->name('specialist.client.get');
 
-    Route::put('{id}', 'update')
-        ->name('specialist.client.update');
+        Route::put('{id}', 'update')
+            ->name('specialist.client.update');
 
-    Route::delete('{id}', 'delete')
-        ->name('specialist.client.delete');
+        Route::delete('{id}', 'delete')
+            ->name('specialist.client.delete');
 
-    Route::get('', 'all')
-        ->name('specialist.client.all');
-});
+        Route::get('', 'all')
+            ->name('specialist.client.all');
+    });
 
 // Appointment routes
 Route::controller(AppointmentController::class)
     ->prefix('specialist/appointment')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::post('', 'create')
-        ->name('specialist.appointment.create');
+        Route::post('', 'create')
+            ->name('specialist.appointment.create');
 
-    Route::get('{orderNumber}', 'get')
-        ->name('specialist.appointment.get');
+        Route::get('{orderNumber}', 'get')
+            ->name('specialist.appointment.get');
 
-    Route::put('{orderNumber}', 'update')
-        ->name('specialist.appointment.update');
+        Route::put('{orderNumber}', 'update')
+            ->name('specialist.appointment.update');
 
-    Route::delete('{orderNumber}', 'delete')
-        ->name('specialist.appointment.delete');
+        Route::delete('{orderNumber}', 'delete')
+            ->name('specialist.appointment.delete');
 
-    Route::post('{orderNumber}/confirm', 'confirm')
-        ->name('specialist.appointment.confirm');
+        Route::post('{orderNumber}/confirm', 'confirm')
+            ->name('specialist.appointment.confirm');
 
-    Route::post('{orderNumber}/skipped', 'skipped')
-        ->name('specialist.appointment.skipped');
+        Route::post('{orderNumber}/skipped', 'skipped')
+            ->name('specialist.appointment.skipped');
 
-    Route::post('byDay', 'getAllByDay')
-        ->name('specialist.appointment.byDay');
+        Route::post('byDay', 'getAllByDay')
+            ->name('specialist.appointment.byDay');
 
-    Route::post('svgByMonth', 'svgByMonth')
-        ->name('specialist.appointment.svg');
+        Route::post('svgByMonth', 'svgByMonth')
+            ->name('specialist.appointment.svg');
 
-    Route::delete('mass', 'massDelete')
-        ->name('specialist.appointment.delete.mass');
-});
+        Route::delete('mass', 'massDelete')
+            ->name('specialist.appointment.delete.mass');
+    });
 
 // Single work schedule routes
 
@@ -148,18 +148,18 @@ Route::controller(SingleWorkScheduleController::class)
     ->prefix('specialist/schedule/single')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::post('', 'create')
-        ->name('specialist.schedule.single.create');
+        Route::post('', 'create')
+            ->name('specialist.schedule.single.create');
 
-    Route::post('break', 'createBreak')
-        ->name('specialist.schedule.single.create.break');
+        Route::post('break', 'createBreak')
+            ->name('specialist.schedule.single.create.break');
 
-    Route::post('workday', 'createWorkday')
-        ->name('specialist.schedule.single.create.workday');
+        Route::post('workday', 'createWorkday')
+            ->name('specialist.schedule.single.create.workday');
 
-    Route::delete('{id}', 'delete')
-        ->name('specialist.schedule.single.delete');
-});
+        Route::delete('{id}', 'delete')
+            ->name('specialist.schedule.single.delete');
+    });
 
 // Blacklist routes
 
@@ -167,15 +167,15 @@ Route::controller(BlacklistController::class)
     ->prefix('specialist/blacklist')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::post('{id}', 'create')
-        ->name('blacklist.add');
+        Route::post('{id}', 'create')
+            ->name('blacklist.add');
 
-    Route::delete('{id}/{type}', 'delete')
-        ->name('blacklist.delete');
+        Route::delete('{id}/{type}', 'delete')
+            ->name('blacklist.delete');
 
-    Route::get('', 'get')
-        ->name('blacklist.get');
-});
+        Route::get('', 'get')
+            ->name('blacklist.get');
+    });
 
 // Contact book routes
 
@@ -183,27 +183,27 @@ Route::controller(ContactBookController::class)
     ->prefix('specialist/contactBook')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::post('/mass', 'massCreate')
-        ->name('specialist.contactBook.create.mass');
+        Route::post('/mass', 'massCreate')
+            ->name('specialist.contactBook.create.mass');
 
-    Route::post('{id}', 'create')
-        ->name('specialist.contactBook.create');
+        Route::post('{id}', 'create')
+            ->name('specialist.contactBook.create');
 
-    Route::delete('{id}/{type}', 'delete')
-        ->name('specialist.contactBook.delete');
+        Route::delete('{id}/{type}', 'delete')
+            ->name('specialist.contactBook.delete');
 
-    Route::get('', 'get')
-        ->name('specialist.contactBook.get');
-});
+        Route::get('', 'get')
+            ->name('specialist.contactBook.get');
+    });
 
 // Client Data routes
 Route::controller(ClientController::class)
     ->prefix('specialist/clientData')
     ->middleware('auth:sanctum')->group(function() {
 
-    Route::get('{id}/{type}/history', 'getClientHistory')
-        ->name('specialist.client.data.history');
-});
+        Route::get('{id}/{type}/history', 'getClientHistory')
+            ->name('specialist.client.data.history');
+    });
 
 
 // Share routes
@@ -211,6 +211,6 @@ Route::controller(ShareController::class)
     ->prefix('share')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::post('qrcode', 'getQrCode')
-        ->name('specialist.share.qrcode');
-});
+        Route::post('qrcode', 'getQrCode')
+            ->name('specialist.share.qrcode');
+    });
