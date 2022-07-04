@@ -10,6 +10,7 @@ use App\Http\Requests\ContactBook\CreateRequest;
 use App\Http\Requests\ContactBook\DeleteRequest;
 use App\Http\Requests\ContactBook\GetRequest;
 use App\Http\Requests\ContactBook\MassCreateRequest;
+use App\Http\Requests\ContactBook\MassDeleteRequest;
 use App\Http\Resources\ContactBookResource;
 use App\Services\ContactBookService;
 use Illuminate\Http\JsonResponse;
@@ -80,6 +81,13 @@ class ContactBookController extends Controller
     {
         return $this->success(
             ContactBookResource::collection($this->service->get($request->specialist_id))
+        );
+    }
+
+    public function massDelete(MassDeleteRequest $request)
+    {
+        return $this->success(
+            $this->service->massDelete($request->validated())
         );
     }
 }
