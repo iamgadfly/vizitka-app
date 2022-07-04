@@ -91,14 +91,17 @@ class ContactBookService
     /**
      * @throws RecordNotFoundException
      */
-    public function delete(int $clientId, string $type)
+    public function delete(array $data)
     {
-        if ($type == 'client') {
+        $clientId = $data['client_id'];
+        if ($data['type'] == 'client') {
             $record = $this->repository->whereFirst([
                 'client_id' => $clientId
             ]);
         } else {
-            $record = $this->dummyClientRepository->getById($clientId);
+            $record = $this->dummyClientRepository->whereFirst([
+                'id' => $clientId
+            ]);
         }
         if (is_null($record)) {
             throw new RecordNotFoundException;
