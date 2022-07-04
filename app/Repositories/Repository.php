@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\ClientNotFoundException;
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use Illuminate\Database\Eloquent\Model as Model;
@@ -23,9 +24,16 @@ class Repository
         return $this->model::find($id);
     }
 
+    /**
+     * @throws RecordIsAlreadyExistsException
+     */
     public function create(array $data)
     {
-        return $this->model->create($data);
+        $item = $this->whereFirst([
+            'specialist_id' => $data['specialist_id'],
+            'phone_number' => $data['phone_number']
+        ]) ?? throw new RecordIsAlreadyExistsException;
+        return $this->model::create($data);
     }
 
     public function update($id, array $data)

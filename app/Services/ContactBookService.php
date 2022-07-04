@@ -68,17 +68,21 @@ class ContactBookService
                     continue;
                 }
             } else {
-                $client = $this->dummyClientRepository->create([
-                    'name' => $item['name'],
-                    'surname' => $item['surname'],
-                    'phone_number' => $item['phone_number'],
-                    'discount' => 0,
-                    'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
-                ]);
-                $output[] = $this->create([
-                    'type' => 'dummy',
-                    'client_id' => $client->id
-                ]);
+                try {
+                    $client = $this->dummyClientRepository->create([
+                        'name' => $item['name'],
+                        'surname' => $item['surname'],
+                        'phone_number' => $item['phone_number'],
+                        'discount' => 0,
+                        'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+                    ]);
+                    $output[] = $this->create([
+                        'type' => 'dummy',
+                        'client_id' => $client->id
+                    ]);
+                } catch (RecordIsAlreadyExistsException $e) {
+                    continue;
+                }
             }
         }
         return $output;
