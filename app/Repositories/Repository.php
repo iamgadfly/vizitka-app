@@ -32,7 +32,10 @@ class Repository
         $item = $this->whereFirst([
             'specialist_id' => $data['specialist_id'],
             'phone_number' => $data['phone_number']
-        ]) ?? throw new RecordIsAlreadyExistsException;
+        ]);
+        if (!is_null($item)) {
+            throw new RecordIsAlreadyExistsException;
+        }
         return $this->model::create($data);
     }
 
