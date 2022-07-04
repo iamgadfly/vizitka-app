@@ -170,7 +170,7 @@ Route::controller(BlacklistController::class)
     Route::post('{id}', 'create')
         ->name('blacklist.add');
 
-    Route::delete('{id}', 'delete')
+    Route::delete('{id}/{type}', 'delete')
         ->name('blacklist.delete');
 
     Route::get('', 'get')
@@ -189,7 +189,7 @@ Route::controller(ContactBookController::class)
     Route::post('{id}', 'create')
         ->name('specialist.contactBook.create');
 
-    Route::delete('{id}', 'delete')
+    Route::delete('{id}/{type}', 'delete')
         ->name('specialist.contactBook.delete');
 
     Route::get('', 'get')
