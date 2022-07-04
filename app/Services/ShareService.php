@@ -29,7 +29,7 @@ class ShareService
     /**
      * @throws LinkHasExpiredException
      */
-    public function getByHash(string $hash)
+    public function getByHash(string $hash): array
     {
         $url = $this->repository->whereFirst([
             'hash' => $hash,
@@ -46,6 +46,9 @@ class ShareService
         $link = $this->createShortlink($url);
         $url = config('app.url') . "/shares/" . $link->hash;
 
-        return QRService::generate($url);
+        $qr = QRService::generate($url);
+        return response($qr, 200, [
+            'Content-Type' => 'image/png'
+        ]);
     }
 }
