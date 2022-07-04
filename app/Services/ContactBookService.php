@@ -117,4 +117,26 @@ class ContactBookService
 
         return $contacts->concat($dummies);
     }
+
+    /**
+     * @throws SpecialistNotFoundException
+     */
+    public function massDelete(array $data)
+    {
+        foreach ($data['client_ids'] as $clientId) {
+            $item = $this->repository->whereFirst([
+                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                'client_id' => $clientId
+            ]);
+            $item->delete();
+        }
+        foreach ($data['dummy_client_ids'] as $clientId) {
+            $item = $this->repository->whereFirst([
+                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                'dummy_client_id' => $clientId
+            ]);
+            $item->delete();
+        }
+        return true;
+    }
 }

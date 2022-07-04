@@ -194,6 +194,9 @@ Route::controller(ContactBookController::class)
 
         Route::get('', 'get')
             ->name('specialist.contactBook.get');
+
+        Route::post('/massDelete', 'massDelete')
+            ->name('specialist.contactBook.massDelete');
     });
 
 // Client Data routes
