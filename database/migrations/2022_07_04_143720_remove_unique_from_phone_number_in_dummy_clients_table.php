@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('dummy_clients', function (Blueprint $table) {
-            $table->dropUnique('phone_number');
+            $table->dropUnique(['phone_number']);
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('dummy_clients', function (Blueprint $table) {
-            $table->unique('phone_number');
+            $table->unique(['phone_number']);
         });
     }
 };
