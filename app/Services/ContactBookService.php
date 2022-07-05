@@ -132,7 +132,7 @@ class ContactBookService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function massDelete(array $data)
+    public function massDelete(array $data): bool
     {
         foreach ($data['client_ids'] as $clientId) {
             $item = $this->repository->whereFirst([
@@ -142,10 +142,7 @@ class ContactBookService
             $item->delete();
         }
         foreach ($data['dummy_client_ids'] as $clientId) {
-            $item = $this->repository->whereFirst([
-                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
-                'dummy_client_id' => $clientId
-            ]);
+            $item = $this->dummyClientRepository->getById($clientId);
             $item->delete();
         }
         return true;
