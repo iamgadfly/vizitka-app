@@ -106,7 +106,7 @@ class ContactBookService
         if (is_null($record)) {
             throw new RecordNotFoundException;
         }
-        return $record->delete();
+        return $record->forceDelete();
     }
 
     public function get(int $specialistId)
