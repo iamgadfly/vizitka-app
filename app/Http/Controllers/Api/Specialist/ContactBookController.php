@@ -84,6 +84,9 @@ class ContactBookController extends Controller
         );
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function massDelete(MassDeleteRequest $request)
     {
         return $this->success(
