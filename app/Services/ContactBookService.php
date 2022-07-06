@@ -49,7 +49,6 @@ class ContactBookService
     }
 
     /**
-     * @throws RecordIsAlreadyExistsException
      * @throws SpecialistNotFoundException
      */
     public function massCreate(array $data): array
