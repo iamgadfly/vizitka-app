@@ -23,7 +23,7 @@ class ContactBookResource extends JsonResource
                 'surname' => $this->dummyClient?->surname,
                 'discount' => [
                     'label' => $this->dummyClient?->discount * 100,
-                    'value' => $this->dummyClient?->discount
+                    'value' => (float)$this->dummyClient?->discount
                 ],
                 'phone_number' => $this->dummyClient?->phone_number,
                 'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
