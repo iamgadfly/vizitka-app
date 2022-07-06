@@ -111,7 +111,6 @@ class AppointmentService extends BaseAppointmentService
             $records = $appointments->where('order_number', '=', $order);
             $item = [
                 'order_number' => $order,
-                'date' => $records->first()->date,
                 'status' => $records->first()->status,
                 'services' => [],
                 'specialist' => SpecialistResource::make($records->first()->specialist)
@@ -119,6 +118,7 @@ class AppointmentService extends BaseAppointmentService
             foreach ($records as $record) {
                 $item['services'][] = [
                     'id' => $record->maintenance->id,
+                    'date' => $record->date,
                     'title' => $record->maintenance->title,
                     'price' => [
                         'label' => str($record->maintenance->price)->value(),
