@@ -26,7 +26,7 @@ class DummyClientService
     public function create(array $data)
     {
         if ($data['discount']['value'] != 0) {
-            $data['discount'] = $data['discount']['value'] / 100;
+            $data['discount'] = $data['discount']['value'];
         } else {
             $data['discount'] = 0;
         }
