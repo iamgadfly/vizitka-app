@@ -103,7 +103,7 @@ class RequestHelper
             'phone_number' => ['string', 'bail'],
             'discount' => ['array', 'bail'],
             'discount.label' => ['string', 'nullable', 'bail'],
-            'discount.value' => ['float', 'min:0', 'max:1', 'bail'],
+            'discount.value' => ['numeric', 'min:0', 'max:1', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
             'notes' => ['string', 'nullable', 'bail']
         ];
