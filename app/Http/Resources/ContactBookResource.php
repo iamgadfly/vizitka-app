@@ -22,7 +22,7 @@ class ContactBookResource extends JsonResource
                 'name' => $this->dummyClient?->name,
                 'surname' => $this->dummyClient?->surname,
                 'discount' => [
-                    'label' => $this->dummyClient?->discount * 100,
+                    'label' => str($this->dummyClient?->discount * 100)->value(),
                     'value' => (float)$this->dummyClient?->discount
                 ],
                 'phone_number' => $this->dummyClient?->phone_number,

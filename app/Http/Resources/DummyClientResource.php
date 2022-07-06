@@ -21,7 +21,7 @@ class DummyClientResource extends JsonResource
             'surname' => $this->surname,
             'full_name' => "$this->name $this->surname",
             'discount' => [
-                'label' => $this->discount * 100,
+                'label' => str($this->discount * 100)->value(),
                 'value' =>  (float)$this->discount
             ],
             'phone_number' => $this->phone_number,
