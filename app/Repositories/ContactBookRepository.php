@@ -24,13 +24,6 @@ class ContactBookRepository extends Repository
 
     public function create(array $data)
     {
-        $item = $this->whereFirst([
-            'specialist_id' => $data['specialist_id'],
-            'phone_number' => $data['phone_number']
-        ]);
-        if (!is_null($item)) {
-            throw new RecordIsAlreadyExistsException;
-        }
         return $this->model::updateOrCreate($data, $data);
     }
 }
