@@ -71,7 +71,7 @@ class RequestHelper
             'services.*.duration.price' => ['nullable', 'integer', 'bail'],
             'services.*.price' => ['array', 'bail'],
             'services.*.price.label' => ['nullable', 'string', 'bail'],
-            'services.*.price.value' => ['nullable', 'integer', 'bail'],
+            'services.*.price.value' => ['nullable', 'numeric', 'bail'],
             'client' => ['required', 'array', 'bail'],
             'client.avatar' => ['nullable', 'string', 'bail'],
             'client.discount' => ['nullable', 'numeric', 'bail'],
