@@ -31,6 +31,11 @@ class ContactBookForClientResource extends JsonResource
                 'card' => CardBackgroundHelper::getCardFromActivityKind(
                     CardBackgroundHelper::getActivityKindFromFilename($this->specialist->card->background_image)
                 ),
+                'colors' => [
+                    CardBackgroundHelper::getSpecialistColorFromActivityKind(
+                        CardBackgroundHelper::getActivityKindFromFilename($this->specialist->card->background_image)
+                    )
+                ],
                 'title' => $this->specialist->card->title,
                 'about' => $this->specialist->card->about,
                 'address' => $this->specialist->card->address,
