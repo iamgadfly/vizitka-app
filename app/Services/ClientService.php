@@ -2,18 +2,24 @@
 
 namespace App\Services;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\UserNotFoundException;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
+use App\Repositories\ContactDataRepository;
 use App\Repositories\UserRepository;
 
 class ClientService
 {
     public function __construct(
         protected ClientRepository $repository,
-        protected UserRepository $userRepository
+        protected UserRepository $userRepository,
+        protected ContactDataRepository $contactDataRepository
     ) {}
 
+    /**
+     * @throws RecordIsAlreadyExistsException
+     */
     public function create(array $data)
     {
         return $this->repository->create($data);

@@ -204,9 +204,12 @@ Route::controller(ClientController::class)
     ->prefix('specialist/clientData')
     ->middleware('auth:sanctum')->group(function() {
 
-        Route::get('{id}/{type}/history', 'getClientHistory')
-            ->name('specialist.client.data.history');
-    });
+    Route::get('{id}/{type}/history', 'getClientHistory')
+        ->name('specialist.client.data.history');
+
+        Route::put('{id}', 'update')
+            ->name('specialist.client.data.update');
+});
 
 
 // Share routes

@@ -9,6 +9,7 @@ use App\Helpers\AuthHelper;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
 use App\Repositories\ContactBookRepository;
+use App\Repositories\ContactDataRepository;
 use App\Repositories\DummyBusinessCardRepository;
 use App\Repositories\DummyClientRepository;
 
@@ -19,7 +20,8 @@ class ContactBookService
         protected ContactBookRepository $repository,
         protected DummyClientRepository $dummyClientRepository,
         protected ClientRepository $clientRepository,
-        protected DummyBusinessCardRepository $dummyBusinessCardRepository
+        protected DummyBusinessCardRepository $dummyBusinessCardRepository,
+        protected ContactDataRepository $contactDataRepository
     ) {}
 
     /**
@@ -108,11 +110,24 @@ class ContactBookService
         return $record->forceDelete();
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function get(int $specialistId)
     {
-        return $this->repository->whereGet([
+        $items = $this->repository->whereGet([
             'specialist_id' => $specialistId
         ]);
+        $items->map(function ($item) {
+            if (is_null($item->client)) {
+                return;
+            }
+            $item->contactData = $this->contactDataRepository->whereFirst([
+                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                'client_id' => $item->client->id
+            ]);
+        });
+        return $items;
     }
 
     public function getForClient(int $clientId)
