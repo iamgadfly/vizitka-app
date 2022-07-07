@@ -32,7 +32,7 @@ class AuthService
         $user = $this->service->searchByPhoneNumber($phoneNumber);
         if (!is_null($user)) {
             $output['user'] = true;
-            $output['specialist'] = !is_null($this->specialistRepository->findByPhoneNumber($phoneNumber));
+            $output['specialist'] = !is_null($user->specialist);
             $output['client'] = !is_null($user->client);
         } else {
             $output['user'] = false;
