@@ -24,9 +24,6 @@ class Repository
         return $this->model::find($id);
     }
 
-    /**
-     * @throws RecordIsAlreadyExistsException
-     */
     public function create(array $data)
     {
         return $this->model::create($data);

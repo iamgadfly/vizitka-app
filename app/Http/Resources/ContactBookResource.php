@@ -32,12 +32,16 @@ class ContactBookResource extends JsonResource
         }
         return [
             'id' => $this->client->id,
-            'name' => $this->client->name,
-            'surname' => $this->client->surname,
-            'phone' => $this->client->user->phone_number,
+            'name' => $this?->contactData?->name ?? $this->client->name,
+            'surname' => $this?->contactData?->surname ?? $this->client->surname,
+            'phone' => $this?->contactData?->phone_number ?? $this->client->user->phone_number,
             'avatar' => $this->client?->avatar?->url ?? null,
             'type' => $type,
-            'discount' => 0
+            'discount' => [
+                'label' => str($this?->contactData?->discount)->value(),
+                'value' => (float) $this?->contactData?->discount
+            ],
+            'notes' => $this?->contactData?->notes,
         ];
     }
 }
