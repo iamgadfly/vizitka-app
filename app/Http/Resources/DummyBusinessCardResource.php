@@ -25,6 +25,7 @@ class DummyBusinessCardResource extends JsonResource
             'background_image' => ImageHelper::getAssetFromFilename(
                 CardBackgroundHelper::filenameFromActivityKind('default')
             ),
+            'phone_number' => $this->phone_number
         ];
     }
 }
