@@ -73,8 +73,8 @@ class WorkScheduleBreakRepository extends Repository
             }
             foreach ($single as $break) {
                 $result[] = [
-                    $break->start,
-                    $break->end
+                    Carbon::parse($break->start)->format('H:i'),
+                    Carbon::parse($break->end)->format('H:i'),
                 ];
             }
 
@@ -88,8 +88,8 @@ class WorkScheduleBreakRepository extends Repository
         }
         foreach ($breaks as $break) {
             $result[] = [
-                $break->start,
-                $break->end,
+                Carbon::parse($break->start)->format('H:i'),
+                Carbon::parse($break->end)->format('H:i'),
             ];
         }
 
