@@ -101,7 +101,7 @@ class RequestHelper
     {
         $rules = [
             'name' => ['string', 'bail'],
-            'surname' => ['string', 'bail'],
+            'surname' => ['string', 'nullable', 'bail'],
             'phone_number' => ['string', 'bail'],
             'discount' => ['array', 'bail'],
             'discount.label' => ['string', 'nullable', 'bail'],
