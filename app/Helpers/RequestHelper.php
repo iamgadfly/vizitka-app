@@ -127,7 +127,7 @@ class RequestHelper
             'name' => ['string', 'bail'],
             'surname' => ['string', 'bail'],
             'title' => ['string', 'bail'],
-            'about' => ['string', 'bail'],
+            'about' => ['string', 'nullable', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
             'phone_number' => ['string', 'bail']
         ];
