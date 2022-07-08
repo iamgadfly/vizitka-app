@@ -6,6 +6,9 @@ class ArrayHelper
 {
     public static function arrayWithoutIntersections(array $origin, array $second): array
     {
+        if (empty($second)) {
+            return $origin;
+        }
         if (is_array($second[0])) {
             $output = array_diff($origin, ...$second);
         } else {
