@@ -28,7 +28,7 @@ class ReportMail extends Mailable
      */
     public function build()
     {
-        return $this->from('reports@vizitka.bz')
+        return $this->from(config('custom.report_mail'))
                     ->markdown('emails.report')
                     ->with(['report' => $this->report]);
     }

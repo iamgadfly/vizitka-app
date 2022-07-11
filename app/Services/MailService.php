@@ -4,7 +4,9 @@ namespace App\Services;
 
 
 use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Mail\ReportMail;
+use App\Mail\SupportMail;
 use App\Models\Report;
 use App\Repositories\SpecialistRepository;
 
@@ -24,6 +26,19 @@ class MailService
         $report->phoneNumber = $specialist->user->phone_number;
         $report->reason = __('users.reports.' . $data['reason']);
         \Mail::to(config('custom.report_mail'))->send(new ReportMail($report));
+
+        return true;
+    }
+
+    public function sendMailToSupport(array $data, array $files)
+    {
+        $specialist = $this->specialistRepository->findById($data['id']);
+        $mail = collect();
+        $mail->text = $data['text'];
+        $mail->fullName = $specialist->name . " " . $specialist->surname;
+        $mail->phoneNumber = $specialist->user->phone_number;
+        $mail->files = $files;
+        \Mail::to(config('custom.support_mail'))->send(new SupportMail($mail));
 
         return true;
     }

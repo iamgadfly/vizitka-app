@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Specialist\ContactBookController;
 use App\Http\Controllers\Api\Specialist\DummyClientController;
 use App\Http\Controllers\Api\Specialist\MaintenanceController;
 use App\Http\Controllers\Api\Specialist\SingleWorkScheduleController;
+use App\Http\Controllers\Api\Specialist\SupportController;
 use App\Http\Controllers\Api\Specialist\WorkScheduleController;
 use App\Http\Controllers\Api\SpecialistController;
 
@@ -219,4 +220,13 @@ Route::controller(ShareController::class)
 
         Route::post('qrcode', 'getQrCode')
             ->name('specialist.share.qrcode');
-    });
+});
+
+// Report Routes
+Route::controller(SupportController::class)
+    ->prefix('support')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('', 'createSupport')
+        ->name('specialist.support.create');
+});

@@ -9,4 +9,6 @@ return [
     'sms_sender' => env('SMS_SERVICE_SENDER'),
 
     'report_mail' => env('REPORTS_EMAIL'),
+    'support_mail' => env('TECH_SUPPORT_EMAIL'),
+    'from_mail' => env('FROM_EMAIL')
 ];
