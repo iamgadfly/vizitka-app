@@ -9,6 +9,7 @@ use App\Mail\ReportMail;
 use App\Mail\SupportMail;
 use App\Models\Report;
 use App\Repositories\SpecialistRepository;
+use Illuminate\Http\UploadedFile;
 
 class MailService
 {
@@ -30,14 +31,14 @@ class MailService
         return true;
     }
 
-    public function sendMailToSupport(array $data, array $files)
+    public function sendMailToSupport(array $data, UploadedFile $file)
     {
         $specialist = $this->specialistRepository->findById($data['id']);
         $mail = collect();
         $mail->text = $data['text'];
         $mail->fullName = $specialist->name . " " . $specialist->surname;
         $mail->phoneNumber = $specialist->user->phone_number;
-        $mail->files = $files;
+        $mail->file = $file;
         \Mail::to(config('custom.support_mail'))->send(new SupportMail($mail));
 
         return true;

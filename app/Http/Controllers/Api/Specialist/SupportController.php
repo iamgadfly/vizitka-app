@@ -16,7 +16,7 @@ class SupportController extends Controller
     public function createSupport(CreateRequest $request)
     {
         return $this->success(
-            $this->service->sendMailToSupport($request->validated(), $request->allFiles())
+            $this->service->sendMailToSupport($request->validated(), $request->file)
         );
     }
 }
