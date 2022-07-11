@@ -32,13 +32,11 @@ class SupportMail extends Mailable
             ->markdown('emails.support')
             ->subject('Заявка в тех. поддержку от ' . $this->data->fullName)
             ->with(['data' => $this->data]);
-
-        $i = 0;
-        foreach ($this->data->files as $file) {
+        $file = $this->data->file;
+        if (!is_null($file)) {
             $this->attach($file, [
-                'as' => "image{$i}.{$file->extension()}"
+                'as' => "image.{$file->extension()}"
             ]);
-            $i++;
         }
         return $this;
     }
