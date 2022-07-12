@@ -91,7 +91,7 @@ class AuthService
      * @throws GuzzleException
      * @throws InvalidLoginException
      */
-    public function sendSmsPassword(string $phoneNumber): void
+    public function sendSmsPassword(string $phoneNumber): array
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
         if (\Cache::get("User#$user->id") > 10) {
@@ -113,6 +113,10 @@ class AuthService
 
         $user->verification_code = $verification_code;
         $user->save();
+
+        return [
+            'code' => $verification_code
+        ];
     }
 
     /**

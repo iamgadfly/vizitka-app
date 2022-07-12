@@ -35,9 +35,13 @@ class AuthController extends BaseAuthController
      */
     public function signIn(SignInRequest $request): JsonResponse
     {
-        $this->authService->sendSmsPassword($request->phone_number);
 
-        return $this->success(null,Response::HTTP_OK, 'Provide password from SMS');
+
+        return $this->success(
+            $this->authService->sendSmsPassword($request->phone_number),
+            Response::HTTP_OK,
+            'Provide password from SMS'
+        );
     }
 
     /**
