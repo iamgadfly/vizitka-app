@@ -27,7 +27,7 @@ class ContactBookForClientResource extends JsonResource
                     'id' => $this->specialist->activity_kind->id,
                     'name' => $this->specialist->activity_kind->name,
                 ],
-                'avatar' => $this->specialist->avatar?->url,
+                'avatar' => ImageHelper::getAssetFromFilename($this->specialist->avatar?->url),
                 'card' => CardBackgroundHelper::getCardFromActivityKind(
                     CardBackgroundHelper::getActivityKindFromFilename($this->specialist->card->background_image)
                 ),
@@ -46,7 +46,7 @@ class ContactBookForClientResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'phone_number' => $this->phone_number,
-            'avatar' => $this->avatar?->url,
+            'avatar' => ImageHelper::getAssetFromFilename($this->avatar?->url),
             'card' => CardBackgroundHelper::getCardFromActivityKind('default')
         ];
     }
