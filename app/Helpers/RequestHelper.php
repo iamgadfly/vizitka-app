@@ -133,7 +133,6 @@ class RequestHelper
         if ($request->method() == 'POST') {
             $rules['client_id'][] = 'required';
             $rules['name'][] = 'required';
-            $rules['surname'][] = 'required';
             $rules['title'][] = 'required';
             $rules['phone_number'][] = 'required';
         } elseif ($request->method() == 'PUT') {
