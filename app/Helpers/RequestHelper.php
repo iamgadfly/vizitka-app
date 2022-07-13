@@ -124,7 +124,7 @@ class RequestHelper
         $rules = [
             'client_id' => ['exists:clients,id', 'bail'],
             'name' => ['string', 'bail'],
-            'surname' => ['string', 'bail'],
+            'surname' => ['string', 'nullable', 'bail'],
             'title' => ['string', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
