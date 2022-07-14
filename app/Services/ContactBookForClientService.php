@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Exceptions\ClientNotFoundException;
 use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Models\Specialist;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyBusinessCardRepository;
@@ -59,12 +61,14 @@ class ContactBookForClientService
 
     /**
      * @throws RecordNotFoundException
+     * @throws ClientNotFoundException
      */
     public function delete(int $specialistId, string $type)
     {
         if ($type == 'specialist') {
             $record = $this->repository->whereFirst([
-                'specialist_id' => $specialistId
+                'specialist_id' => $specialistId,
+                'client_id' => AuthHelper::getClientIdFromAuth()
             ]);
         } else {
             $record = $this->businessCardRepository->whereFirst([
