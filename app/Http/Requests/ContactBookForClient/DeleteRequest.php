@@ -32,7 +32,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' => ['required', 'exists:specialists,id'],
+            'specialist_id' => ['required', 'integer'],
             'type' => ['required', 'string', 'in:dummy,specialist']
         ];
     }
