@@ -38,7 +38,7 @@ Route::controller(ContactBookController::class)
         Route::post('{id}', 'create')
             ->name('client.contactBook.create');
 
-        Route::delete('{id}', 'delete')
+        Route::delete('{type}/{id}', 'delete')
             ->name('client.contactBook.delete');
 
         Route::get('', 'get')

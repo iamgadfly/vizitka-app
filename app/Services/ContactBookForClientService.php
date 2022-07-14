@@ -60,11 +60,17 @@ class ContactBookForClientService
     /**
      * @throws RecordNotFoundException
      */
-    public function delete(int $specialistId)
+    public function delete(int $specialistId, string $type)
     {
-        $record = $this->repository->whereFirst([
-            'specialist_id' => $specialistId
-        ]);
+        if ($type == 'specialist') {
+            $record = $this->repository->whereFirst([
+                'specialist_id' => $specialistId
+            ]);
+        } else {
+            $record = $this->businessCardRepository->whereFirst([
+                'id' => $specialistId
+            ]);
+        }
         if (is_null($record)) {
             throw new RecordNotFoundException;
         }

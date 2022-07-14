@@ -8,7 +8,10 @@ class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['specialist_id' => $this->route('id')]);
+        $this->merge([
+            'specialist_id' => $this->route('id'),
+            'type' => $this->route('type')
+        ]);
     }
 
     /**
@@ -29,7 +32,8 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' => ['required', 'exists:specialists,id']
+            'specialist_id' => ['required', 'exists:specialists,id'],
+            'type' => ['required', 'string', 'in:dummy,specialist']
         ];
     }
 }
