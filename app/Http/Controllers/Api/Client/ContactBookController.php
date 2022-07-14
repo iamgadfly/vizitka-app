@@ -63,7 +63,7 @@ class ContactBookController extends Controller
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->delete($request->specialist_id)
+            $this->service->delete($request->specialist_id, $request->type)
         );
     }
 
