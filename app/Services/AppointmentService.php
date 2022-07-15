@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
+use App\Helpers\AuthHelper;
 use App\Helpers\ImageHelper;
 use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
@@ -106,13 +107,16 @@ class AppointmentService
      */
     public function getAllByDay(string $date, ?int $specialistId = null): Collection
     {
+        if (is_null($specialistId)) {
+            $specialistId = AuthHelper::getSpecialistIdFromAuth();
+        }
         $output = collect();
         $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date, $specialistId)));
         $breaks = $this->convertBreakToOrderType(collect($this->breakRepository->getBreaksForDay($date, true, $specialistId)));
 
         $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
-        $times = WorkScheduleWorkRepository::getWorkDay($date) ?? null;
+        $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? null;
         if (!is_null($times)) {
             $timesobj = new \StdClass;
             $timesobj->start = Carbon::parse($date . $times[0])->toISOString();
@@ -122,7 +126,7 @@ class AppointmentService
         }
         $output->workSchedule = $timesobj;
         $output->smartSchedule = WorkScheduleSettings::where([
-            'specialist_id' => auth()->user()->specialist->id
+            'specialist_id' => $specialistId
         ])->first()->smart_schedule;
         return $output;
     }
