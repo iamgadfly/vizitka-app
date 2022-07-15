@@ -51,7 +51,7 @@ class AppointmentRepository extends Repository
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getAllByDate(string $date, ?int $specialistId)
+    public function getAllByDate(string $date, ?int $specialistId = null)
     {
         if (is_null($specialistId)) {
             $specialistId = AuthHelper::getSpecialistIdFromAuth();

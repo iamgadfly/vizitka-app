@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\ArrayHelper;
 use App\Helpers\TimeHelper;
 use App\Http\Resources\SpecialistData\MaintenanceResource;
@@ -20,6 +21,9 @@ class SpecialistDataService
         protected MaintenanceRepository $maintenanceRepository
     ){}
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function getFreeHours(int $specialistId, string $dateFromMonth): ?array
     {
         $monthDates = TimeHelper::getMonthInterval($dateFromMonth);
