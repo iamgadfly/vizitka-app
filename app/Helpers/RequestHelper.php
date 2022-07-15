@@ -125,7 +125,7 @@ class RequestHelper
             'client_id' => ['exists:clients,id', 'bail'],
             'name' => ['string', 'bail'],
             'surname' => ['string', 'nullable', 'bail'],
-            'title' => ['string', 'bail'],
+            'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
             'phone_number' => ['string', 'bail']
@@ -133,7 +133,6 @@ class RequestHelper
         if ($request->method() == 'POST') {
             $rules['client_id'][] = 'required';
             $rules['name'][] = 'required';
-            $rules['title'][] = 'required';
             $rules['phone_number'][] = 'required';
         } elseif ($request->method() == 'PUT') {
             $rules['id'] = ['required', 'exists:dummy_business_cards,id'];
