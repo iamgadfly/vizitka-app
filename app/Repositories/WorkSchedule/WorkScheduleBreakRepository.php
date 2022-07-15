@@ -2,6 +2,8 @@
 
 namespace App\Repositories\WorkSchedule;
 
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleBreak;
 use App\Models\WorkScheduleSettings;
@@ -45,10 +47,13 @@ class WorkScheduleBreakRepository extends Repository
         ])->get();
     }
 
-    public function getBreaksForDay(string $date, bool $forCalendar = false, int $specialist = null)
+    /**
+     * @throws SpecialistNotFoundException
+     */
+    public function getBreaksForDay(string $date, bool $forCalendar = false, int $specialist = null): array
     {
         if (is_null($specialist)) {
-            $specialist = $this->getSpecialistIdFromAuth();
+            $specialist = AuthHelper::getSpecialistIdFromAuth();
         }
         $result = [];
         // Try to get single work schedule for a day

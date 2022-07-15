@@ -108,7 +108,7 @@ class AppointmentService
     {
         $output = collect();
         $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date, $specialistId)));
-        $breaks = $this->convertBreakToOrderType(collect($this->breakRepository->getBreaksForDay($date, true)));
+        $breaks = $this->convertBreakToOrderType(collect($this->breakRepository->getBreaksForDay($date, true, $specialistId)));
 
         $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
