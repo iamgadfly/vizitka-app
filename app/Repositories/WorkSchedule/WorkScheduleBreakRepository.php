@@ -50,7 +50,7 @@ class WorkScheduleBreakRepository extends Repository
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getBreaksForDay(string $date, bool $forCalendar = false, int $specialist = null): array
+    public function getBreaksForDay(string $date, bool $forCalendar = false, int $specialist = null)
     {
         if (is_null($specialist)) {
             $specialist = AuthHelper::getSpecialistIdFromAuth();
