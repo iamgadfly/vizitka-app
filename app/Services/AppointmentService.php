@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\ImageHelper;
 use App\Helpers\SvgHelper;
@@ -100,10 +101,13 @@ class AppointmentService
         return $this->repository->skipped($orderNumber);
     }
 
-    public function getAllByDay(string $date): Collection
+    /**
+     * @throws SpecialistNotFoundException
+     */
+    public function getAllByDay(string $date, ?int $specialistId = null): Collection
     {
         $output = collect();
-        $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date)));
+        $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date, $specialistId)));
         $breaks = $this->convertBreakToOrderType(collect($this->breakRepository->getBreaksForDay($date, true)));
 
         $appointments = $appointments->merge($breaks);

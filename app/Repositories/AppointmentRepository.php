@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -46,12 +48,17 @@ class AppointmentRepository extends Repository
         ])->get();
     }
 
-    public function getAllByDate(string $date)
+    /**
+     * @throws SpecialistNotFoundException
+     */
+    public function getAllByDate(string $date, ?int $specialistId)
     {
-
+        if (is_null($specialistId)) {
+            $specialistId = AuthHelper::getSpecialistIdFromAuth();
+        }
         return $this->model::where([
             'date' => Carbon::parse($date),
-            'specialist_id' => auth()->user()->specialist->id
+            'specialist_id' => $specialistId
         ])->get();
     }
 }

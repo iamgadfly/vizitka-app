@@ -30,7 +30,7 @@ class SpecialistDataService
                 continue;
             }
             $breaks = $this->breakRepository->getBreaksForDay($date, false, $specialistId);
-            $appointments = $this->appointmentService->getAllByDay($date)->appointments;
+            $appointments = $this->appointmentService->getAllByDay($date, $specialistId)->appointments;
             $appointmentsInterval = [];
             foreach ($appointments as $appointment) {
                 $appointmentsInterval[] = $appointment['interval'];
