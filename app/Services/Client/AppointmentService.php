@@ -26,6 +26,7 @@ class AppointmentService extends BaseAppointmentService
 
     /**
      * @throws TimeIsNotValidException
+     * @throws SpecialistNotFoundException
      */
     public function create(array $data, ?string $orderNumber = null): array
     {
