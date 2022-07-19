@@ -225,7 +225,9 @@ class AppointmentService
                     'value' => $records->first()->date
                 ],
                 'status' => $records->first()->status,
-                'interval' => TimeHelper::getTimeInterval($minTime, $maxTime),
+                'interval' => TimeHelper::getTimeInterval(
+                    $minTime, Carbon::parse($maxTime)->addMinutes(-15)->format('H:i')
+                ),
                 'services' => [],
                 'client' => [
                     'id' => $records->first()->client?->id ?? $records->first()->dummyClient?->id,
