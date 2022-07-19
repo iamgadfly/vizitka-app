@@ -139,9 +139,13 @@ class AppointmentService extends BaseAppointmentService
         return collect($output);
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     * @throws TimeIsNotValidException
+     */
     private function isInInterval(array $data): void
     {
-        $appointments = $this->repository->getAllByDate($data['date']);
+        $appointments = $this->repository->getAllByDate($data['date'], $data['specialist_id']);
         $start = strtotime(Carbon::parse($data['time_start'])->format('H:i'));
         $end = strtotime(Carbon::parse($data['time_end'])->format('H:i'));
         foreach ($appointments as $appointment) {
