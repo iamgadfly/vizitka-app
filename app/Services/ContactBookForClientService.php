@@ -5,25 +5,29 @@ namespace App\Services;
 use App\Exceptions\ClientNotFoundException;
 use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Models\Specialist;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyBusinessCardRepository;
+use App\Repositories\SpecialistRepository;
 
 
 class ContactBookForClientService
 {
     public function __construct(
         protected ContactBookRepository $repository,
-        protected DummyBusinessCardRepository $businessCardRepository
+        protected DummyBusinessCardRepository $businessCardRepository,
+        protected SpecialistRepository $specialistRepository
     ) {}
 
     /**
      * @throws RecordIsAlreadyExistsException
+     * @throws ClientNotFoundException
      */
     public function create(int $specialistId)
     {
-        $clientId = auth()->user()->client->id;
+        $clientId = AuthHelper::getClientIdFromAuth();
         $record = $this->repository->whereFirst([
             'specialist_id' => $specialistId,
             'client_id' => $clientId
@@ -38,19 +42,32 @@ class ContactBookForClientService
     }
 
     /**
-     * @throws RecordIsAlreadyExistsException
+     * @throws SpecialistNotFoundException
+     * @throws ClientNotFoundException
      */
     public function massCreate(array $data): array
     {
         $output = [];
-        foreach ($data['phone_numbers'] as $phoneNumber) {
-            $specialist = Specialist::whereHas('user', function ($q) use ($phoneNumber) {
-                return $q->where(['phone_number' => $phoneNumber]);
-            })->get();
+        foreach ($data['data'] as $item) {
+            $specialist = $this->specialistRepository->findByPhoneNumber($item['phone_number']);
 
-            if (!is_null($specialist->first())) {
+            if (!is_null($specialist)) {
                 try {
-                    $output[] = $this->create($specialist->first()->id);
+                    $output[] = $this->create($specialist->id);
+                } catch (RecordIsAlreadyExistsException $e) {
+                    continue;
+                }
+            } else {
+                try {
+                    $output[] = $this->businessCardRepository->create([
+                        'name' => $item['name'],
+                        'surname' => $item['surname'],
+                        'phone_number' => $item['phone_number'],
+                        'title' => null,
+                        'avatar_id' => null,
+                        'about' => null,
+                        'client_id' => AuthHelper::getClientIdFromAuth()
+                    ]);
                 } catch (RecordIsAlreadyExistsException $e) {
                     continue;
                 }
@@ -58,6 +75,7 @@ class ContactBookForClientService
         }
         return $output;
     }
+
 
     /**
      * @throws RecordNotFoundException
