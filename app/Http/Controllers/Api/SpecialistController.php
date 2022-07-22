@@ -38,7 +38,9 @@ class SpecialistController extends Controller
             $this->imageService->removeTemporary($image); // make 'deleted_at' field null
         }
 
-        $request->merge(['background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image)]);
+        $request->merge([
+            'background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image['value'])
+        ]);
 
         return $this->success(
             new SpecialistResource($this->service->create($request->toArray())),
