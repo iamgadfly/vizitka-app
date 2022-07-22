@@ -39,7 +39,9 @@ class SpecialistController extends Controller
         }
 
         $request->merge([
-            'background_image' => CardBackgroundHelper::filenameFromActivityKind($request->background_image['value'])
+            'background_image' => CardBackgroundHelper::filenameFromActivityKind(
+                $request->toArray()['background_image']['value']
+            )
         ]);
 
         return $this->success(
