@@ -21,7 +21,10 @@ class FullInfoResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'phone' => $this->user->phone_number,
-            'avatar' => !is_null($this->avatar) ? ImageHelper::getAssetFromFilename($this?->avatar?->url): null,
+            'avatar' => [
+                'id' => !is_null($this->avatar) ? $this->avatar->id : null,
+                'url' => !is_null($this->avatar) ? ImageHelper::getAssetFromFilename($this?->avatar?->url): null
+            ],
             'activity_kind' => [
                 'id' => $this->activity_kind?->id,
                 'label' => $this->activity_kind?->name
