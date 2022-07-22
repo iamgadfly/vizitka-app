@@ -185,7 +185,7 @@ class RequestHelper
             'avatar.id' => ['integer', 'nullable', 'exists:images,id', 'bail'],
             'avatar.url' => ['string', 'nullable', 'bail'],
             'activity_kind' => ['array', 'bail'],
-            'activity_kind.label' => ['string', 'bail'],
+            'activity_kind.label' => ['string', 'nullable','bail'],
             'activity_kind.id' => ['int', 'exists:activity_kinds,id', 'bail'],
             'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
