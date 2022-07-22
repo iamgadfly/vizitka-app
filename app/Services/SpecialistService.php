@@ -36,7 +36,7 @@ class SpecialistService
             if (!isset($data['title'])) {
                 $data['title'] = $data['activity_kind']['label'];
             }
-            $data['activity_kind_id'] = $data['activity_kind']['id'];
+            $data['activity_kind_id'] = $data['activity_kind']['value'];
             $data['background_image'] = $data['background_image']['value'];
             // Create specialist and his business card
             $specialist = $this->repository->create($data);
@@ -62,7 +62,7 @@ class SpecialistService
             if (!isset($data['title'])) {
                 $data['title'] = $data['activity_kind']['label'];
             }
-            $data['activity_kind_id'] = $data['activity_kind']['id'];
+            $data['activity_kind_id'] = $data['activity_kind']['value'];
             $this->repository->update($data['id'], $data);
             $data['card_id'] = $this->repository->getById($data['id'])->card->id;
             $data['background_image'] = $data['background_image']['value'];
