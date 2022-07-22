@@ -2,10 +2,35 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Appointment
+ *
+ * @package App\Models
+ *
+ * @property int $id
+ * @property int $specialist_id
+ * @property int|null $client_id
+ * @property int|null $dummy_client_id
+ * @property int $maintenance_id
+ * @property DateTime $date
+ * @property DateTime $time_start
+ * @property DateTime $time_end
+ * @property string $status
+ * @property string $order_number
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ *
+ * Relations
+ * @property Specialist $specialist
+ * @property Client $client
+ * @property DummyClient $dummyClient
+ * @property Maintenance $maintenance
+ */
 class Appointment extends Model
 {
     use HasFactory;
