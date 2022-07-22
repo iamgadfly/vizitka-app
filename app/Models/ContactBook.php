@@ -2,11 +2,31 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class ContactBook
+ *
+ * @package App\Models
+ *
+ * @property int $id
+ * @property int $specialist_id
+ * @property int|null $client_id
+ * @property int|null $dummy_client_id
+ * @property DateTime|null $deleted_at
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ *
+ * Relations
+ *
+ * @property Specialist $specialist
+ * @property Client $client
+ * @property DummyClient $dummyClient
+ */
 class ContactBook extends Model
 {
     use HasFactory, SoftDeletes;

@@ -2,10 +2,28 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Blacklist
+ *
+ * @package App\Models
+ *
+ * @property int $id
+ * @property int $specialist_id
+ * @property int|null $blacklisted_id
+ * @property int|null $dummy_client_id
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ *
+ * Relations
+ * @property Client $client
+ * @property Specialist $specialist
+ * @property DummyClient $dummyClient
+ */
 class Blacklist extends Model
 {
     use HasFactory;

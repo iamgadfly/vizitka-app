@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -9,6 +10,22 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Class User
+ *
+ * @package App\Models
+ *
+ * @property int $id
+ * @property DateTime|null $deleted_at
+ * @property string $phone_number
+ * @property string|null $pin
+ * @property string|null $verification_code
+ * @property DateTime|null $phone_number_verified_at
+ * @property boolean $is_verified
+ * @property string|null $remember_token
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
