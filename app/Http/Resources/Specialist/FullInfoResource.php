@@ -32,7 +32,7 @@ class FullInfoResource extends JsonResource
                 'url' => !is_null($this->avatar) ? ImageHelper::getAssetFromFilename($this?->avatar?->url): null
             ],
             'activity_kind' => [
-                'id' => $this->activity_kind?->id,
+                'value' => $this->activity_kind?->id,
                 'label' => $this->activity_kind?->name
             ],
             'youtube_account' => $this->youtube_account,

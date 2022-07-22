@@ -186,7 +186,7 @@ class RequestHelper
             'avatar.url' => ['string', 'nullable', 'bail'],
             'activity_kind' => ['array', 'bail'],
             'activity_kind.label' => ['string', 'nullable','bail'],
-            'activity_kind.id' => ['int', 'exists:activity_kinds,id', 'bail'],
+            'activity_kind.value' => ['int', 'exists:activity_kinds,id', 'bail'],
             'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'address' => ['string', 'nullable', 'bail'],
@@ -196,7 +196,7 @@ class RequestHelper
             'youtube_account' => ['string', 'nullable', 'bail'],
             'vk_account' => ['string', 'nullable', 'bail'],
             'tiktok_account' => ['string', 'nullable', 'bail'],
-            'background_image' => ['string', 'array', 'bail'],
+            'background_image' => ['array', 'bail'],
             'background_image.value' => ['string', Rule::in(CardBackgroundHelper::$files), 'bail'],
             'background_image.url' => ['string', 'nullable', 'bail'],
         ];
