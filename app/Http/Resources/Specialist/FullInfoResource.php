@@ -2,8 +2,12 @@
 
 namespace App\Http\Resources\Specialist;
 
+use App\Helpers\CardBackgroundHelper;
 use App\Helpers\ImageHelper;
+use App\Models\BusinessCard;
+use App\Models\Specialist;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 
 class FullInfoResource extends JsonResource
 {
@@ -15,8 +19,10 @@ class FullInfoResource extends JsonResource
      */
     public function toArray($request)
     {
+        /**
+         * @var Specialist $this
+         */
         return [
-            'id' => $this->id,
             'id' => $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
@@ -37,9 +43,14 @@ class FullInfoResource extends JsonResource
             'address' => $this->card->address,
             'placement' => $this->card->placement,
             'floor' => $this->card->floor,
-            'background_image' => ImageHelper::getAssetFromFilename(
-                $this->card->background_image
-            ),
+            'background_image' => [
+                'url' => ImageHelper::getAssetFromFilename(
+                    $this->card->background_image
+                ),
+                'value' => CardBackgroundHelper::getActivityKindFromFilename(
+                    $this->card->background_image
+                )
+            ]
         ];
     }
 }
