@@ -67,7 +67,7 @@ class SpecialistService
             $data['activity_kind_id'] = $data['activity_kind']['value'];
             $this->repository->update($data['id'], $data);
             $data['card_id'] = $this->repository->getById($data['id'])->card->id;
-            $data['background_image'] = $data['background_image']['value'];
+            $data['background_image'] = CardBackgroundHelper::filenameFromActivityKind($data['background_image']['value']);
             $this->businessCardRepository->update($data['card_id'], $data);
             \DB::commit();
 
