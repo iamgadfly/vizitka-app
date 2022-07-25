@@ -18,6 +18,9 @@ class ContactBookForClientResource extends JsonResource
     public function toArray($request)
     {
         if ($this->resource instanceof ContactBook) {
+            /**
+             * @var ContactBook $this
+             */
             return [
                 'id' => $this->specialist->id,
                 'name' => $this->specialist->name,
@@ -38,7 +41,15 @@ class ContactBookForClientResource extends JsonResource
                 'about' => $this->specialist->card->about,
                 'address' => $this->specialist->card->address,
                 'placement' => $this->specialist->card->placement,
-                'floor' => $this->specialist->card->floor
+                'floor' => $this->specialist->card->floor,
+                'coordinates' => [
+                    'latitude' => $this->specialist->card->latitude,
+                    'longitude' => $this->specialist->card->longitude
+                ],
+                'share' => [
+                    'link' => config('app.url') . '/shares/' . $this->specialist->share->hash,
+                    'qr' => ImageHelper::getAssetFromFilename("images/shares/{$this->specialist->share->hash}.png")
+                ],
             ];
         }
         return [
