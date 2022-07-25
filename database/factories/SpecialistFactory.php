@@ -24,7 +24,7 @@ class SpecialistFactory extends Factory
             'surname' => $this->faker->lastName(),
             'activity_kind_id' => $this->faker->numberBetween(1, 8),
             'avatar_id' => null,
-            'user_id' => User::query()->doesntHave('specialist')->doesntHave('client')->first()->id
+            'user_id' => User::query()->doesntHave('specialist')->get()->random()->id
         ];
     }
 }

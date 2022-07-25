@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class BusinessCardSeeder extends Seeder
 {
+    const NUMBER_TO_CREATE = 50;
     /**
      * Run the database seeds.
      *
@@ -29,6 +30,8 @@ class BusinessCardSeeder extends Seeder
                'updated_at' => date('Y-m-d H:i:s')
            ]
         ]);
-        BusinessCard::factory(50)->create();
+        foreach (range(0, self::NUMBER_TO_CREATE) as $i) {
+            BusinessCard::factory()->create();
+        }
     }
 }

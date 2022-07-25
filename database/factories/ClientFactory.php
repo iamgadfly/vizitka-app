@@ -23,7 +23,7 @@ class ClientFactory extends Factory
             'name' => $this->faker->firstName(),
             'surname' => $this->faker->lastName(),
             'avatar_id' => null,
-            'user_id' => User::query()->doesntHave('specialist')->doesntHave('client')->first()->id
+            'user_id' => User::query()->doesntHave('client')->get()->random()->id
         ];
     }
 }

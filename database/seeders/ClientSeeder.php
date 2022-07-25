@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class ClientSeeder extends Seeder
 {
+    const NUMBER_TO_CREATE = 50;
     /**
      * Run the database seeds.
      *
@@ -23,6 +24,8 @@ class ClientSeeder extends Seeder
                'surname' => 'Карелин',
            ]
         ]);
-        Client::factory(50)->create();
+        foreach (range(0, self::NUMBER_TO_CREATE) as $i) {
+            Client::factory()->create();
+        }
     }
 }

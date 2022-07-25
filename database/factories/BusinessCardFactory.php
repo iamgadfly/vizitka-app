@@ -26,7 +26,7 @@ class BusinessCardFactory extends Factory
         return [
             'specialist_id' => Specialist::query()->doesntHave('card')->first()->id,
             'background_image' => CardBackgroundHelper::getCardFromActivityKind(
-                CardBackgroundHelper::$files[random_int(0, count(CardBackgroundHelper::$files) -1)]
+                CardBackgroundHelper::$files[random_int(0, count(CardBackgroundHelper::$files) -1)], false
             )->first()['url'],
             'title' => $this->faker->sentence(1),
             'about' => $this->faker->sentence(),

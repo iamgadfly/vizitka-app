@@ -243,15 +243,17 @@ class CardBackgroundHelper
         return self::$specialistColor[$activityKind];
     }
 
-    public static function getCardFromActivityKind(string $activityKind): Collection
+    public static function getCardFromActivityKind(string $activityKind, bool $asAsset = true): Collection
     {
-        return collect(Storage::disk('public')->files('/images/card_backgrounds'))->map(function ($file) {
+        return collect(Storage::disk('public')
+            ->files('/images/card_backgrounds'))
+            ->map(function ($file) use ($asAsset) {
             $name = str(basename($file))->explode('.')[0];
 
             return [
                 'nameBusiness' => $name,
                 'colors' => self::$colors[$name],
-                'url' => self::getAssetFromFilename($file)
+                'url' => $asAsset ? self::getAssetFromFilename($file) : $file
             ];
         })->reject(function ($element) use ($activityKind) {
             return $element['nameBusiness'] != $activityKind;
