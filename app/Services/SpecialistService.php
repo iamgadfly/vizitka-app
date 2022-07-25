@@ -83,6 +83,9 @@ class SpecialistService
         return $this->repository->findByUserId($id);
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function getSpecialistData($id): ?Specialist
     {
         if (is_null($id)) {
@@ -94,6 +97,9 @@ class SpecialistService
         return $item;
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function getMe(): ?Specialist
     {
         return $this->getSpecialistData(null);

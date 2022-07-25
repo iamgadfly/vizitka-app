@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $address
  * @property string $placement
  * @property string $floor
+ * @property double $latitude
+ * @property double $longitude
  * @property DateTime $created_at
  * @property DateTime $updated_at
  *

@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property ActivityKind $activity_kind
  * @property Image $avatar
  * @property BusinessCard $card
+ * @property MaintenanceSettings $maintenanceSettings
+ * @property WorkScheduleSettings $scheduleSettings
  */
 class Specialist extends Model
 {
@@ -58,5 +60,15 @@ class Specialist extends Model
     public function card(): HasOne
     {
         return $this->hasOne(BusinessCard::class, 'specialist_id', 'id');
+    }
+
+    public function maintenanceSettings(): HasOne
+    {
+        return $this->hasOne(MaintenanceSettings::class, 'specialist_id', 'id');
+    }
+
+    public function scheduleSettings()
+    {
+        return $this->hasOne(WorkScheduleSettings::class, 'specialist_id', 'id');
     }
 }

@@ -52,7 +52,7 @@ Route::controller(ShareController::class)
         ->name('share.createShortlink');
 });
 
-Route::post('/test', [TestController::class, 'test'])->middleware('auth:sanctum');
+Route::post('/test', [TestController::class, 'test']);
 Route::post('/test/deleteUser', [TestController::class, 'deleteUser']);
 
 // No auth routes

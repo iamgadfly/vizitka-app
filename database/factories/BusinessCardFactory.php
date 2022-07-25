@@ -32,7 +32,9 @@ class BusinessCardFactory extends Factory
             'about' => $this->faker->sentence(),
             'address' => $this->faker->streetAddress(),
             'placement' => $this->faker->numberBetween(1, 1000),
-            'floor' => $this->faker->numberBetween(1, 100)
+            'floor' => $this->faker->numberBetween(1, 100),
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude()
         ];
     }
 }
