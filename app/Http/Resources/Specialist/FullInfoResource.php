@@ -43,6 +43,10 @@ class FullInfoResource extends JsonResource
             'address' => $this->card->address,
             'placement' => $this->card->placement,
             'floor' => $this->card->floor,
+            'coordiantes' => [
+                'latitude' => $this->card->latitude,
+                'longitude' => $this->card->longitude
+            ],
             'background_image' => [
                 'url' => ImageHelper::getAssetFromFilename(
                     $this->card->background_image

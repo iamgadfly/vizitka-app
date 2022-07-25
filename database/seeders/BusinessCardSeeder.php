@@ -26,6 +26,8 @@ class BusinessCardSeeder extends Seeder
                'placement' => '93',
                'floor' => '9',
                'background_image' => 'images/card_backgrounds/neutral_man_2.svg',
+               'latitude' => 44.69193,
+               'longitude' => 37.77397,
                'created_at' => date('Y-m-d H:i:s'),
                'updated_at' => date('Y-m-d H:i:s')
            ]

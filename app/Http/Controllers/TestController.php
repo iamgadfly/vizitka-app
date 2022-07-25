@@ -7,6 +7,7 @@ use App\Helpers\TimeHelper;
 use App\Http\Requests\Test\DeleteUserRequest;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
+use App\Services\GeocodeService;
 use App\Services\QRService;
 
 class TestController extends Controller
@@ -16,8 +17,12 @@ class TestController extends Controller
         protected SpecialistRepository $specialistRepository
     ){}
 
+    /**
+     * @throws \Geocoder\Exception\Exception
+     */
     public function test()
     {
+        dd(GeocodeService::fromAddress('Япония, Токио, Синдзюку'));
     }
 
     public function deleteUser(DeleteUserRequest $request)

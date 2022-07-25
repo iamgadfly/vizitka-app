@@ -17,12 +17,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             ActivityKindSeeder::class,
+            OnboardingSeeder::class,
+            ReportSeeder::class,
             UserSeeder::class,
             ClientSeeder::class,
             SpecialistSeeder::class,
             BusinessCardSeeder::class,
-            OnboardingSeeder::class,
-            ReportSeeder::class
+            MaintenanceSettingsSeeder::class,
+            MaintenanceSeeder::class,
+            WorkScheduleSettingsSeeder::class,
+            WorkScheduleWorkSeeder::class,
+            WorkScheduleBreakSeeder::class
         ]);
     }
 }

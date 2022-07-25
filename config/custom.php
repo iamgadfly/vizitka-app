@@ -3,6 +3,8 @@
 return [
     'photo_path' => 'images/user_photos',
 
+    'yandex_maps_api_key' => env('YANDEX_MAPS_API_KEY'),
+
     'sms_host' => env('SMS_SERVICE_HOST'),
     'sms_login' => env('SMS_SERVICE_LOGIN'),
     'sms_password' => env('SMS_SERVICE_PASSWORD'),
