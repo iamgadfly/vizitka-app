@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('business_cards', function (Blueprint $table) {
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->double('latitude')->default(.0);
+            $table->double('longitude')->default(.0);
         });
     }
 
