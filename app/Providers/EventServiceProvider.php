@@ -2,13 +2,17 @@
 
 namespace App\Providers;
 
+use App\Events\SpecialistCreatedEvent;
 use App\Events\WorkScheduleSettingsCreated;
+use App\Listeners\CreateShareLink;
 use App\Listeners\CreateWorkScheduleDays;
 use App\Models\BusinessCard;
 use App\Models\Share;
+use App\Models\Specialist;
 use App\Models\WorkScheduleSettings;
 use App\Observers\BusinessCardObserver;
 use App\Observers\ShareObserver;
+use App\Observers\SpecialistObserver;
 use App\Observers\WorkScheduleSettingsObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -35,10 +39,15 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Observers
         Share::observe(ShareObserver::class);
 //        BusinessCard::observe(BusinessCardObserver::class);
         WorkScheduleSettings::observe(WorkScheduleSettingsObserver::class);
+        Specialist::observe(SpecialistObserver::class);
+
+        // Event listeners
         Event::listen(WorkScheduleSettingsCreated::class, CreateWorkScheduleDays::class);
+        Event::listen(SpecialistCreatedEvent::class, CreateShareLink::class);
     }
 
     /**

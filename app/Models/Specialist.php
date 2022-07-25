@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property BusinessCard $card
  * @property MaintenanceSettings $maintenanceSettings
  * @property WorkScheduleSettings $scheduleSettings
+ * @property Share $share
  */
 class Specialist extends Model
 {
@@ -70,5 +71,10 @@ class Specialist extends Model
     public function scheduleSettings()
     {
         return $this->hasOne(WorkScheduleSettings::class, 'specialist_id', 'id');
+    }
+
+    public function share()
+    {
+        return $this->morphOne(Share::class, 'sharable');
     }
 }

@@ -43,6 +43,10 @@ class SpecialistDetailedDataResource extends JsonResource
                 'latitude' => $this->card->latitude,
                 'longitude' => $this->card->longitude
             ],
+            'share' => [
+                'link' => config('app.url') . '/shares/' . $this->share->hash,
+                'qr' => ImageHelper::getAssetFromFilename("images/shares/{$this->share->hash}.png")
+            ],
             'suggestedDaysAndTime' => []
         ];
     }

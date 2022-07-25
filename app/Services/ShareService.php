@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\LinkHasExpiredException;
 use App\Repositories\ShareRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 
 class ShareService
@@ -13,7 +14,7 @@ class ShareService
         protected ShareRepository $repository
     ) {}
 
-    public function createShortlink(string $url)
+    public function createShortlink(string $url, $sharableType, $sharableId)
     {
         $url = str($url)->replace(config('app.url'), '')->value();
         $link = $this->repository->whereFirst([
@@ -23,7 +24,17 @@ class ShareService
         if (!is_null($link)) {
             return $link;
         }
-        return $this->repository->create(['url' => $url]);
+
+        $share = $this->repository->create([
+            'url' => $url,
+            'sharable_type' => $sharableType,
+            'sharable_id' => $sharableId
+        ]);
+
+        $url = config('app.url') . '/shares/' . $share->hash;
+        $qr = QRService::generate($url);
+
+        Storage::disk('public')->put("images/shares/{$share->hash}.png", $qr);
     }
 
     /**
