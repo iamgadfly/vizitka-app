@@ -256,7 +256,7 @@ class CardBackgroundHelper
                 'url' => $asAsset ? self::getAssetFromFilename($file) : $file
             ];
         })->reject(function ($element) use ($activityKind) {
-            return $element['nameBusiness'] != $activityKind;
+            return $element['value'] != $activityKind;
         })->values();
     }
 

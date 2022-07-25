@@ -44,8 +44,8 @@ class SpecialistDetailedDataResource extends JsonResource
                 'longitude' => $this->card->longitude
             ],
             'share' => [
-                'link' => config('app.url') . '/shares/' . $this->share->hash,
-                'qr' => ImageHelper::getAssetFromFilename("images/shares/{$this->share->hash}.png")
+                'link' => is_null($this->share->hash) ? config('app.url') . '/shares/' . $this->share->hash : null,
+                'qr' => is_null($this->share->hash) ? ImageHelper::getAssetFromFilename("images/shares/{$this->share->hash}.png") : null
             ],
             'suggestedDaysAndTime' => []
         ];
