@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class ClientSeeder extends Seeder
 {
+    const NUMBER_TO_CREATE = 50;
     /**
      * Run the database seeds.
      *
@@ -17,10 +19,13 @@ class ClientSeeder extends Seeder
     {
         DB::table('clients')->insert([
            [
-               'user_id' => 2,
+               'user_id' => 1,
                'name' => 'Николай',
                'surname' => 'Карелин',
            ]
         ]);
+        foreach (range(0, self::NUMBER_TO_CREATE) as $i) {
+            Client::factory()->create();
+        }
     }
 }
