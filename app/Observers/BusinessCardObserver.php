@@ -10,6 +10,9 @@ class BusinessCardObserver
 {
     public function creating(BusinessCard $businessCard): void
     {
+        if (is_null($businessCard->address)) {
+            return;
+        }
         try {
             $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
             $businessCard->latitude = $coordinates->getLatitude();
