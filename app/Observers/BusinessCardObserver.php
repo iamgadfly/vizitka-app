@@ -39,9 +39,15 @@ class BusinessCardObserver
      */
     public function updated(BusinessCard $businessCard)
     {
-        $coordinates = GeocodeService::fromAddress($businessCard->address);
-        $businessCard->latitude = $coordinates->latitude;
-        $businessCard->longitude = $coordinates->longitude;
+        if (is_null($businessCard->address)) {
+            return;
+        }
+        try {
+            $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
+            $businessCard->latitude = $coordinates->getLatitude();
+            $businessCard->longitude = $coordinates->getLongitude();
+        } catch (Exception $e) {
+        }
     }
 
     /**
