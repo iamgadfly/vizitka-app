@@ -43,12 +43,12 @@ class ContactBookForClientResource extends JsonResource
                 'placement' => $this->specialist->card->placement,
                 'floor' => $this->specialist->card->floor,
                 'coordinates' => [
-                    'latitude' => $this->specialist->card->latitude,
-                    'longitude' => $this->specialist->card->longitude
+                    'latitude' => $this->specialist->card?->latitude,
+                    'longitude' => $this->specialist->card?->longitude
                 ],
                 'share' => [
-                    'link' => config('app.url') . '/shares/' . $this->specialist->share->hash,
-                    'qr' => ImageHelper::getAssetFromFilename("images/shares/{$this->specialist->share->hash}.png")
+                    'link' => config('app.url') . '/shares/' . $this->specialist?->share?->hash,
+                    'qr' => ImageHelper::getAssetFromFilename("images/shares/{$this->specialist?->share?->hash}.png")
                 ],
             ];
         }
