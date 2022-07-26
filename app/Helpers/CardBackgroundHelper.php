@@ -271,7 +271,7 @@ class CardBackgroundHelper
                 'url' => self::getAssetFromFilename($file)
             ];
         })->reject(function ($element) {
-            return $element['nameBusiness'] == 'default';
+            return $element['value'] == 'default';
         })->values();
     }
 }
