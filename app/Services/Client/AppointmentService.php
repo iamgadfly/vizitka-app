@@ -88,6 +88,16 @@ class AppointmentService extends BaseAppointmentService
         }
     }
 
+    public function getMyHistoryForSpecialist(int $clientId, int $specialistId)
+    {
+        return $this->convertToOrderType(
+            $this->repository->whereGet([
+                'specialist_id' => $specialistId,
+                'client_id' => $clientId
+            ])
+        );
+    }
+
     /**
      * @throws ClientNotFoundException
      */

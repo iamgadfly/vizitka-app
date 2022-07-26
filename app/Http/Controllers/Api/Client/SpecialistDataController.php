@@ -7,7 +7,6 @@ use App\Http\Requests\SpecialistData\FreeHoursRequest;
 use App\Http\Requests\SpecialistData\IdRequest;
 use App\Services\SpecialistDataService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class SpecialistDataController extends Controller
 {
@@ -42,4 +41,6 @@ class SpecialistDataController extends Controller
             $this->service->getSpecialistsMaintenances($request->id)
         );
     }
+
+
 }
