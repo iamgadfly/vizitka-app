@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $client_id
  * @property string $phone_number
+ * @property string|null $name
  * @property string|null $surname
  * @property string|null $title
  * @property int|null $avatar_id
