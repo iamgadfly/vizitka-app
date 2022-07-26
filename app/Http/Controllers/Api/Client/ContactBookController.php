@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Client;
 
+use App\Exceptions\ClientNotFoundException;
 use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
 use App\Http\Controllers\Controller;
@@ -24,6 +25,7 @@ class ContactBookController extends Controller
      * @param CreateRequest $request
      * @return JsonResponse
      * @throws RecordIsAlreadyExistsException
+     * @throws ClientNotFoundException
      * @lrd:start
      * Add to Client's contact book
      * @lrd:end
@@ -31,7 +33,7 @@ class ContactBookController extends Controller
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->create($request->specialist_id),
+            new ContactBookForClientResource($this->service->create($request->specialist_id)),
             Response::HTTP_CREATED
         );
     }
