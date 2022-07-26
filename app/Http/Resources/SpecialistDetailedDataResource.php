@@ -40,12 +40,12 @@ class SpecialistDetailedDataResource extends JsonResource
             'background_image' => ImageHelper::getAssetFromFilename($this->card->background_image),
             'confirmation' => $settings->confirmation,
             'coordiantes' => [
-                'latitude' => $this->card->latitude,
-                'longitude' => $this->card->longitude
+                'latitude' => $this->card?->latitude,
+                'longitude' => $this->card?->longitude
             ],
             'share' => [
-                'link' => is_null($this->share->hash) ? config('app.url') . '/shares/' . $this->share->hash : null,
-                'qr' => is_null($this->share->hash) ? ImageHelper::getAssetFromFilename("images/shares/{$this->share->hash}.png") : null
+                'link' => is_null($this->share) ? config('app.url') . '/shares/' . $this->share->hash : null,
+                'qr' => is_null($this->share) ? ImageHelper::getAssetFromFilename("images/shares/{$this->share->hash}.png") : null
             ],
             'suggestedDaysAndTime' => []
         ];
