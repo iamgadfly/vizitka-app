@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Helpers\CardBackgroundHelper;
 use App\Helpers\ImageHelper;
 use App\Models\ContactBook;
+use App\Models\DummyBusinessCard;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContactBookForClientResource extends JsonResource
@@ -52,10 +53,15 @@ class ContactBookForClientResource extends JsonResource
                 ],
             ];
         }
+        /**
+         * @var DummyBusinessCard $this
+         */
         return [
             'id' => $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
+            'about' => $this->about,
+            'title' => $this->title,
             'phone_number' => $this->phone_number,
             'avatar' => ImageHelper::getAssetFromFilename($this->avatar?->url),
             'card' => CardBackgroundHelper::getCardFromActivityKind('default')
