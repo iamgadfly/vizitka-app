@@ -4,16 +4,17 @@ namespace App\Observers;
 
 use App\Models\BusinessCard;
 use App\Services\GeocodeService;
+use Geocoder\Exception\Exception;
 
 class BusinessCardObserver
 {
-    public function creating(BusinessCard $businessCard)
+    public function creating(BusinessCard $businessCard): void
     {
         try {
             $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
             $businessCard->latitude = $coordinates->getLatitude();
             $businessCard->longitude = $coordinates->getLongitude();
-        } catch (\Exception) {
+        } catch (Exception $e) {
         }
     }
     /**
