@@ -266,7 +266,7 @@ class CardBackgroundHelper
             $name = str(basename($file))->explode('.')[0];
 
             return [
-                'nameBusiness' => $name,
+                'value' => $name,
                 'colors' => self::$colors[$name],
                 'url' => self::getAssetFromFilename($file)
             ];
