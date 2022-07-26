@@ -88,6 +88,9 @@ Route::controller(AppointmentController::class)
     Route::get('history', 'getMyHistory')
         ->name('client.appointment.history');
 
+    Route::get('specialist/{id}/history', 'getHistoryForSpecialist')
+        ->name('client.appointment.specialist.history');
+
     Route::post('specialist/{id}/checkForDuplicates', 'checkForDuplicates')
         ->name('client.appointment.duplicates');
 });

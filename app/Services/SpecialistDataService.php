@@ -55,6 +55,10 @@ class SpecialistDataService
             $item->discount = $discount;
         });
         return MaintenanceResource::collection($maintenances);
+    }
+
+    public function getClientsHisotryForSpecialist(array $data)
+    {
 
     }
 }

@@ -7,6 +7,7 @@ use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\Appointment\CreateRequest;
+use App\Http\Requests\SpecialistData\GetMyHistoryForThisSpecialistRequest;
 use App\Http\Resources\Appointment\DuplicateResource;
 use App\Http\Resources\AppointmentResource;
 use App\Services\Client\AppointmentService;
@@ -78,6 +79,13 @@ class AppointmentController extends Controller
     {
         return $this->success(
             $this->service->getMyHistory()
+        );
+    }
+
+    public function getHistoryForSpecialist(GetMyHistoryForThisSpecialistRequest $request)
+    {
+        return $this->success(
+            $this->service->getMyHistoryForSpecialist($request->client_id, $request->specialist_id)
         );
     }
 }
