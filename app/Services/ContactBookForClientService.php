@@ -49,7 +49,11 @@ class ContactBookForClientService
     {
         $output = [];
         foreach ($data['data'] as $item) {
-            $specialist = $this->specialistRepository->findByPhoneNumber($item['phone_number']);
+            try {
+                $specialist = $this->specialistRepository->findByPhoneNumber($item['phone_number']);
+            } catch (SpecialistNotFoundException $e) {
+                $specialist = null;
+            }
 
             if (!is_null($specialist)) {
                 try {
