@@ -26,22 +26,33 @@ class MailService
         $report = collect();
         $report->phoneNumber = $specialist->user->phone_number;
         $report->reason = __('users.reports.' . $data['reason']);
-        \Mail::to(config('custom.report_mail'))->send(new ReportMail($report));
+        //TODO: Update when I get new mail service
+//        \Mail::to(config('custom.report_mail'))->send(new ReportMail($report));
 
         return true;
     }
 
-    public function sendMailToSupport(array $data, UploadedFile $file)
+    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file)
     {
         $specialist = $this->specialistRepository->findById($data['id']);
         $mail = collect();
         $mail->text = $data['text'];
         $mail->fullName = $specialist->name . " " . $specialist->surname;
         $mail->phoneNumber = $specialist->user->phone_number;
+        $mail->email = $data['email'];
         $mail->file = $file;
-        \Mail::to(config('custom.support_mail'))->send(new SupportMail($mail));
+        //TODO: Update when I get new mail service
+//        \Mail::to(config('custom.support_mail'))->send(new SupportMail($mail));
 
         return true;
+    }
+
+    public function sendMailToSupportAsClient(array $data)
+    {
+        $specialist = $this->specialistRepository->findById($data['id']);
+        $report = collect();
+        $report->phoneNumber = $specialist->user->phone_number;
+        $report->reason = __('users.report.support.client.' . $data['reason']);
     }
 
     public function getReportReasons(): array

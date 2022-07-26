@@ -35,7 +35,7 @@ class SupportMail extends Mailable
         $file = $this->data->file;
         if (!is_null($file)) {
             $this->attach($file, [
-                'as' => "image.{$file->extension()}"
+                'as' => "file.{$file->extension()}"
             ]);
         }
         return $this;
