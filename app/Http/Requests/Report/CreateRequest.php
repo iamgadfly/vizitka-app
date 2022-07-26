@@ -30,7 +30,8 @@ class CreateRequest extends FormRequest
     {
         return [
             'id' => ['required', 'exists:specialists,id', 'bail'],
-            'reason' => ['required', 'exists:reports,name', 'bail']
+            'reason' => ['required', 'exists:reports,name', 'bail'],
+            'email' => ['required', 'email', 'bail']
         ];
     }
 }

@@ -36,7 +36,8 @@ class CreateRequest extends FormRequest
         return [
             'id' => ['required', 'exists:specialists,id', 'bail'],
             'text' => ['required', 'string', 'bail'],
-            'file' => ['image', 'nullable', 'bail'],
+            'file' => ['file', 'nullable', 'bail'],
+            'email' => ['required', 'email', 'bail']
         ];
     }
 }
