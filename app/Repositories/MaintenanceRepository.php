@@ -23,6 +23,8 @@ class MaintenanceRepository extends Repository
 
     public function allForCurrentUser(int $specialistId)
     {
-        return $this->model::where('specialist_id', $specialistId)->get();
+        return $this->model::whereHas('settings', function ($query) use ($specialistId) {
+            return $query->where('specialist_id', $specialistId);
+        })->get();
     }
 }
