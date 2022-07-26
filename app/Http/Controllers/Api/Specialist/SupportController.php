@@ -13,10 +13,17 @@ class SupportController extends Controller
         protected MailService $service
     ){}
 
-    public function createSupport(CreateRequest $request)
+    public function createSupportAsSpecialist(CreateRequest $request)
     {
         return $this->success(
             $this->service->sendMailToSupportAsSpecialist($request->validated(), $request->file)
+        );
+    }
+
+    public function createSupportAsClient(CreateRequest $request)
+    {
+        return $this->success(
+            $this->service->sendMailToSupportAsClient($request->validated(), $request->file)
         );
     }
 }
