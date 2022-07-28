@@ -31,6 +31,10 @@ mkdir -p storage/app/public/images/default
 cp -r resources/images/card_background/*.jpg storage/app/public/images/card_backgrounds/
 cp -r resources/images/onboarding/*.svg storage/app/public/images/onboarding/
 cp -r resources/images/default/*.png storage/app/public/images/default/
+>&2 echo --- move deep linking assets ---
+mkdir -p storage/app/public/deep_link_files
+cp -r resources/deep_link_files/apple-app-site-association.json storage/app/public/deep_link_files/apple-app-site-associations.json
+cp -r resources/deep_link_files/assetlinks.json storage/app/public/deep_link_files/assetlinks.json
 #>&2 echo --- php artisan lrd:generate ---
 #php artisan lrd:generate
 
