@@ -3,6 +3,7 @@
 namespace App\Http\Resources\WorkScheduleSettings;
 
 use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FlexibleDayResource extends JsonResource
@@ -19,10 +20,10 @@ class FlexibleDayResource extends JsonResource
         return [
             'day' => DayResource::make($this),
             'workTime' => [
-                'start' => $this->start,
-                'end' => $this->end
+                'start' => Carbon::parse($this->start)->format('H:i'),
+                'end' => Carbon::parse($this->end)->format('H:i')
             ],
-            'breaks' => !is_null($this->start) ? FlexibleBreakResource::collection($break) : null
+            'breaks' => !is_null($this->start) ? FlexibleBreakResource::collection($break) : []
         ];
     }
 }
