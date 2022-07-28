@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Report\Support;
 
+use App\Exceptions\ClientNotFoundException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
@@ -10,10 +11,16 @@ class CreateRequest extends FormRequest
 {
     /**
      * @throws SpecialistNotFoundException
+     * @throws ClientNotFoundException
      */
     protected function prepareForValidation()
     {
-        $this->merge(['id' => AuthHelper::getSpecialistIdFromAuth()]);
+        if ($this->routeIs('client.support.create')) {
+            $id = AuthHelper::getClientIdFromAuth();
+        } else {
+            $id = AuthHelper::getSpecialistIdFromAuth();
+        }
+        $this->merge(['id' => $id]);
     }
 
     /**
@@ -34,7 +41,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:specialists,id', 'bail'],
+            'id' => ['required', 'integer', 'bail'],
             'text' => ['required', 'string', 'bail'],
             'file' => ['file', 'nullable', 'bail'],
             'email' => ['required', 'email', 'bail']

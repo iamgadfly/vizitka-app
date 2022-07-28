@@ -8,13 +8,15 @@ use App\Helpers\AuthHelper;
 use App\Mail\ReportMail;
 use App\Mail\SupportMail;
 use App\Models\Report;
+use App\Repositories\ClientRepository;
 use App\Repositories\SpecialistRepository;
 use Illuminate\Http\UploadedFile;
 
 class MailService
 {
     public function __construct(
-        protected SpecialistRepository $specialistRepository
+        protected SpecialistRepository $specialistRepository,
+        protected ClientRepository $clientRepository
     ){}
 
     /**
@@ -37,7 +39,7 @@ class MailService
         $specialist = $this->specialistRepository->findById($data['id']);
         $mail = collect();
         $mail->text = $data['text'];
-        $mail->fullName = $specialist->name . " " . $specialist->surname;
+        $mail->fullName = $specialist->name . " " . $specialist?->surname;
         $mail->phoneNumber = $specialist->user->phone_number;
         $mail->email = $data['email'];
         $mail->file = $file;
@@ -47,12 +49,18 @@ class MailService
         return true;
     }
 
-    public function sendMailToSupportAsClient(array $data)
+    public function sendMailToSupportAsClient(array $data, UploadedFile $file)
     {
-        $specialist = $this->specialistRepository->findById($data['id']);
-        $report = collect();
-        $report->phoneNumber = $specialist->user->phone_number;
-        $report->reason = __('users.report.support.client.' . $data['reason']);
+        $client = $this->clientRepository->whereFirst(['id' => $data['id']]);
+        $mail = collect();
+        $mail->text = $data['text'];
+        $mail->fullName = $client->name . " " . $client?->surname;
+        $mail->phoneNumber = $client->user->phone_number;
+        $mail->email = $data['email'];
+        $mail->file = $file;
+        //TODO: Update when I get new mail service
+//        \Mail::to(config('custom.support_mail'))->send(new SupportMail($mail));
+        return true;
     }
 
     public function getReportReasons(): array

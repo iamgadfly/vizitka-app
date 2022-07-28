@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Client\DummyBusinessCardController;
 use App\Http\Controllers\Api\Client\ReportController;
 use App\Http\Controllers\Api\Client\SpecialistDataController;
 use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\Specialist\SupportController;
 
 // Client routes
 
@@ -107,3 +108,13 @@ Route::controller(ReportController::class)
     Route::get('reasons', 'getReportReasons')
         ->name('client.report.reasons');
 });
+
+// Report Routes
+Route::controller(SupportController::class)
+    ->prefix('client/support')
+    ->middleware('auth:sanctum')->group(function () {
+
+        Route::post('', 'createSupport')
+            ->name('client.support.create');
+    });
+
