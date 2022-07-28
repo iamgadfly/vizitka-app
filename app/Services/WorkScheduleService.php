@@ -51,7 +51,7 @@ class WorkScheduleService
             $settings = $this->settingsRepository->create([
                 'smart_schedule' => $data['smart_schedule'],
                 'confirmation' => $data['confirmation'],
-                'cancel_appointments' => $data['cancel_appointment']['value'],
+                'cancel_appointment' => $data['cancel_appointment']['value'],
                 'limit_before' => $data['limit_before']['value'],
                 'limit_after' => $data['limit_after']['value'],
                 'specialist_id' => $data['specialist_id'],
@@ -61,7 +61,6 @@ class WorkScheduleService
                 'workdays_count' => $workdaysCount,
                 'weekdays_count' => $weekdaysCount
             ]);
-            $settingsId = $settings->id;
             $type = $data['type']['value'];
             if ($type == 'standard') {
                 $weekends = $data['standardSchedule']['weekends'];

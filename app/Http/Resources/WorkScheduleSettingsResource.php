@@ -8,6 +8,7 @@ use App\Http\Resources\WorkScheduleSettings\SlidingScheduleResource;
 use App\Http\Resources\WorkScheduleSettings\StandardScheduleResource;
 use App\Http\Resources\WorkScheduleSettings\TimeResource;
 use App\Http\Resources\WorkScheduleSettings\TypeResource;
+use App\Models\WorkScheduleSettings;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WorkScheduleSettingsResource extends JsonResource
@@ -20,6 +21,9 @@ class WorkScheduleSettingsResource extends JsonResource
      */
     public function toArray($request)
     {
+        /**
+         * @var WorkScheduleSettings $this
+         */
         return [
             'id' => $this->id,
             'type' => TypeResource::make($this),
