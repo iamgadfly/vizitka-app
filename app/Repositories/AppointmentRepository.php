@@ -59,6 +59,6 @@ class AppointmentRepository extends Repository
         return $this->model::where([
             'date' => Carbon::parse($date),
             'specialist_id' => $specialistId
-        ])->get();
+        ])->whereNot('status', 'cancelled')->get();
     }
 }
