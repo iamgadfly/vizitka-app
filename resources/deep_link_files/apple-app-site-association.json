@@ -3,7 +3,7 @@
         "apps": [],
         "details": [
             {
-                "appID": "",
+                "appID": "org.reactjs.native.example.vizitnica",
                 "paths": ["*"]
             }
         ]
