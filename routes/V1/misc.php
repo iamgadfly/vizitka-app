@@ -48,7 +48,7 @@ Route::controller(ShareController::class)
     ->prefix('share')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::post('shortlink', 'createShortlink')
+    Route::post('{type}/{id}', 'createShortlink')
         ->name('share.createShortlink');
 });
 
