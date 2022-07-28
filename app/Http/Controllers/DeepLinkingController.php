@@ -8,11 +8,13 @@ class DeepLinkingController extends Controller
 {
     public function android()
     {
-        return \Storage::disk('public')->get('deep_link_files/assetlinks.json');
+        return response(\Storage::disk('public')->get('deep_link_files/assetlinks.json'))
+            ->header('Content-Type', ['application/json']);
     }
 
     public function apple()
     {
-        return \Storage::disk('public')->get('deep_link_files/apple-app-site-associations.json');
+        return response(\Storage::disk('public')->get('deep_link_files/apple-app-site-associations.json'))
+            ->header('Content-Type', ['application/json']);
     }
 }
