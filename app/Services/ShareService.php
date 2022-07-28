@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Exceptions\LinkHasExpiredException;
+use App\Models\Specialist;
 use App\Repositories\ShareRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-
 
 class ShareService
 {
@@ -16,7 +16,7 @@ class ShareService
 
     public function createShortlink(string $url, $sharableType, $sharableId)
     {
-        $url = str($url)->replace(config('app.url'), '')->value();
+        $url = str($url)->replace(config('app.url') . '/', '')->value();
         $link = $this->repository->whereFirst([
             'url' => $url,
             ['deactivated_at', '>=', Carbon::now()]
@@ -40,16 +40,17 @@ class ShareService
     /**
      * @throws LinkHasExpiredException
      */
-    public function getByHash(string $hash): array
+    public function getByHash(string $hash): string
     {
         $url = $this->repository->whereFirst([
             'hash' => $hash,
             ['deactivated_at', '>=', Carbon::now()]
-        ])?->url ?? throw new LinkHasExpiredException;
+        ]) ?? throw new LinkHasExpiredException;
 
-        return [
-            'url' => config('app.url') . $url
-        ];
+        if ($url->sharable_type == Specialist::class) {
+            return config('custom.vizitnica_deep_link') . $url->url;
+        }
+        return config('custom.vizitka_deep_link'). $url->url;
     }
 
     public function getQrCode(string $url)

@@ -6,6 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CreateShortlinkRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'sharable_type' => $this->route('type'),
+            'sharable_id' => $this->route('id')
+        ]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +32,9 @@ class CreateShortlinkRequest extends FormRequest
     public function rules()
     {
         return [
-            'url' => ['required', 'url']
+            'url' => ['required', 'url'],
+            'sharable_type' => ['required', 'string', 'in:specialist,dummy', 'bail'],
+            'sharable_id' => ['required', 'integer', 'bail']
         ];
     }
 }

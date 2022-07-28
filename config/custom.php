@@ -12,5 +12,8 @@ return [
 
     'report_mail' => env('REPORTS_EMAIL'),
     'support_mail' => env('TECH_SUPPORT_EMAIL'),
-    'from_mail' => env('FROM_EMAIL')
+    'from_mail' => env('FROM_EMAIL'),
+
+    'vizitnica_deep_link' => env('VIZITNICA_DEEP_LINK'),
+    'vizitka_deep_link' => env('VIZITKA_DEEP_LINK')
 ];
