@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ShareController;
+use App\Http\Controllers\DeepLinkingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,3 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/shares/{hash}', [ShareController::class, 'get'])
     ->name('share.link');
+
+
+Route::get('/.well-known/assetlinks.json', [DeepLinkingController::class, 'android']);
+Route::get('/apple-app-site-association', [DeepLinkingController::class, 'apple']);
