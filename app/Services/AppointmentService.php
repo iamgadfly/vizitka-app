@@ -81,7 +81,8 @@ class AppointmentService
             'order_number' => $orderNumber
         ]);
         foreach ($records as $record) {
-            $record->delete();
+            $record->status = 'cancelled';
+            $record->save();
         }
 
         return true;
@@ -131,6 +132,9 @@ class AppointmentService
         return $output;
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function getSvgForPeriod(array $dates): array
     {
         $output = [];
@@ -155,6 +159,9 @@ class AppointmentService
         return $output;
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function getSvgForDate(
         string $date, string $minTime, string $maxTime, string $startDay, string $endDay
     ): array

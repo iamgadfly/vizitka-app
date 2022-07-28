@@ -88,7 +88,7 @@ class AppointmentService extends BaseAppointmentService
         }
     }
 
-    public function getMyHistoryForSpecialist(int $clientId, int $specialistId)
+    public function getMyHistoryForSpecialist(int $clientId, int $specialistId): Collection
     {
         return $this->convertToOrderType(
             $this->repository->whereGet([
