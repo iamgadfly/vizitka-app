@@ -1,7 +1,7 @@
 [{
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
-        "namespace": "",
+        "namespace": "android_app",
         "package_name": "com.vizitnica",
         "sha256_cert_fingerprints": [
             "3D:AC:98:DC:A7:BB:22:2C:27:0B:5D:79:9E:79:92:26:A1:57:4F:A9:13:22:04:EC:1B:F4:03:2A:26:EA:B6:80"
