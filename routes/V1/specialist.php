@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Specialist\ClientController;
 use App\Http\Controllers\Api\Specialist\ContactBookController;
 use App\Http\Controllers\Api\Specialist\DummyClientController;
 use App\Http\Controllers\Api\Specialist\MaintenanceController;
+use App\Http\Controllers\Api\Specialist\PillDisableController;
 use App\Http\Controllers\Api\Specialist\SingleWorkScheduleController;
 use App\Http\Controllers\Api\Specialist\SupportController;
 use App\Http\Controllers\Api\Specialist\WorkScheduleController;
@@ -229,4 +230,18 @@ Route::controller(SupportController::class)
 
     Route::post('', 'createSupport')
         ->name('specialist.support.create');
+});
+
+
+// Pill routes
+
+Route::controller(PillDisableController::class)
+    ->prefix('specialist/pill')
+    ->middleware('auth:sanctum')->group(function () {
+
+    Route::post('', 'create')
+        ->name('specialist.pill.create');
+
+    Route::delete('{date}/{time}', 'delete')
+        ->name('specialist.pill.delete');
 });

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
+use App\Helpers\ArrayHelper;
 use App\Helpers\AuthHelper;
 use App\Helpers\ImageHelper;
 use App\Helpers\SvgHelper;
@@ -17,6 +18,7 @@ use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Nette\Utils\Random;
+use function Clue\StreamFilter\fun;
 
 
 class AppointmentService
@@ -26,7 +28,8 @@ class AppointmentService
         protected MaintenanceRepository $maintenanceRepository,
         protected WorkScheduleSettingsRepository $settingsRepository,
         protected WorkScheduleWorkRepository $workRepository,
-        protected WorkScheduleBreakRepository $breakRepository
+        protected WorkScheduleBreakRepository $breakRepository,
+        protected PillDisableService $pillDisableService
     ) {}
 
     /**
@@ -118,14 +121,23 @@ class AppointmentService
         $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
         $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? null;
-        if (!is_null($times)) {
-            $timesobj = new \StdClass;
-            $timesobj->start = Carbon::parse($date . $times[0])->toISOString();
-            $timesobj->end = Carbon::parse($date . $times[1])->toISOString();
+        $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
+        if ($pills->isNotEmpty()) {
+            $pills = $pills->map(function ($pill) {
+                return Carbon::parse($pill->only('time')['time'])->format('H:i');
+            })->toArray();
         } else {
-            $timesobj = null;
+            $pills = [];
         }
-        $output->workSchedule = $timesobj;
+
+        if (!empty($times)) {
+            $times = TimeHelper::getTimeInterval($times[0], $times[1]);
+            $workSchedule = ArrayHelper::arrayWithoutIntersections($times, $pills);
+        } else {
+            $workSchedule = [];
+        }
+
+        $output->workSchedule = $workSchedule;
         $output->smartSchedule = WorkScheduleSettings::where([
             'specialist_id' => $specialistId
         ])->first()->smart_schedule;

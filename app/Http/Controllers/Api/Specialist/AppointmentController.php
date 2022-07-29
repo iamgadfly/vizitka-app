@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Appointment\CreateOrUpdateRequest;
@@ -112,6 +113,7 @@ class AppointmentController extends Controller
      * @lrd:start
      * Get All appointments by day route
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function getAllByDay(GetAllByDayRequest $request): JsonResponse
     {
