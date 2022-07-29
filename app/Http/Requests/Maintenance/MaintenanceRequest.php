@@ -6,11 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class MaintenanceRequest extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        $this->merge(['id' => $this->route('id')]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,7 +24,6 @@ class MaintenanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:maintenances,id', 'bail'],
             'maintenances' => ['required', 'array', 'bail'],
             'maintenances.*.id' => ['required', 'exists:maintenances,id'],
             'maintenances.*.title' => ['required', 'string', 'bail'],
