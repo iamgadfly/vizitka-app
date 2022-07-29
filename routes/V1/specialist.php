@@ -32,7 +32,7 @@ Route::controller(MaintenanceController::class)
         Route::put('/settings', 'updateSettings')
             ->name('specialist.maintenance.settings.update');
 
-        Route::put('{id}', 'update')
+        Route::put('', 'update')
             ->name('specialist.maintenance.update');
 
         Route::delete('{id}', 'delete')
