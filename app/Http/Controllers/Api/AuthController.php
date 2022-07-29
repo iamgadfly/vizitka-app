@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\InvalidDeviceException;
 use App\Exceptions\InvalidLoginException;
 use App\Exceptions\SMSNotSentException;
 use App\Exceptions\UserAlreadyVerifiedException;
 use App\Exceptions\UserNotFoundException;
+use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IsUserExistsRequest;
+use App\Http\Requests\User\SignInRequest;
 use App\Http\Requests\User\SignUpRequest;
 use App\Http\Requests\User\VerificationRequest;
 use App\Services\AuthService;
+use App\Services\DeviceService;
 use App\Services\SMSService;
 use App\Services\UserService;
 use GuzzleHttp\Exception\GuzzleException;
@@ -24,7 +28,7 @@ class AuthController extends Controller
     public function __construct(
         protected UserService $service,
         protected AuthService $authService,
-        protected SMSService $SMSService
+        protected SMSService $SMSService,
     ) {}
 
     /**
@@ -37,7 +41,7 @@ class AuthController extends Controller
     public function isUserExists(IsUserExistsRequest $request): JsonResponse
     {
         return $this->success(
-            $this->authService->isUserExists($request->phone_number),
+            $this->authService->isUserExists($request->phone_number, $request->device_id),
             Response::HTTP_OK
         );
     }
@@ -54,32 +58,12 @@ class AuthController extends Controller
      */
     public function verification(VerificationRequest $request): JsonResponse
     {
-        $token = $this->authService->verification($request->phone_number, $request->verification_code);
+        $token = $this->authService->verification($request->validated());
 
         return $this->success(
             $token,
             Response::HTTP_OK,
             'User is verified',
-        );
-    }
-
-    /**
-     * @param SignUpRequest $request
-     * @return JsonResponse
-     * @throws GuzzleException
-     * @throws InvalidLoginException
-     * @throws SMSNotSentException
-     * @lrd:start
-     * Resend SMS route
-     * @lrd:end
-     */
-    public function resendSms(SignUpRequest $request): JsonResponse
-    {
-        $this->authService->resendSms($request->phone_number);
-        return $this->success(
-            null,
-            Response::HTTP_OK,
-            'SMS was sent'
         );
     }
 
@@ -114,5 +98,17 @@ class AuthController extends Controller
         return $this->success([
             'code' => $user->verification_code
         ], Response::HTTP_CREATED ,'Verification code sent');
+    }
+
+    /**
+     * @throws UserPinException
+     * @throws InvalidLoginException
+     * @throws InvalidDeviceException
+     */
+    public function signIn(SignInRequest $request)
+    {
+        return $this->success(
+            $this->authService->signIn($request->phone_number, $request->device_id, $request->pin)
+        );
     }
 }

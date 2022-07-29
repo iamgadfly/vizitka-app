@@ -15,6 +15,7 @@ class UserService
     public function create(array $data)
     {
         $data['verification_code'] = Random::generate(4, '0-9');
+        $data['is_verified'] = false;
         return $this->repository->create($data);
     }
 
