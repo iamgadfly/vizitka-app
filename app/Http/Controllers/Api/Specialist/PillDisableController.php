@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\RecordNotFoundException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PillDisable\CreateRequest;
 use App\Http\Requests\PillDisable\DeleteRequest;
@@ -20,6 +22,10 @@ class PillDisableController extends Controller
         );
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     * @throws RecordNotFoundException
+     */
     public function delete(DeleteRequest $request)
     {
         return $this->success(

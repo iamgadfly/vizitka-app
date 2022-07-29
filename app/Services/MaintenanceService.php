@@ -65,8 +65,14 @@ class MaintenanceService
 
     public function update(array $data)
     {
-        $this->repository->getById($data['id']) ?? throw new NotFoundHttpException;
-        return $this->repository->update($data['id'], $data);
+        foreach ($data['maintenances'] as $maintenance) {
+            $this->repository->getById($maintenance['id']) ?? throw new NotFoundHttpException;
+            $maintenance['price'] = $maintenance['price']['value'];
+            $maintenance['duration'] = $maintenance['duration']['value'];
+            $this->repository->update($maintenance['id'], $maintenance);
+        }
+
+        return true;
     }
 
     public function getMySettings(): MaintenanceSettingsResource
