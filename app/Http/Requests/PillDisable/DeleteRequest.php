@@ -6,6 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'time' => $this->route('time'),
+            'date' => $this->route('date')
+        ]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +21,7 @@ class DeleteRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +32,8 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'time' => ['required', 'date_format:H:i', 'bail'],
+            'date' => ['required', 'date_format:Y-m-d', 'bail']
         ];
     }
 }

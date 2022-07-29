@@ -15,11 +15,15 @@ class PillDisableController extends Controller
 
     public function create(CreateRequest $request)
     {
-
+        return $this->success(
+            $this->service->create($request->validated())
+        );
     }
 
     public function delete(DeleteRequest $request)
     {
-
+        return $this->success(
+            $this->service->delete($request->time, $request->date)
+        );
     }
 }
