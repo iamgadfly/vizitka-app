@@ -29,8 +29,8 @@ class AuthService
     {
         $output = [];
         $user = $this->service->searchByPhoneNumber($phoneNumber);
-        $device = $this->deviceService->getDevice($device_id, $user->id);
         if (!is_null($user)) {
+            $device = $this->deviceService->getDevice($device_id, $user->id);
             $output['user'] = true;
             $output['device'] = !is_null($device);
             $output['pin'] = !is_null($device?->pin);
