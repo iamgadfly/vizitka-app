@@ -16,6 +16,7 @@ class SlidingDayResource extends JsonResource
      */
     public function toArray($request)
     {
+        $breakType = $this->day->settings->break_type;
         $break = WorkScheduleBreakRepository::getBreaksForADayIndex($this->day->day_index);
         return [
             'day' => (string) DayResource::make($this)->day->day_index,
@@ -23,7 +24,8 @@ class SlidingDayResource extends JsonResource
                 'start' => Carbon::parse($this->start)->format('H:i'),
                 'end' => Carbon::parse($this->end)->format('H:i')
             ],
-            'breaks' => !is_null($this->start) ? FlexibleBreakResource::collection($break) : null
+            'breaks' => !is_null($this->start) && $breakType == 'individual'
+                ? FlexibleBreakResource::collection($break) : null
         ];
     }
 }
