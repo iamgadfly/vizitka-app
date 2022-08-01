@@ -2,20 +2,18 @@
 
 namespace App\Services;
 
+use App\Exceptions\InvalidDeviceException;
 use App\Exceptions\InvalidLoginException;
-use App\Exceptions\InvalidPasswordException;
 use App\Exceptions\SMSNotSentException;
-use App\Exceptions\TooManyLoginAttemptsException;
-use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserAlreadyVerifiedException;
 use App\Exceptions\UserNotFoundException;
 use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
+use App\Models\Device;
 use App\Models\User;
 use App\Repositories\SpecialistRepository;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Nette\Utils\Random;
 
 class AuthService
@@ -23,15 +21,19 @@ class AuthService
     public function __construct(
         protected SMSService $SMSService,
         protected UserService $service,
-        protected SpecialistRepository $specialistRepository
+        protected SpecialistRepository $specialistRepository,
+        protected DeviceService $deviceService
     ){}
 
-    public function isUserExists(string $phoneNumber): array
+    public function isUserExists(string $phoneNumber, string $device_id): array
     {
         $output = [];
         $user = $this->service->searchByPhoneNumber($phoneNumber);
+        $device = $this->deviceService->getDevice($device_id, $user->id);
         if (!is_null($user)) {
             $output['user'] = true;
+            $output['device'] = !is_null($device);
+            $output['pin'] = !is_null($device->pin);
             $output['specialist'] = !is_null($user->specialist);
             $output['client'] = !is_null($user->client);
         } else {
@@ -62,12 +64,35 @@ class AuthService
     }
 
     /**
+     * @throws InvalidLoginException
+     * @throws GuzzleException
+     * @throws SMSNotSentException
+     */
+    public function forget(string $phoneNumber): void
+    {
+        $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new InvalidLoginException;
+        $verification_code = Random::generate(4, '0-9');
+
+        try {
+            $this->SMSService->sendSms("Код для сброса PIN: $verification_code", $phoneNumber);
+        } catch (SMSNotSentException $e) {
+            throw new SMSNotSentException;
+        }
+
+        $user->verification_code = $verification_code;
+        $user->save();
+    }
+
+    /**
      * @throws UserNotFoundException
      * @throws UserAlreadyVerifiedException
      * @throws VerificationCodeIsntValidException
      */
-    public function verification(string $phoneNumber, string $verificationCode): string
+    public function verification(array $data): string|bool
     {
+        $phoneNumber = $data['phone_number'];
+        $verificationCode = $data['verification_code'];
+
         $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new UserNotFoundException;
 
         if ($user->is_verified) {
@@ -79,142 +104,111 @@ class AuthService
             $user->is_verified = true;
             $user->save();
 
+            $this->deviceService->create([
+                'device_id' => $data['device_id'],
+                'user_id' => $user->id
+            ]);
+
             return $user->createToken("Token for user #$user->id")->plainTextToken;
         }
 
         throw new VerificationCodeIsntValidException;
     }
 
+
     /**
-     * @throws SMSNotSentException
-     * @throws TooManyLoginAttemptsException
+     * @throws VerificationCodeIsntValidException
+     * @throws UserNotFoundException
+     */
+    public function verifyNewDevice(array $data): bool
+    {
+        $phoneNumber = $data['phone_number'];
+        $verificationCode = $data['verification_code'];
+
+        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new UserNotFoundException;
+
+        if ($user->verification_code == $verificationCode) {
+
+            $this->deviceService->create([
+                'device_id' => $data['device_id'],
+                'user_id' => $user->id
+            ]);
+
+            return $user->tokens()->create("Token for user #$user->id")->plainTextToken;
+        }
+
+        throw new VerificationCodeIsntValidException;
+    }
+
+
+    /**
+     * @param string $phoneNumber
+     * @param string $deviceId
+     * @param string|null $pin
+     * @return string
      * @throws GuzzleException
      * @throws InvalidLoginException
-     */
-    public function sendSmsPassword(string $phoneNumber): array
-    {
-        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
-        if (\Cache::get("User#$user->id") > 10) {
-            throw new TooManyLoginAttemptsException;
-        }
-        $verification_code = Random::generate(4, '0-9');
-
-        $phone_number = str($user->phone_number)->replace('+', '')->value();
-        if (\Cache::has("User#$user->id")) {
-            \Cache::increment("User#$user->id");
-        } else {
-            \Cache::put("User#$user->id", 1, 15 * 60);
-        }
-        try {
-            $this->SMSService->sendSms("Ваш пароль: $verification_code", $phone_number);
-        } catch (SMSNotSentException $e) {
-            throw new SMSNotSentException;
-        }
-
-        $user->verification_code = $verification_code;
-        $user->save();
-
-        return [
-            'code' => $verification_code
-        ];
-    }
-
-    /**
-     * @throws InvalidLoginException
-     * @throws InvalidPasswordException
-     */
-    public function clientSignIn(string $phoneNumber, string $password): string
-    {
-        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
-
-        if (!$this->clientAttempt($user, $password)) {
-            throw new InvalidPasswordException;
-        }
-
-        return $user->createToken("Token for user #$user->id")->plainTextToken;
-    }
-
-    /**
-     * @throws UnauthorizedException
-     */
-    public function specialistSetPin(?User $user, string $pin): void
-    {
-        $user ?? throw new UnauthorizedException;
-
-        $user->pin = $pin;
-        $user->save();
-    }
-
-    /**
-     * @throws InvalidLoginException
+     * @throws SMSNotSentException
      * @throws UserPinException
+     * @throws InvalidDeviceException
      */
-    public function specialistSignIn(string $phoneNumber, string $pin): string
+    public function signIn(string $phoneNumber, string $deviceId, ?string $pin = null): string
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
+        $device = $this->deviceService->getDevice($deviceId, $user->id);
 
-        if (!$this->specialistAttempt($user, $pin)) {
+
+        if (is_null($device)) {
+            $verification_code = Random::generate(4, '0-9');
+            $this->SMSService->sendSms(
+                "Код для входа с нового устройства: $verification_code", $user->phone_number
+            );
+            $user->verification_code = $verification_code;
+            $user->save();
+            throw new InvalidDeviceException;
+        }
+
+        if (!is_null($pin) && !$this->attempt($device, $pin)) {
             throw new UserPinException;
         }
 
         return $user->createToken("Token for user #$user->id")->plainTextToken;
     }
 
+
     /**
      * @throws InvalidLoginException
-     * @throws SMSNotSentException
-     * @throws GuzzleException
+     * @throws InvalidDeviceException
      */
-    public function sendPinResetRequest(string $phoneNumber): array
+    public function setPin(array $data): bool
     {
-        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
+        $user = $this->service->searchByPhoneNumber($data['phoneNumber']) ?? throw new InvalidLoginException;
+        $device = $this->deviceService->getDevice($data['device_id'], $user->phone_number)
+            ?? throw new InvalidDeviceException;
 
-        $code = Random::generate(4, '0-9');
-        try {
-            $this->SMSService->sendSms("Код для сброса PIN: $code", $phoneNumber);
-        } catch (SMSNotSentException $e) {
-            throw new SMSNotSentException;
-        }
-
-        $user->verification_code = $code;
-        $user->save();
-
-        return ['code' => $code];
+        return $this->deviceService->setPin($user->id, $device->device_id, $data['pin']);
     }
 
     /**
      * @throws InvalidLoginException
-     * @throws VerificationCodeIsntValidException
+     * @throws InvalidDeviceException
      */
-    public function pinReset(string $phoneNumber, string $verificationCode, string $pin): bool
+    public function unsetPin(array $data): bool
     {
-        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
+        $user = $this->service->searchByPhoneNumber($data['phoneNumber']) ?? throw new InvalidLoginException;
+        $device = $this->deviceService->getDevice($data['device_id'], $user->phone_number)
+            ?? throw new InvalidDeviceException;
 
-        if ($user->verification_code !== $verificationCode) {
-            throw new VerificationCodeIsntValidException;
-        }
-
-        $user->pin = $pin;
-        $user->save();
-
-        return true;
+        return $this->deviceService->unsetPin($user->id, $device->device_id);
     }
 
-    protected function specialistAttempt(Authenticatable $user, string $pin): bool
+
+    protected function attempt(Device $device, string $pin): bool
     {
-        if ($user->pin == $pin) {
+        if ($device->pin == $pin) {
             return true;
         }
 
-        return false;
-    }
-
-    protected function clientAttempt(Authenticatable $user, string $code): bool
-    {
-        if ($user->verification_code == $code) {
-            \Cache::delete("User#$user-id");
-            return true;
-        }
         return false;
     }
 }

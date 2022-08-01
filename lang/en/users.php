@@ -14,7 +14,8 @@ return [
             'too_many_login' => 'Too many login attempts. Try again in 15 minutes',
             'specialist_not_created' => 'Specialist not created',
             'specialist_not_found' => 'Specialist not found',
-            'client_not_found' => 'Client not found'
+            'client_not_found' => 'Client not found',
+            'invalid_device' => 'Invalid Device'
         ],
         'specialist' => [
             'pin_exception' => 'PIN is not valid',

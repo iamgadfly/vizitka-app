@@ -1,53 +1,33 @@
 <?php
 
-use App\Http\Controllers\Api\Specialist\AuthController as SpecialistAuthController;
-use App\Http\Controllers\Api\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\Api\AuthController;
 
-// Specialist auth routes
-Route::controller(SpecialistAuthController::class)
-    ->prefix('specialist/auth')->group(function() {
+Route::controller(AuthController::class)
+    ->prefix('auth')
+    ->group(function() {
 
-        Route::post('signup', 'signup')
-            ->name('specialist.auth.signup');
+    Route::post('signup', 'signUp')
+        ->name('auth.signUp');
 
-        Route::post('signin', 'signIn')
-            ->name('specialist.auth.signIn');
+    Route::post('signin', 'signin')
+        ->name('auth.singIn');
 
-        Route::post('setPin', 'setPin')
-            ->middleware('auth:sanctum')
-            ->name('specialist.auth.setpin');
+    Route::post('verify', 'verification')
+        ->name('auth.verification');
 
-        Route::post('verification', 'verification')
-            ->name('specialist.auth.verification');
+    Route::post('newDevice/verify', 'newDeviceVerify')
+        ->name('auth.new.device.verification');
 
-        Route::post('logout',  'logout')
-            ->middleware('auth:sanctum')
-            ->name('specialist.auth.logout');
+    Route::post('logout', 'logout')
+        ->middleware('auth:sanctum')
+        ->name('auth.logout');
 
-        Route::post('sendPinResetRequest', 'sendPinResetRequest')
-            ->name('specialist.auth.send-pin-reset-request');
+    Route::post('forget', 'forgetPin')
+        ->name('auth.forget');
 
-        Route::post('pinReset', 'pinReset')
-            ->name('specialist.auth.pin-reset');
-});
+    Route::post('pin/set', 'setPin')
+        ->name('auth.pin.set');
 
-// Client auth routes
-Route::controller(ClientAuthController::class)
-    ->prefix('client/auth')->group(function () {
-
-        Route::post('signup', 'signup')
-            ->name('client.auth.signup');
-
-        Route::post('signin', 'signIn')
-            ->name('client.auth.signIn');
-
-        Route::post('sendPassword', 'sendPassword')
-            ->name('client.auth.sendPassword');
-
-        Route::post('verification', 'verification')
-            ->name('client.auth.verification');
-
-        Route::post('logout',  'logout')
-            ->middleware('auth:sanctum')
-            ->name('client.auth.logout');
+    Route::post('pin/unset', 'unsetPin')
+        ->name('auth.pin.unset');
 });

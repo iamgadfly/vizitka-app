@@ -14,7 +14,8 @@ return [
           'too_many_login' => 'Слишком много попыток входа. Попробуйте еще раз через 15 минут',
           'specialist_not_created' => 'Специалист не был создан',
           'specialist_not_found' => 'Специалист не найден',
-          'client_not_found' => 'Клиент не найден'
+          'client_not_found' => 'Клиент не найден',
+          'invalid_device' => 'Устройство не найдено'
       ],
       'specialist' => [
           'pin_exception' => 'Неврно введен PIN код',

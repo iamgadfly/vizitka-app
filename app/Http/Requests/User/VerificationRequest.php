@@ -24,8 +24,9 @@ class VerificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|max:15|exists:users|bail',
-            'verification_code' => 'required|max:4|bail'
+            'phone_number' => ['required', 'max:15', 'exists:users,phone_number', 'bail'],
+            'verification_code' => ['required', 'max:4', 'bail'],
+            'device_id' => ['required', 'string', 'bail']
         ];
     }
 
