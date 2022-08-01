@@ -266,7 +266,6 @@ class RequestHelper
         return [
             'slidingSchedule' => [$rule, 'array', 'nullable', 'bail'],
             'slidingSchedule.startFrom' => [$rule, 'array', 'bail'],
-            'slidingSchedule.startFrom.label' => [$rule, 'date_format:d.m.Y', 'bail'],
             'slidingSchedule.startFrom.value' => [$rule, 'date_format:Y-m-d', 'bail'],
             'slidingSchedule.workdaysCount' => [$rule, 'integer', 'bail'],
             'slidingSchedule.weekdaysCount' => [$rule, 'integer', 'bail'],
