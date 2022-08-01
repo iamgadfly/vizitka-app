@@ -117,7 +117,6 @@ class AuthService
 
 
     /**
-     * @throws UserAlreadyVerifiedException
      * @throws VerificationCodeIsntValidException
      * @throws UserNotFoundException
      */
@@ -128,21 +127,14 @@ class AuthService
 
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new UserNotFoundException;
 
-        if ($user->is_verified) {
-            throw new UserAlreadyVerifiedException;
-        }
-
         if ($user->verification_code == $verificationCode) {
-            $user->phone_number_verified_at = Carbon::now();
-            $user->is_verified = true;
-            $user->save();
 
             $this->deviceService->create([
                 'device_id' => $data['device_id'],
                 'user_id' => $user->id
             ]);
 
-            return true;
+            return $user->tokens()->create("Token for user #$user->id")->plainTextToken;
         }
 
         throw new VerificationCodeIsntValidException;

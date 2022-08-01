@@ -101,6 +101,18 @@ class AuthController extends Controller
     }
 
     /**
+     * @throws UserAlreadyVerifiedException
+     * @throws VerificationCodeIsntValidException
+     * @throws UserNotFoundException
+     */
+    public function newDeviceVerify(VerificationRequest $request)
+    {
+        return $this->success(
+            $this->authService->verifyNewDevice($request->validated())
+        );
+    }
+
+    /**
      * @throws UserPinException
      * @throws InvalidLoginException
      * @throws InvalidDeviceException
