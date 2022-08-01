@@ -20,11 +20,13 @@ class FlexibleScheduleResource extends JsonResource
             return [];
         }
         $work = WorkScheduleWorkRepository::getWorks($this->id);
-        $breaks = WorkScheduleBreakRepository::getBreaks($this->id);
+        if ($this->break_type == 'united') {
+            $breaks = WorkScheduleBreakRepository::getBreaksForADay($work->first()->day->day);
+        }
         return [
             'data' => FlexibleDayResource::collection($work),
             'breakType' => BreakTypeResource::make($this),
-            'breaks' => $this->break_type == 'united' ? FlexibleBreakResource::collection($breaks) : null
+            'breaks' => $this->break_type == 'united' ? FlexibleBreakResource::collection($breaks) : []
         ];
     }
 }

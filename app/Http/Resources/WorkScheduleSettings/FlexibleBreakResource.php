@@ -16,8 +16,8 @@ class FlexibleBreakResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'start' => Carbon::parse($this->start)->format('H:i'),
-            'end' => Carbon::parse($this->end)->format('H:i')
+            'start' => !is_null($this->start) ? Carbon::parse($this->start)->format('H:i') : null,
+            'end' => !is_null($this->end) ? Carbon::parse($this->end)->format('H:i') : null
         ];
     }
 }

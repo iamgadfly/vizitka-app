@@ -23,8 +23,8 @@ class TimeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => __(TranslationHelper::getTranslationForTime($this->value)),
-            'value' => $this->value
+            'label' => !is_null($this->value) ? __(TranslationHelper::getTranslationForTime($this->value)) : null,
+            'value' => !is_null($this->value) ? $this->value : null
         ];
     }
 }
