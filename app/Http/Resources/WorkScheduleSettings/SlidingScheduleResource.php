@@ -20,7 +20,7 @@ class SlidingScheduleResource extends JsonResource
         if ($this->type != 'sliding') {
             return [];
         }
-        $breakType = $this->day->settings->break_type;
+        $breakType = $this->break_type;
         $work = WorkScheduleWorkRepository::getWorks($this->id);
         if ($breakType == 'united') {
             $breaks = WorkScheduleBreakRepository::getBreaksForADayIndex($work->first()->day->day_index);
