@@ -7,6 +7,7 @@ use App\Exceptions\TimeIsNotValidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Appointment\CreateOrUpdateRequest;
 use App\Http\Requests\Appointment\GetAllByDayRequest;
+use App\Http\Requests\Appointment\GetAppointmentInIntervalRequest;
 use App\Http\Requests\Appointment\GetSvgRequest;
 use App\Http\Requests\Appointment\IdRequest;
 use App\Http\Requests\Appointment\MassDeleteRequest;
@@ -119,6 +120,13 @@ class AppointmentController extends Controller
     {
         $data = $this->service->getAllByDay($request->date);
         return response()->json(new AppointmentResourceForCalendar($data));
+    }
+
+    public function getAppointmentsInInterval(GetAppointmentInIntervalRequest $request)
+    {
+        return $this->success(
+            $this->service->getAppointmentsInInterval($request->validated())
+        );
     }
 
     /**

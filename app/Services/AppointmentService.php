@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\BaseException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\ArrayHelper;
@@ -16,8 +17,10 @@ use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
 use App\Repositories\WorkSchedule\WorkScheduleSettingsRepository;
 use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Carbon\Carbon;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Nette\Utils\Random;
+use Symfony\Component\HttpFoundation\Response;
 use function Clue\StreamFilter\fun;
 
 
@@ -62,6 +65,22 @@ class AppointmentService
         return $output;
     }
 
+
+    /**
+     * @throws BaseException
+     */
+    public function getAppointmentsInInterval(array $data)
+    {
+        if ($data['time_start'] >= $data['time_end']) {
+            throw new BaseException("time_start must be less than time_end", Response::HTTP_BAD_REQUEST);
+        }
+        return $this->repository->whereGet([
+            ['specialist_id', '=', $data['specialist_id']],
+            ['time_start' , '>=', $data['time_start']],
+            ['time_end', '<=', $data['time_end']],
+            ['date', '=', $data['date']]
+        ])->count();
+    }
 
 
     /**
