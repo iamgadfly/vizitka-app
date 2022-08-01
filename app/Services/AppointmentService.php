@@ -129,15 +129,15 @@ class AppointmentService
         } else {
             $pills = [];
         }
+        $output->disabled = $pills;
 
         if (!empty($times)) {
             $times = TimeHelper::getTimeInterval($times[0], $times[1]);
-            $workSchedule = ArrayHelper::arrayWithoutIntersections($times, $pills);
         } else {
             $workSchedule = [];
         }
 
-        $output->workSchedule = $workSchedule;
+        $output->workSchedule = $times;
         $output->smartSchedule = WorkScheduleSettings::where([
             'specialist_id' => $specialistId
         ])->first()->smart_schedule;
