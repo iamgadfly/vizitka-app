@@ -22,6 +22,7 @@ class AppointmentResourceForCalendar extends JsonResource
             'smart_schedule' => $this->smartSchedule,
             'data' => $this->appointments,
             'workSchedule' => $this->workSchedule,
+            'disabledPills' => $this->disabled,
             'time_interval' => $timeInterval
         ];
     }
