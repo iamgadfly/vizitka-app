@@ -20,7 +20,11 @@ class SlidingScheduleResource extends JsonResource
         if ($this->type != 'sliding') {
             return [];
         }
+        $breakType = $this->day->settings->break_type;
         $work = WorkScheduleWorkRepository::getWorks($this->id);
+        if ($breakType == 'united') {
+            $breaks = WorkScheduleBreakRepository::getBreaksForADayIndex($work->first()->day->day_index);
+        }
         return [
             'startFrom' => [
                 'label' => Carbon::parse($this->start_from)->format('d.m.Y'),
@@ -29,6 +33,7 @@ class SlidingScheduleResource extends JsonResource
             'workdaysCount' => $this->workdays_count,
             'weekdaysCount' => $this->weekdays_count,
             'data' => SlidingDayResource::collection($work),
+            'breaks' => $breakType == 'united' ? FlexibleBreakResource::collection($breaks) : []
         ];
     }
 }
