@@ -25,7 +25,7 @@ class IsUserExistsRequest extends FormRequest
     {
         return [
             'phone_number' => ['required', 'regex:/\+[0-9]{0,3}[0-9]{10}/', 'bail'],
-            'device_id' => ['required', 'string', 'exists:devices,device_id', 'bail']
+            'device_id' => ['required', 'string', 'bail']
         ];
     }
 }

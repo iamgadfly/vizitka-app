@@ -33,7 +33,7 @@ class AuthService
         if (!is_null($user)) {
             $output['user'] = true;
             $output['device'] = !is_null($device);
-            $output['pin'] = !is_null($device->pin);
+            $output['pin'] = !is_null($device?->pin);
             $output['specialist'] = !is_null($user->specialist);
             $output['client'] = !is_null($user->client);
         } else {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\BaseException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Http\Controllers\Controller;
@@ -122,6 +123,9 @@ class AppointmentController extends Controller
         return response()->json(new AppointmentResourceForCalendar($data));
     }
 
+    /**
+     * @throws BaseException
+     */
     public function getAppointmentsInInterval(GetAppointmentInIntervalRequest $request)
     {
         return $this->success(
