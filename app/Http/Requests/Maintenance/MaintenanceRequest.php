@@ -25,7 +25,7 @@ class MaintenanceRequest extends FormRequest
     {
         return [
             'maintenances' => ['required', 'array', 'bail'],
-            'maintenances.*.id' => ['required', 'exists:maintenances,id'],
+            'maintenances.*.id' => ['exists:maintenances,id'],
             'maintenances.*.title' => ['required', 'string', 'bail'],
             'maintenances.*.price' => ['required', 'array', 'bail'],
             'maintenances.*.price.label' => ['nullable', 'string', 'bail'],
