@@ -21,7 +21,6 @@ class UserFactory extends Factory
     {
         return [
             'phone_number' => $this->faker->unique()->numerify("+7##########"),
-            'pin' => $this->faker->numerify("####"),
             'phone_number_verified_at' => now(),
             'verification_code' => $this->faker->numerify("####"),
             'is_verified' => true,

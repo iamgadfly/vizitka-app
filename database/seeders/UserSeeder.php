@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'phone_number' => '+79000000000',
-                'pin' => '1234',
                 'phone_number_verified_at' => Carbon::now(),
                 'is_verified' => true,
                 'created_at' => date('Y-m-d H:i:s'),
