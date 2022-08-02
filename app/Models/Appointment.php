@@ -54,6 +54,6 @@ class Appointment extends Model
 
     public function maintenance(): BelongsTo
     {
-        return $this->belongsTo(Maintenance::class, 'maintenance_id', 'id');
+        return $this->belongsTo(Maintenance::class, 'maintenance_id', 'id')->withTrashed();
     }
 }
