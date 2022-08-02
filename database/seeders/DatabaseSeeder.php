@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             MaintenanceSeeder::class,
             WorkScheduleSettingsSeeder::class,
             WorkScheduleWorkSeeder::class,
-            WorkScheduleBreakSeeder::class
+            WorkScheduleBreakSeeder::class,
+            DeviceSeeder::class
         ]);
     }
 }

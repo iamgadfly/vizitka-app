@@ -27,7 +27,7 @@ class SlidingScheduleResource extends JsonResource
         $breakType = $this->break_type;
         $work = WorkScheduleWorkRepository::getWorks($this->id);
         if ($breakType == 'united') {
-            $breaks = WorkScheduleBreakRepository::getBreaksForADayIndex($this->day->day_index);
+            $breaks = WorkScheduleBreakRepository::getBreaksForADayIndex($this->day->first()->day_index);
         }
         return [
             'startFrom' => [
