@@ -5,7 +5,7 @@ namespace App\Http\Requests\Appointment;
 use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetAppointmentInIntervalRequest extends FormRequest
+class RemoveAppointmentsBetweenTwoDatesRequest extends FormRequest
 {
     /**
      * @throws \App\Exceptions\SpecialistNotFoundException
@@ -37,9 +37,9 @@ class GetAppointmentInIntervalRequest extends FormRequest
     public function rules()
     {
         return [
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
             'start' => ['required', 'date_format:Y-m-d', 'bail'],
-            'end' => ['required', 'date_format:Y-m-d', 'bail'],
-            'specialist_id' => ['required', 'exists:specialists,id', 'bail']
+            'end' => ['required', 'date_format:Y-m-d', 'bail']
         ];
     }
 }

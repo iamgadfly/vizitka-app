@@ -71,14 +71,13 @@ class AppointmentService
      */
     public function getAppointmentsInInterval(array $data)
     {
-        if ($data['time_start'] >= $data['time_end']) {
-            throw new BaseException("time_start must be less than time_end", Response::HTTP_BAD_REQUEST);
+        if ($data['start'] >= $data['end']) {
+            throw new BaseException("start must be less than end", Response::HTTP_BAD_REQUEST);
         }
         return $this->repository->whereGet([
             ['specialist_id', '=', $data['specialist_id']],
-            ['time_start' , '>=', $data['time_start']],
-            ['time_end', '<=', $data['time_end']],
-            ['date', '=', $data['date']]
+            ['date', '>=', $data['start']],
+            ['date', '<=', $data['end']]
         ])->count();
     }
 
@@ -225,6 +224,19 @@ class AppointmentService
     {
         foreach ($data['ids'] as $id) {
             $this->repository->deleteById($id);
+        }
+        return true;
+    }
+
+    public function deleteAppointmentsBetweenTwoDates(array $data): bool
+    {
+        $appointments = $this->repository->whereGet([
+            ['specialist_id', '=', $data['specialist_id']],
+            ['date', '>=', $data['start']],
+            ['date', '<=', $data['end']],
+        ]);
+        foreach ($appointments as $appointment) {
+            $appointment->delete();
         }
         return true;
     }

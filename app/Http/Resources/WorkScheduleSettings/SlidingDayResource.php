@@ -17,13 +17,15 @@ class SlidingDayResource extends JsonResource
     public function toArray($request)
     {
         $break = WorkScheduleBreakRepository::getBreaksForADayIndex($this->day->day_index);
+        $breakType = $this->day->settings->break_type;
         return [
             'day' => (string) DayResource::make($this)->day->day_index,
             'workTime' => [
-                'start' => Carbon::parse($this->start)->format('H:i'),
-                'end' => Carbon::parse($this->end)->format('H:i')
+                'start' => !is_null($this->start) ? Carbon::parse($this->start)->format('H:i') : null,
+                'end' => !is_null($this->end) ? Carbon::parse($this->end)->format('H:i') : null
             ],
-            'breaks' => !is_null($this->start) ? FlexibleBreakResource::collection($break) : null
+            'breaks' => !is_null($this->start) && $breakType == 'individual'
+                ? FlexibleBreakResource::collection($break) : []
         ];
     }
 }

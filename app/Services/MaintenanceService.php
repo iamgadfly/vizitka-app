@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
+use App\Helpers\AuthHelper;
 use App\Http\Resources\MaintenanceSettingsResource;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\MaintenanceSettingsRepository;
@@ -44,12 +45,17 @@ class MaintenanceService
         }
     }
 
-    public function addNew(array $data)
+    public function addNew(array $data): bool
     {
-        $data['settings_id'] = $this->maintenanceSettingsRepository->mySettings()->id;
-        $data['price'] = $data['price']['value'] ?? null;
-        $data['duration'] = $data['duration']['value'];
-        return $this->repository->create($data);
+        $settingsId = $this->maintenanceSettingsRepository->mySettings()->id;
+        foreach ($data['maintenances'] as $item) {
+            $item['specialist_id'] = $data['specialist_id'];
+            $item['settings_id'] = $settingsId;
+            $item['price'] = $item['price']['value'] ?? null;
+            $item['duration'] = $item['duration']['value'];
+            $this->repository->create($item);
+        }
+        return true;
     }
 
     public function delete(int $id)
@@ -63,13 +69,34 @@ class MaintenanceService
         return $this->maintenanceSettingsRepository->update($item->id, $data);
     }
 
-    public function update(array $data)
+    /**
+     * @throws \App\Exceptions\SpecialistNotFoundException
+     */
+    public function update(array $data): bool
     {
+        $settings = $this->maintenanceSettingsRepository->whereFirst([
+            'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+        ])->id;
+        $allIds = $this->repository->whereGet([
+            'settings_id' => $settings
+        ])->toArray();
+        $allIds = array_column($allIds, 'id');
+        $maintenanceIds = array_column($data['maintenances'], 'id');
+        foreach ($allIds as $id) {
+            if (!in_array($id, $maintenanceIds)) {
+                $this->repository->deleteById($id);
+            }
+        }
         foreach ($data['maintenances'] as $maintenance) {
-            $this->repository->getById($maintenance['id']) ?? throw new NotFoundHttpException;
             $maintenance['price'] = $maintenance['price']['value'];
             $maintenance['duration'] = $maintenance['duration']['value'];
-            $this->repository->update($maintenance['id'], $maintenance);
+            if (isset($maintenance['id'])) {
+                $this->repository->getById($maintenance['id']) ?? throw new NotFoundHttpException;
+                $this->repository->update($maintenance['id'], $maintenance);
+            } else {
+                $maintenance['settings_id'] = $settings;
+                $this->repository->create($maintenance);
+            }
         }
 
         return true;
