@@ -54,6 +54,10 @@ class FullInfoResource extends JsonResource
                 'value' => CardBackgroundHelper::getActivityKindFromFilename(
                     $this->card->background_image
                 )
+            ],
+            'share' => [
+                'link' =>  config('app.url') . '/shares/' . $this->share?->hash,
+                'qr' => ImageHelper::getAssetFromFilename("images/shares/{$this->share?->hash}.png")
             ]
         ];
     }
