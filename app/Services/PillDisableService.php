@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
@@ -16,8 +17,19 @@ class PillDisableService
         protected PillDisableRepository $repository
     ) {}
 
+    /**
+     * @throws RecordIsAlreadyExistsException
+     */
     public function create(array $data): bool
     {
+        $pill = $this->repository->whereFirst([
+            'specialist_id' => $data['specialist_id'],
+            'date' => $data['date'],
+            'time' => $data['time']
+        ]);
+        if (!is_null($pill)) {
+            throw new RecordIsAlreadyExistsException;
+        }
         $this->repository->create($data);
         return true;
     }

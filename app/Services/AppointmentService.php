@@ -151,6 +151,7 @@ class AppointmentService
 
         if (!empty($times)) {
             $times = TimeHelper::getTimeInterval($times[0], $times[1]);
+            $times = ArrayHelper::arrayWithoutIntersections($times, $pills);
         } else {
             $workSchedule = [];
         }
@@ -252,7 +253,6 @@ class AppointmentService
             ];
             $output[] = $item;
         }
-
         return collect($output);
     }
 
