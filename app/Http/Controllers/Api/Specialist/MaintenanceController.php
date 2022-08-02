@@ -44,7 +44,7 @@ class MaintenanceController extends Controller
     public function create(NewMaintenanceRequest $request): JsonResponse
     {
         return $this->success(
-            new MaintenanceResource($this->service->addNew($request->validated())),
+            $this->service->addNew($request->validated()),
             Response::HTTP_CREATED
         );
     }

@@ -44,12 +44,17 @@ class MaintenanceService
         }
     }
 
-    public function addNew(array $data)
+    public function addNew(array $data): bool
     {
-        $data['settings_id'] = $this->maintenanceSettingsRepository->mySettings()->id;
-        $data['price'] = $data['price']['value'] ?? null;
-        $data['duration'] = $data['duration']['value'];
-        return $this->repository->create($data);
+        $settingsId = $this->maintenanceSettingsRepository->mySettings()->id;
+        foreach ($data['maintenances'] as $item) {
+            $item['specialist_id'] = $data['specialist_id'];
+            $item['settings_id'] = $settingsId;
+            $item['price'] = $item['price']['value'] ?? null;
+            $item['duration'] = $item['duration']['value'];
+            $this->repository->create($item);
+        }
+        return true;
     }
 
     public function delete(int $id)
