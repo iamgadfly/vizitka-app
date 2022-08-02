@@ -143,8 +143,11 @@ Route::controller(AppointmentController::class)
         Route::delete('mass', 'massDelete')
             ->name('specialist.appointment.delete.mass');
 
-        Route::get('interval/{date}/{start}-{end}', 'getAppointmentsInInterval')
+        Route::get('interval/{start}/{end}', 'getAppointmentsInInterval')
             ->name('specialist.appointment.isInInterval');
+
+        Route::delete('interval/{start}/{end}', 'deleteAppointmentsBetweenTwoDates')
+            ->name('specialist.appointment.inInterval.delete');
     });
 
 // Single work schedule routes

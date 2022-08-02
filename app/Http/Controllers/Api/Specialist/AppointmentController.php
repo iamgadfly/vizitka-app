@@ -12,6 +12,7 @@ use App\Http\Requests\Appointment\GetAppointmentInIntervalRequest;
 use App\Http\Requests\Appointment\GetSvgRequest;
 use App\Http\Requests\Appointment\IdRequest;
 use App\Http\Requests\Appointment\MassDeleteRequest;
+use App\Http\Requests\Appointment\RemoveAppointmentsBetweenTwoDatesRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\AppointmentResourceForCalendar;
 use App\Services\AppointmentService;
@@ -158,6 +159,13 @@ class AppointmentController extends Controller
     {
         return $this->success(
             $this->service->massDelete($request->validated())
+        );
+    }
+
+    public function deleteAppointmentsBetweenTwoDates(RemoveAppointmentsBetweenTwoDatesRequest $request)
+    {
+        return $this->success(
+            $this->service->deleteAppointmentsBetweenTwoDates($request->validated())
         );
     }
 }
