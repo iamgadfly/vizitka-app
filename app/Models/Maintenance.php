@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Maintenance extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
