@@ -72,10 +72,10 @@ class AppointmentRepository extends Repository
     /**
      * @param string $date
      * @param int|null $specialistId
-     * @return Appointment|null
+     * @return Collection
      * @throws SpecialistNotFoundException
      */
-    public function getAllByDate(string $date, ?int $specialistId = null): ?Appointment
+    public function getAllByDate(string $date, ?int $specialistId = null): Collection
     {
         if (is_null($specialistId)) {
             $specialistId = AuthHelper::getSpecialistIdFromAuth();
