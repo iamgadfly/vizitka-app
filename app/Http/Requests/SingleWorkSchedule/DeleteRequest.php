@@ -4,6 +4,13 @@ namespace App\Http\Requests\SingleWorkSchedule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class DeleteRequest
+ *
+ * @package App\Http\Requests\SingleWorkSchedule
+ *
+ * @property integer $id
+ */
 class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:single_work_schedules,id']
+            'id' => ['required', 'integer', 'exists:single_work_schedules,id']
         ];
     }
 }

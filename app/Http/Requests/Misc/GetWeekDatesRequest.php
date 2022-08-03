@@ -2,8 +2,16 @@
 
 namespace App\Http\Requests\Misc;
 
+use DateTime;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetWeekDatesRequest
+ *
+ * @package App\Http\Requests\Misc
+ *
+ * @property DateTime $date
+ */
 class GetWeekDatesRequest extends FormRequest
 {
     /**

@@ -6,6 +6,14 @@ use App\Exceptions\ClientNotFoundException;
 use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetMyHistoryForThisSpecialistRequest
+ *
+ * @package App\Http\Requests\SpecialistData
+ *
+ * @property integer $specialist_id
+ * @property integer $client_id
+ */
 class GetMyHistoryForThisSpecialistRequest extends FormRequest
 {
     /**

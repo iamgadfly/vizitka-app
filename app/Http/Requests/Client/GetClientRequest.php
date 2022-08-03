@@ -4,6 +4,13 @@ namespace App\Http\Requests\Client;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetClientRequest
+ *
+ * @package App\Http\Requests\Client
+ *
+ * @property integer $id
+ */
 class GetClientRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class GetClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|int|exists:clients,id'
+            'id' => ['required', 'integer', 'exists:clients,id']
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Specialist;
 
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\CreateRequest;
 use App\Http\Requests\Maintenance\DeleteRequest;
@@ -25,6 +26,8 @@ class MaintenanceController extends Controller
      * @lrd:start
      * Create Maintenance on create specialist stage
      * @lrd:end
+     * @param CreateRequest $request
+     * @return JsonResponse
      */
     public function store(CreateRequest $request): JsonResponse
     {
@@ -96,6 +99,7 @@ class MaintenanceController extends Controller
      * @lrd:start
      * Update Maintenance route
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function update(MaintenanceRequest $request): JsonResponse
     {

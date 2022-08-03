@@ -24,7 +24,9 @@ class SetPinRequest extends FormRequest
     public function rules()
     {
         return [
-            'pin' => 'required|string|size:4'
+            'pin' => ['required', 'string', 'size:4', 'bail'],
+            'phone_number' => ['required', 'string', 'bail'] ,
+            'device_id' => ['required', 'string', 'exists:devices,device_id', 'bail']
         ];
     }
 }

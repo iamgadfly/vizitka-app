@@ -26,6 +26,14 @@ use function Clue\StreamFilter\fun;
 
 class AppointmentService
 {
+    /**
+     * @param AppointmentRepository $repository
+     * @param MaintenanceRepository $maintenanceRepository
+     * @param WorkScheduleSettingsRepository $settingsRepository
+     * @param WorkScheduleWorkRepository $workRepository
+     * @param WorkScheduleBreakRepository $breakRepository
+     * @param PillDisableService $pillDisableService
+     */
     public function __construct(
         protected AppointmentRepository $repository,
         protected MaintenanceRepository $maintenanceRepository,
@@ -36,6 +44,9 @@ class AppointmentService
     ) {}
 
     /**
+     * @param array $data
+     * @param string|null $orderNumber
+     * @return array
      * @throws TimeIsNotValidException
      */
     public function create(array $data, ?string $orderNumber = null): array
@@ -67,9 +78,11 @@ class AppointmentService
 
 
     /**
+     * @param array $data
+     * @return integer
      * @throws BaseException
      */
-    public function getAppointmentsInInterval(array $data)
+    public function getAppointmentsInInterval(array $data): int
     {
         if ($data['start'] >= $data['end']) {
             throw new BaseException("start must be less than end", Response::HTTP_BAD_REQUEST);
@@ -83,6 +96,8 @@ class AppointmentService
 
 
     /**
+     * @param array $data
+     * @return array
      * @throws TimeIsNotValidException
      */
     public function update(array $data): array
@@ -96,6 +111,10 @@ class AppointmentService
         return $this->create($data, $data['order_number']);
     }
 
+    /**
+     * @param string $orderNumber
+     * @return bool
+     */
     public function delete(string $orderNumber): bool
     {
         $records = $this->repository->whereGet([
@@ -109,22 +128,37 @@ class AppointmentService
         return true;
     }
 
+    /**
+     * @param string $orderNumber
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function get(string $orderNumber)
     {
         return $this->repository->whereGet(['order_number' => $orderNumber]);
     }
 
+    /**
+     * @param string $orderNumber
+     * @return bool
+     */
     public function confirm(string $orderNumber): bool
     {
         return $this->repository->confirm($orderNumber);
     }
 
+    /**
+     * @param string $orderNumber
+     * @return bool
+     */
     public function skipped(string $orderNumber): bool
     {
         return $this->repository->skipped($orderNumber);
     }
 
     /**
+     * @param string $date
+     * @param int|null $specialistId
+     * @return Collection
      * @throws SpecialistNotFoundException
      */
     public function getAllByDay(string $date, ?int $specialistId = null): Collection
@@ -164,6 +198,8 @@ class AppointmentService
     }
 
     /**
+     * @param array $dates
+     * @return array
      * @throws SpecialistNotFoundException
      */
     public function getSvgForPeriod(array $dates): array
@@ -191,6 +227,12 @@ class AppointmentService
     }
 
     /**
+     * @param string $date
+     * @param string $minTime
+     * @param string $maxTime
+     * @param string $startDay
+     * @param string $endDay
+     * @return array
      * @throws SpecialistNotFoundException
      */
     public function getSvgForDate(
@@ -202,6 +244,10 @@ class AppointmentService
         return $this->convertToScheduleType($appointments, $breaks, $minTime, $maxTime, $startDay, $endDay);
     }
 
+    /**
+     * @param string $date
+     * @return array
+     */
     public function getMinMaxTimes(string $date): array
     {
         $starts = [];
@@ -221,6 +267,10 @@ class AppointmentService
         ];
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     public function massDelete(array $data): bool
     {
         foreach ($data['ids'] as $id) {
@@ -229,6 +279,10 @@ class AppointmentService
         return true;
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     public function deleteAppointmentsBetweenTwoDates(array $data): bool
     {
         $appointments = $this->repository->whereGet([
@@ -242,6 +296,10 @@ class AppointmentService
         return true;
     }
 
+    /**
+     * @param Collection $breaks
+     * @return Collection
+     */
     private function convertBreakToOrderType(Collection $breaks): Collection
     {
         $output = [];
@@ -256,6 +314,10 @@ class AppointmentService
         return collect($output);
     }
 
+    /**
+     * @param Collection $appointments
+     * @return Collection
+     */
     protected function convertToOrderType(Collection $appointments): Collection
     {
         $usedOrders = [];
@@ -318,6 +380,8 @@ class AppointmentService
     }
 
     /**
+     * @param array $data
+     * @throws SpecialistNotFoundException
      * @throws TimeIsNotValidException
      */
     private function isInInterval(array $data): void
@@ -338,6 +402,15 @@ class AppointmentService
         }
     }
 
+    /**
+     * @param $appointments
+     * @param $breaks
+     * @param string $minTime
+     * @param string $maxTime
+     * @param string $startDay
+     * @param string $endDay
+     * @return array
+     */
     private function convertToScheduleType(
         $appointments, $breaks, string $minTime, string $maxTime, string $startDay, string $endDay
     ): array

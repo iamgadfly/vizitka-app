@@ -47,7 +47,7 @@ class ContactBookController extends Controller
      * Remove from Specialist's contact book
      * @lrd:end
      */
-    public function delete(DeleteRequest $request)
+    public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->delete($request->validated())
@@ -60,7 +60,6 @@ class ContactBookController extends Controller
      * @lrd:start
      * Mass create contacts route (import from phone contacts)
      * @lrd:end
-     * @throws RecordIsAlreadyExistsException
      * @throws SpecialistNotFoundException
      */
     public function massCreate(MassCreateRequest $request): JsonResponse
@@ -76,6 +75,7 @@ class ContactBookController extends Controller
      * @lrd:start
      * Get Contact Book route
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function get(GetRequest $request): JsonResponse
     {
@@ -85,9 +85,14 @@ class ContactBookController extends Controller
     }
 
     /**
+     * @param MassDeleteRequest $request
+     * @return JsonResponse
      * @throws SpecialistNotFoundException
+     * @lrd:start
+     * Mass Delete from Contact Book
+     * @lrd:end
      */
-    public function massDelete(MassDeleteRequest $request)
+    public function massDelete(MassDeleteRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->massDelete($request->validated())

@@ -6,6 +6,13 @@ use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetRequest
+ *
+ * @package App\Http\Requests\ContactBook
+ *
+ * @property integer $specialist_id
+ */
 class GetRequest extends FormRequest
 {
     /**

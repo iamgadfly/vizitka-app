@@ -4,6 +4,13 @@ namespace App\Http\Requests\Appointment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class IdRequest
+ *
+ * @package App\Http\Requests\Appointment
+ *
+ * @property string $order_number
+ */
 class IdRequest extends FormRequest
 {
     protected function prepareForValidation()

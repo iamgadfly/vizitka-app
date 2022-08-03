@@ -2,8 +2,16 @@
 
 namespace App\Http\Requests\Appointment;
 
+use DateTime;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetAllByDayRequest
+ *
+ * @package App\Http\Requests\Appointment
+ *
+ * @property DateTime $date
+ */
 class GetAllByDayRequest extends FormRequest
 {
     /**

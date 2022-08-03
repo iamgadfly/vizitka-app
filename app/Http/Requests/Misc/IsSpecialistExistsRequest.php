@@ -4,6 +4,13 @@ namespace App\Http\Requests\Misc;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class IsSpecialistExistsRequest
+ *
+ * @package App\Http\Requests\Misc
+ *
+ * @property string $phone_number
+ */
 class IsSpecialistExistsRequest extends FormRequest
 {
     /**

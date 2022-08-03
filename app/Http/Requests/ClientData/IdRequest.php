@@ -4,6 +4,14 @@ namespace App\Http\Requests\ClientData;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class IdRequest
+ *
+ * @package App\Http\Requests\ClientData
+ *
+ * @property integer $id
+ * @property string $type
+ */
 class IdRequest extends FormRequest
 {
     protected function prepareForValidation()

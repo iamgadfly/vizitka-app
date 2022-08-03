@@ -4,6 +4,13 @@ namespace App\Http\Requests\Blacklist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetRequest
+ *
+ * @package App\Http\Request\Blacklist
+ *
+ * @property integer $specialist_id
+ */
 class GetRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class GetRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' => ['required', 'exists:specialists,id']
+            'specialist_id' => ['required', 'integer', 'exists:specialists,id']
         ];
     }
 }

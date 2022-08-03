@@ -6,7 +6,18 @@ use App\Exceptions\ClientNotFoundException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
+/**
+ * Class CreateRequest
+ *
+ * @package App\Http\Requests\Report\Support
+ *
+ * @property integer $id
+ * @property string $text
+ * @property string $email
+ * @property UploadedFile $file
+ */
 class CreateRequest extends FormRequest
 {
     /**

@@ -191,7 +191,6 @@ class RequestHelper
             'address' => ['string', 'nullable', 'bail'],
             'placement' => ['string', 'nullable', 'bail'],
             'floor' => ['string', 'nullable', 'bail'],
-            'instagram_account' => ['string', 'nullable', 'bail'],
             'youtube_account' => ['string', 'nullable', 'bail'],
             'vk_account' => ['string', 'nullable', 'bail'],
             'tiktok_account' => ['string', 'nullable', 'bail'],

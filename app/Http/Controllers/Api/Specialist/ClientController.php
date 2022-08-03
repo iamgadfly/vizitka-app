@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    /**
+     * @param AppointmentService $service
+     * @param ContactDataService $contactDataService
+     */
     public function __construct(
         protected AppointmentService $service,
         protected ContactDataService $contactDataService
@@ -29,7 +33,7 @@ class ClientController extends Controller
      * Get Client's history as Specialist
      * @lrd:end
      */
-    public function getClientHistory(IdRequest $request)
+    public function getClientHistory(IdRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getMyHistory($request->type, $request->id)
@@ -37,9 +41,14 @@ class ClientController extends Controller
     }
 
     /**
+     * @param UpdateRequest $request
+     * @return JsonResponse
      * @throws SpecialistNotFoundException
+     * @lrd:start
+     * Update Client's Date for Specialist
+     * @lrd:end
      */
-    public function update(UpdateRequest $request)
+    public function update(UpdateRequest $request): JsonResponse
     {
         return $this->success(
             $this->contactDataService->update($request->validated())

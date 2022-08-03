@@ -19,14 +19,21 @@ use Nette\Utils\Random;
 
 class AppointmentService extends BaseAppointmentService
 {
+    /**
+     * @param AppointmentRepository $repository
+     * @param MaintenanceRepository $maintenanceRepository
+     */
     public function __construct(
         protected AppointmentRepository $repository,
         protected MaintenanceRepository $maintenanceRepository
     ) {}
 
     /**
-     * @throws TimeIsNotValidException
+     * @param array $data
+     * @param string|null $orderNumber
+     * @return array
      * @throws SpecialistNotFoundException
+     * @throws TimeIsNotValidException
      */
     public function create(array $data, ?string $orderNumber = null): array
     {
@@ -54,6 +61,9 @@ class AppointmentService extends BaseAppointmentService
     }
 
     /**
+     * @param array $data
+     * @return array
+     * @throws SpecialistNotFoundException
      * @throws TimeIsNotValidException
      */
     public function update(array $data): array
@@ -70,6 +80,9 @@ class AppointmentService extends BaseAppointmentService
     }
 
     /**
+     * @param string|null $type
+     * @param int|null $clientId
+     * @return Collection
      * @throws ClientNotFoundException
      * @throws SpecialistNotFoundException
      */
@@ -88,6 +101,11 @@ class AppointmentService extends BaseAppointmentService
         }
     }
 
+    /**
+     * @param int $clientId
+     * @param int $specialistId
+     * @return Collection
+     */
     public function getMyHistoryForSpecialist(int $clientId, int $specialistId): Collection
     {
         return $this->convertToOrderType(
@@ -99,6 +117,8 @@ class AppointmentService extends BaseAppointmentService
     }
 
     /**
+     * @param array $data
+     * @return mixed
      * @throws ClientNotFoundException
      */
     public function checkForDuplicates(array $data)
@@ -110,6 +130,10 @@ class AppointmentService extends BaseAppointmentService
         ])->whereIn('maintenance_id', $data['maintenances'])->get();
     }
 
+    /**
+     * @param Collection $appointments
+     * @return Collection
+     */
     protected function convertToOrderType(Collection $appointments): Collection
     {
         $usedOrders = [];
@@ -151,6 +175,7 @@ class AppointmentService extends BaseAppointmentService
     }
 
     /**
+     * @param array $data
      * @throws SpecialistNotFoundException
      * @throws TimeIsNotValidException
      */

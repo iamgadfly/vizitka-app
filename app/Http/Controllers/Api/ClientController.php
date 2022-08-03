@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\UserNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateClientRequest;
@@ -25,6 +26,7 @@ class ClientController extends Controller
      * @lrd:start
      * Create Client route
      * @lrd:end
+     * @throws RecordIsAlreadyExistsException
      */
     public function create(CreateClientRequest $request): JsonResponse
     {

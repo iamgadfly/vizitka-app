@@ -4,6 +4,14 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class IsUserExistsRequest
+ *
+ * @package App\Http\Requests\User
+ *
+ * @property string $phone_number
+ * @property string $device_id
+ */
 class IsUserExistsRequest extends FormRequest
 {
     /**
@@ -24,7 +32,7 @@ class IsUserExistsRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => ['required', 'regex:/\+[0-9]{0,3}[0-9]{10}/', 'bail'],
+            'phone_number' => ['required', 'string', 'regex:/\+[0-9]{0,3}[0-9]{10}/', 'bail'],
             'device_id' => ['required', 'string', 'bail']
         ];
     }

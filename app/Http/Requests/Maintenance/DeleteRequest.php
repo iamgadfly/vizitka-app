@@ -4,6 +4,14 @@ namespace App\Http\Requests\Maintenance;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+/**
+ * Class DeleteRequest
+ *
+ * @package App\Http\Requests\Maintenance
+ *
+ * @property integer $id
+ */
 class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -28,7 +36,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:maintenances,id']
+            'id' => ['required', 'integer', 'exists:maintenances,id']
         ];
     }
 }

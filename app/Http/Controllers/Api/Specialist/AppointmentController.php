@@ -125,9 +125,14 @@ class AppointmentController extends Controller
     }
 
     /**
+     * @param GetAppointmentInIntervalRequest $request
+     * @return JsonResponse
      * @throws BaseException
+     * @lrd:start
+     * Get count of appointments between two dates
+     * @lrd:end
      */
-    public function getAppointmentsInInterval(GetAppointmentInIntervalRequest $request)
+    public function getAppointmentsInInterval(GetAppointmentInIntervalRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getAppointmentsInInterval($request->validated())
@@ -140,6 +145,7 @@ class AppointmentController extends Controller
      * @lrd:start
      * Get SVG data for a month
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function svgByMonth(GetSvgRequest $request): JsonResponse
     {
@@ -162,7 +168,14 @@ class AppointmentController extends Controller
         );
     }
 
-    public function deleteAppointmentsBetweenTwoDates(RemoveAppointmentsBetweenTwoDatesRequest $request)
+    /**
+     * @param RemoveAppointmentsBetweenTwoDatesRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * Delete Appointments between two dates
+     * @lrd:end
+     */
+    public function deleteAppointmentsBetweenTwoDates(RemoveAppointmentsBetweenTwoDatesRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->deleteAppointmentsBetweenTwoDates($request->validated())

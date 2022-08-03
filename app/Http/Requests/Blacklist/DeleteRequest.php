@@ -4,6 +4,14 @@ namespace App\Http\Requests\Blacklist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class DeleteRequest
+ *
+ * @package App\Http\Request\Blacklist
+ *
+ * @property integer $blacklisted_id
+ * @property string $type
+ */
 class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -32,7 +40,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'blacklisted_id' => ['required', 'bail'],
+            'blacklisted_id' => ['required', 'integer', 'bail'],
             'type' => ['required', 'in:client,dummy', 'bail']
         ];
     }

@@ -4,6 +4,13 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SignUpRequest
+ *
+ * @package App\Http\Requests\User
+ *
+ * @property string $phone_number
+ */
 class SignUpRequest extends FormRequest
 {
     /**

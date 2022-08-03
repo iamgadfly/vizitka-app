@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Specialist;
 
+use App\Exceptions\BaseException;
+use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SingleWorkSchedule\CreateBreakRequest;
 use App\Http\Requests\SingleWorkSchedule\CreateRequest;
@@ -25,6 +27,7 @@ class SingleWorkScheduleController extends Controller
      * @lrd:start
      * Create Single Work Schedule route
      * @lrd:end
+     * @throws BaseException
      */
     public function create(CreateRequest $request): JsonResponse
     {
@@ -69,6 +72,7 @@ class SingleWorkScheduleController extends Controller
      * @lrd:start
      * Create Break for a Single Work Schedule route
      * @lrd:end
+     * @throws RecordIsAlreadyExistsException
      */
     public function createBreak(CreateBreakRequest $request): JsonResponse
     {

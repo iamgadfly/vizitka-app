@@ -4,6 +4,13 @@ namespace App\Http\Requests\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class DeleteImageRequest
+ *
+ * @package App\Http\Requests\Image
+ *
+ * @property integer $id
+ */
 class DeleteImageRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class DeleteImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:images,id'
+            'id' => ['required', 'integer', 'exists:images,id']
         ];
     }
 }

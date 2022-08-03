@@ -4,6 +4,13 @@ namespace App\Http\Requests\Appointment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetSvgRequest
+ *
+ * @package App\Http\Requests\Appointment
+ *
+ * @property array $dates
+ */
 class GetSvgRequest extends FormRequest
 {
     /**
@@ -21,7 +28,7 @@ class GetSvgRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'dates' => 'required|array',
