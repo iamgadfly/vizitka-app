@@ -196,7 +196,7 @@ class AuthService
     public function setPin(array $data): bool
     {
         $user = $this->service->searchByPhoneNumber($data['phone_number']) ?? throw new InvalidLoginException;
-        $device = $this->deviceService->getDevice($data['device_id'], $user->phone_number)
+        $device = $this->deviceService->getDevice($data['device_id'], $user->id)
             ?? throw new InvalidDeviceException;
 
         return $this->deviceService->setPin($user->id, $device->device_id, $data['pin']);
@@ -211,7 +211,7 @@ class AuthService
     public function unsetPin(array $data): bool
     {
         $user = $this->service->searchByPhoneNumber($data['phone_number']) ?? throw new InvalidLoginException;
-        $device = $this->deviceService->getDevice($data['device_id'], $user->phone_number)
+        $device = $this->deviceService->getDevice($data['device_id'], $user->id)
             ?? throw new InvalidDeviceException;
 
         return $this->deviceService->unsetPin($user->id, $device->device_id);
