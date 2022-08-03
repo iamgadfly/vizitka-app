@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\BaseException;
+use App\Exceptions\RecordIsAlreadyExistsException;
+use App\Helpers\AuthHelper;
 use App\Helpers\TimeHelper;
 use App\Repositories\WorkSchedule\SingleWorkScheduleRepository;
 use App\Repositories\WorkSchedule\WorkScheduleDayRepository;
@@ -12,10 +15,33 @@ class SingleWorkScheduleService
 {
     public function __construct(
         protected SingleWorkScheduleRepository $repository,
+        protected AppointmentService $appointmentService
     ) {}
 
-    public function create(array $data): bool
+    /**
+     * @throws BaseException
+     */
+    public function create(array $data): bool|int
     {
+        $saveFlag = $data['save'];
+        $isBreak = $data['is_break'];
+        if (is_null($saveFlag) && !$isBreak) {
+            $count = $this->appointmentService->getAppointmentsInInterval([
+                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                'start' => $data['weekend']['start'],
+                'end' => $data['weekend']['end']
+            ]);
+            if ($count > 0) {
+                return $count;
+            }
+        }
+        if (!$saveFlag && !$isBreak) {
+            $this->appointmentService->deleteAppointmentsBetweenTwoDates([
+                'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                'start' => $data['weekend']['start'],
+                'end' => $data['weekend']['end']
+            ]);
+        }
         if ($data['is_break']) {
             return $this->createBreak($data['break']);
         }
@@ -31,7 +57,10 @@ class SingleWorkScheduleService
                 'end' => null,
                 'is_break' => false
             ];
-
+            $record = $this->repository->whereGet($weekend);
+            if ($record->isNotEmpty()) {
+                throw new RecordIsAlreadyExistsException;
+            }
             $this->repository->create($weekend);
         }
         return true;
@@ -65,6 +94,9 @@ class SingleWorkScheduleService
         return true;
     }
 
+    /**
+     * @throws RecordIsAlreadyExistsException
+     */
     public function createBreak(array $data): bool
     {
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
@@ -73,6 +105,17 @@ class SingleWorkScheduleService
             ?? WorkScheduleDayRepository::getDayIndexFromDate($data['date'])?->id;
         $data['start'] = $data['time']['start'];
         $data['end'] = $data['time']['end'];
+
+        $records = $this->repository->whereGet([
+            'day_id' => $data['day_id'],
+            'start' => $data['start'],
+            'end' => $data['end'],
+            'is_break' => true
+        ]);
+
+        if ($records->isNotEmpty()) {
+            throw new RecordIsAlreadyExistsException;
+        }
         $this->repository->create($data);
         return true;
     }
