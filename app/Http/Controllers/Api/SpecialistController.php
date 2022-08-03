@@ -49,11 +49,12 @@ class SpecialistController extends Controller
      * @lrd:start
      * Get Specialist route
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function get(GetSpecialistRequest $request): JsonResponse
     {
         return $this->success(
-            SpecialistDetailedDataResource::make($this->service->getSpecialistData($request->id)),
+            FullInfoResource::make($this->service->getSpecialistData($request->id)),
             Response::HTTP_OK,
         );
     }

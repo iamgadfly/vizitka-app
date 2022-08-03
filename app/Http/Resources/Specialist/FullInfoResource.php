@@ -47,6 +47,11 @@ class FullInfoResource extends JsonResource
                 'latitude' => $this->card?->latitude,
                 'longitude' => $this->card?->longitude
             ],
+            'card' => CardBackgroundHelper::getSpecialistColorFromActivityKind(
+                CardBackgroundHelper::getActivityKindFromFilename(
+                    $this->card->background_image
+                )
+            ),
             'background_image' => [
                 'url' => ImageHelper::getAssetFromFilename(
                     $this->card->background_image

@@ -32,7 +32,8 @@ class CreateRequest extends FormRequest
             'weekend' => ['required', 'array', 'bail'],
             'weekend.start' => ['date_format:Y-m-d', 'nullable', 'bail'],
             'weekend.end' => ['date_format:Y-m-d', 'nullable', 'bail'],
-            'is_break' => ['required', 'boolean', 'bail']
+            'is_break' => ['required', 'boolean', 'bail'],
+            'save' => ['boolean', 'nullable', 'bail', 'present']
         ];
     }
 }
