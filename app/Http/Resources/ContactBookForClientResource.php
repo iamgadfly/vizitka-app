@@ -36,7 +36,15 @@ class ContactBookForClientResource extends JsonResource
             'title' => $this->title,
             'phone_number' => $this->phone_number,
             'avatar' => ImageHelper::getAssetFromFilename($this->avatar?->url),
-            'card' => CardBackgroundHelper::getCardFromActivityKind('default')
+            'background_image' => [
+                'url' => ImageHelper::getAssetFromFilename(
+                    'images/card_backgrounds/default.jpg'
+                ),
+                'value' => CardBackgroundHelper::getActivityKindFromFilename(
+                    'images/card_backgrounds/default.jpg'
+                )
+            ],
+            'card' => CardBackgroundHelper::getSpecialistColorFromActivityKind('psychology_2')
         ];
     }
 }
