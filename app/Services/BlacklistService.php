@@ -13,12 +13,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BlacklistService
 {
+    /**
+     * @param BlacklistRepository $repository
+     * @param ContactBookRepository $contactBookRepository
+     */
     public function __construct(
         protected BlacklistRepository $repository,
         protected ContactBookRepository $contactBookRepository
     ) {}
 
     /**
+     * @param array $data
+     * @return bool
      * @throws RecordIsAlreadyExistsException
      * @throws SpecialistNotFoundException
      */
@@ -48,6 +54,9 @@ class BlacklistService
     }
 
     /**
+     * @param int $id
+     * @param string $type
+     * @return mixed
      * @throws RecordNotFoundException
      * @throws SpecialistNotFoundException
      */
@@ -69,6 +78,10 @@ class BlacklistService
     }
 
 
+    /**
+     * @param int $specialist_id
+     * @return mixed
+     */
     public function get(int $specialist_id)
     {
         return $this->repository->whereGet([

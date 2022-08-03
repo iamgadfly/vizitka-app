@@ -4,6 +4,15 @@ namespace App\Http\Requests\Share;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class CreateShortlinkRequest
+ *
+ * @package App\Http\Requests\Share
+ *
+ * @property string $sharable_type
+ * @property integer $sharable_id
+ * @property string $url
+ */
 class CreateShortlinkRequest extends FormRequest
 {
     protected function prepareForValidation()

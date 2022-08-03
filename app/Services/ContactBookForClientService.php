@@ -42,7 +42,6 @@ class ContactBookForClientService
     }
 
     /**
-     * @throws SpecialistNotFoundException
      * @throws ClientNotFoundException
      */
     public function massCreate(array $data): array

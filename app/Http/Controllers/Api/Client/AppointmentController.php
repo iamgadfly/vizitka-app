@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AppointmentController extends Controller
 {
+    /**
+     * @param AppointmentService $service
+     */
     public function __construct(
         protected AppointmentService $service
     ){}
@@ -25,11 +28,12 @@ class AppointmentController extends Controller
      * @param CreateRequest $request
      * @return JsonResponse
      * @throws TimeIsNotValidException
+     * @throws SpecialistNotFoundException
      * @lrd:start
      * Create Appointment as Client
      * @lrd:end
      */
-    public function create(CreateRequest $request)
+    public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
             AppointmentResource::collection($this->service->create($request->validated())),
@@ -45,7 +49,7 @@ class AppointmentController extends Controller
      * Check for duplicates route (For modals)
      * @lrd:end
      */
-    public function checkForDuplicates(CreateRequest $request)
+    public function checkForDuplicates(CreateRequest $request): JsonResponse
     {
         return $this->success(
             DuplicateResource::collection($this->service->checkForDuplicates($request->validated()))
@@ -60,7 +64,7 @@ class AppointmentController extends Controller
      * Update Appointment as Client
      * @lrd:end
      */
-    public function update(CreateRequest $request)
+    public function update(CreateRequest $request): JsonResponse
     {
         return $this->success(
             AppointmentResource::collection($this->service->update($request->validated()))
@@ -75,14 +79,21 @@ class AppointmentController extends Controller
      * Get History as Client
      * @lrd:end
      */
-    public function getMyHistory()
+    public function getMyHistory(): JsonResponse
     {
         return $this->success(
             $this->service->getMyHistory()
         );
     }
 
-    public function getHistoryForSpecialist(GetMyHistoryForThisSpecialistRequest $request)
+    /**
+     * @param GetMyHistoryForThisSpecialistRequest $request
+     * @return JsonResponse
+     * @lrd:start
+     * History of entries for a particular specialist
+     * @lrd:end
+     */
+    public function getHistoryForSpecialist(GetMyHistoryForThisSpecialistRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getMyHistoryForSpecialist($request->client_id, $request->specialist_id)

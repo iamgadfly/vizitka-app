@@ -41,7 +41,7 @@ class ContactBookController extends Controller
     /**
      * @param MassCreateRequest $request
      * @return JsonResponse
-     * @throws RecordIsAlreadyExistsException
+     * @throws ClientNotFoundException
      * @lrd:start
      * Import to Client's contact book
      * @lrd:end
@@ -58,6 +58,7 @@ class ContactBookController extends Controller
      * @param DeleteRequest $request
      * @return JsonResponse
      * @throws RecordNotFoundException
+     * @throws ClientNotFoundException
      * @lrd:start
      * Remove from Client's contact book
      * @lrd:end

@@ -17,6 +17,7 @@ class MiscController extends Controller
 
     /**
      * @throws GuzzleException
+     * @return JsonResponse
      * @lrd:start
      * Get Countries route
      * @lrd:end

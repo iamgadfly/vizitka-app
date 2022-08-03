@@ -4,6 +4,13 @@ namespace App\Http\Requests\Specialist;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetSpecialistRequest
+ *
+ * @package App\Http\Requests\Specialist
+ *
+ * @property integer $id
+ */
 class GetSpecialistRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class GetSpecialistRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|int|exists:specialists,id'
+            'id' => ['required', 'integer', 'exists:specialists,id']
         ];
     }
 }

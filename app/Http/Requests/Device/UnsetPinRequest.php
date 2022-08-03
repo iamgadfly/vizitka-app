@@ -1,23 +1,11 @@
 <?php
 
-namespace App\Http\Requests\DummyClient;
+namespace App\Http\Requests\Device;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Class GetRequest
- *
- * @package App\Http\Requests\DummyClient
- *
- * @property integer $id
- */
-class GetRequest extends FormRequest
+class UnsetPinRequest extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        $this->merge(['id' => $this->route('id')]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,7 +24,8 @@ class GetRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'integer', 'exists:dummy_clients,id']
+            'device_id' => ['required', 'string', 'exists:devices,device_id', 'bail'],
+            'phone_number' => ['required', 'string', 'bail']
         ];
     }
 }

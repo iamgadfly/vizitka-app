@@ -25,6 +25,11 @@ class AuthService
         protected DeviceService $deviceService
     ){}
 
+    /**
+     * @param string $phoneNumber
+     * @param string $device_id
+     * @return array
+     */
     public function isUserExists(string $phoneNumber, string $device_id): array
     {
         $output = [];
@@ -43,9 +48,10 @@ class AuthService
     }
 
     /**
+     * @param string $phoneNumber
      * @throws GuzzleException
-     * @throws SMSNotSentException
      * @throws InvalidLoginException
+     * @throws SMSNotSentException
      */
     public function resendSms(string $phoneNumber): void
     {
@@ -64,8 +70,9 @@ class AuthService
     }
 
     /**
-     * @throws InvalidLoginException
+     * @param string $phoneNumber
      * @throws GuzzleException
+     * @throws InvalidLoginException
      * @throws SMSNotSentException
      */
     public function forget(string $phoneNumber): void
@@ -84,8 +91,10 @@ class AuthService
     }
 
     /**
-     * @throws UserNotFoundException
+     * @param array $data
+     * @return string|bool
      * @throws UserAlreadyVerifiedException
+     * @throws UserNotFoundException
      * @throws VerificationCodeIsntValidException
      */
     public function verification(array $data): string|bool
@@ -117,8 +126,10 @@ class AuthService
 
 
     /**
-     * @throws VerificationCodeIsntValidException
+     * @param array $data
+     * @return bool
      * @throws UserNotFoundException
+     * @throws VerificationCodeIsntValidException
      */
     public function verifyNewDevice(array $data): bool
     {
@@ -177,8 +188,10 @@ class AuthService
 
 
     /**
-     * @throws InvalidLoginException
+     * @param array $data
+     * @return bool
      * @throws InvalidDeviceException
+     * @throws InvalidLoginException
      */
     public function setPin(array $data): bool
     {
@@ -190,8 +203,10 @@ class AuthService
     }
 
     /**
-     * @throws InvalidLoginException
+     * @param array $data
+     * @return bool
      * @throws InvalidDeviceException
+     * @throws InvalidLoginException
      */
     public function unsetPin(array $data): bool
     {
@@ -203,6 +218,11 @@ class AuthService
     }
 
 
+    /**
+     * @param Device $device
+     * @param string $pin
+     * @return bool
+     */
     protected function attempt(Device $device, string $pin): bool
     {
         if ($device->pin == $pin) {

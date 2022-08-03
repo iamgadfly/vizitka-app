@@ -10,7 +10,9 @@ use App\Exceptions\UserNotFoundException;
 use App\Exceptions\UserPinException;
 use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Device\UnsetPinRequest;
 use App\Http\Requests\User\IsUserExistsRequest;
+use App\Http\Requests\User\SetPinRequest;
 use App\Http\Requests\User\SignInRequest;
 use App\Http\Requests\User\SignUpRequest;
 use App\Http\Requests\User\VerificationRequest;
@@ -101,11 +103,15 @@ class AuthController extends Controller
     }
 
     /**
-     * @throws UserAlreadyVerifiedException
-     * @throws VerificationCodeIsntValidException
+     * @param VerificationRequest $request
+     * @return JsonResponse
      * @throws UserNotFoundException
+     * @throws VerificationCodeIsntValidException
+     * @lrd:start
+     * New Device Verify
+     * @lrd:end
      */
-    public function newDeviceVerify(VerificationRequest $request)
+    public function newDeviceVerify(VerificationRequest $request): JsonResponse
     {
         return $this->success(
             $this->authService->verifyNewDevice($request->validated())
@@ -113,14 +119,43 @@ class AuthController extends Controller
     }
 
     /**
-     * @throws UserPinException
-     * @throws InvalidLoginException
+     * @param SignInRequest $request
+     * @return JsonResponse
+     * @throws GuzzleException
      * @throws InvalidDeviceException
+     * @throws InvalidLoginException
+     * @throws SMSNotSentException
+     * @throws UserPinException
+     * @lrd:start
+     * Sign In
+     * @lrd:end
      */
-    public function signIn(SignInRequest $request)
+    public function signIn(SignInRequest $request): JsonResponse
     {
         return $this->success(
             $this->authService->signIn($request->phone_number, $request->device_id, $request->pin)
+        );
+    }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws InvalidDeviceException
+     */
+    public function setPin(SetPinRequest $request)
+    {
+        return $this->success(
+            $this->authService->setPin($request->validated())
+        );
+    }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws InvalidDeviceException
+     */
+    public function unsetPin(UnsetPinRequest $request)
+    {
+        return $this->success(
+            $this->authService->unsetPin($request->validated())
         );
     }
 }

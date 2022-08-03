@@ -23,7 +23,7 @@ class ReportController extends Controller
      * Create report
      * @lrd:end
      */
-    public function createReport(CreateRequest $request)
+    public function createReport(CreateRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->sendReportMail($request->validated()),
@@ -37,7 +37,7 @@ class ReportController extends Controller
      * Get report reasons
      * @lrd:end
      */
-    public function getReportReasons()
+    public function getReportReasons(): JsonResponse
     {
         return $this->success(
             $this->service->getReportReasons()

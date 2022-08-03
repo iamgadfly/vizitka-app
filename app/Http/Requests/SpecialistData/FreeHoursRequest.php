@@ -2,8 +2,17 @@
 
 namespace App\Http\Requests\SpecialistData;
 
+use DateTime;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class FreeHoursRequest
+ *
+ * @package App\Http\Requests\SpecialistData
+ *
+ * @property integer $id
+ * @property DateTime $date
+ */
 class FreeHoursRequest extends FormRequest
 {
     protected function prepareForValidation()

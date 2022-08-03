@@ -4,6 +4,13 @@ namespace App\Http\Requests\DummyClient;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class DeleteRequest
+ *
+ * @package App\Http\Requests\DummyClient
+ *
+ * @property integer $id
+ */
 class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:dummy_clients,id']
+            'id' => ['required', 'integer', 'exists:dummy_clients,id']
         ];
     }
 }

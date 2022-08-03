@@ -4,6 +4,13 @@ namespace App\Http\Requests\DummyClient;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetAllRequest
+ *
+ * @package App\Http\Requests\DummyClient
+ *
+ * @property integer $specialist_id
+ */
 class GetAllRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class GetAllRequest extends FormRequest
     public function rules()
     {
         return [
-            'specialist_id' => ['required', 'exists:specialists,id', 'bail']
+            'specialist_id' => ['required', 'integer', 'exists:specialists,id', 'bail']
         ];
     }
 }

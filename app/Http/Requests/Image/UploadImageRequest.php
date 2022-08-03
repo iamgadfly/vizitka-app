@@ -3,7 +3,15 @@
 namespace App\Http\Requests\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
+/**
+ * Class UploadImageRequest
+ *
+ * @package App\Http\Requests\Image
+ *
+ * @property UploadedFile $image
+ */
 class UploadImageRequest extends FormRequest
 {
     /**
@@ -24,7 +32,7 @@ class UploadImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'required|image'
+            'image' => ['required', 'image']
         ];
     }
 }

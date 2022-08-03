@@ -49,7 +49,7 @@ class BlacklistController extends Controller
     public function delete(DeleteRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->delete($request->id, $request->type)
+            $this->service->delete($request->blacklisted_id, $request->type)
         );
     }
 
@@ -60,7 +60,7 @@ class BlacklistController extends Controller
      * Get clients in blacklist
      * @lrd:end
      */
-    public function get(GetRequest $request)
+    public function get(GetRequest $request): JsonResponse
     {
         return $this->success(
             BlacklistResource::collection($this->service->get($request->specialist_id))

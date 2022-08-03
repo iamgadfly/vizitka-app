@@ -6,8 +6,17 @@ use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class AppointmentRepository
+ *
+ * @package App\Repositories
+ *
+ * @method Collection<Appointment> whereGet(array $condition)
+ * @method Appointment whereFirst(array $condition)
+ */
 class AppointmentRepository extends Repository
 {
     public function __construct(Appointment $model)
@@ -15,6 +24,10 @@ class AppointmentRepository extends Repository
         parent::__construct($model);
     }
 
+    /**
+     * @param string $orderNumber
+     * @return bool
+     */
     public function confirm(string $orderNumber): bool
     {
         $items = $this->getAllByOrderNumber($orderNumber);
@@ -28,6 +41,10 @@ class AppointmentRepository extends Repository
         return true;
     }
 
+    /**
+     * @param string $orderNumber
+     * @return bool
+     */
     public function skipped(string $orderNumber): bool
     {
         $items = $this->getAllByOrderNumber($orderNumber);
@@ -41,7 +58,11 @@ class AppointmentRepository extends Repository
         return true;
     }
 
-    public function getAllByOrderNumber(string $orderNumber)
+    /**
+     * @param string $orderNumber
+     * @return Appointment|null
+     */
+    public function getAllByOrderNumber(string $orderNumber): ?Appointment
     {
         return $this->model::where([
             'order_number' => $orderNumber
@@ -49,9 +70,12 @@ class AppointmentRepository extends Repository
     }
 
     /**
+     * @param string $date
+     * @param int|null $specialistId
+     * @return Appointment|null
      * @throws SpecialistNotFoundException
      */
-    public function getAllByDate(string $date, ?int $specialistId = null)
+    public function getAllByDate(string $date, ?int $specialistId = null): ?Appointment
     {
         if (is_null($specialistId)) {
             $specialistId = AuthHelper::getSpecialistIdFromAuth();

@@ -4,6 +4,12 @@ namespace App\Http\Requests\Share;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class GetByHashRequest
+ *
+ * @package App\Http\Requests\Share
+ * @property string $hash
+ */
 class GetByHashRequest extends FormRequest
 {
     protected function prepareForValidation()

@@ -60,28 +60,16 @@ class SpecialistController extends Controller
     }
 
     /**
-     * @return JsonResponse
-     * @lrd:start
-     * Get all Specialists
-     * @lrd:end
-     */
-    public function getAll()
-    {
-        return $this->success(
-            SpecialistResource::collection($this->service->all())
-        );
-    }
-
-    /**
      * @param CreateSpecialistRequest $request
      * @return JsonResponse
      * @lrd:start
      * Update Specialist route
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function update(CreateSpecialistRequest $request): JsonResponse
     {
-        if (!is_null($request?->avatar_id) && !is_null($this->service->getMe()?->avatar_id)) {
+        if (!is_null($request?->avatar['id']) && !is_null($this->service->getMe()?->avatar_id)) {
             $image = $this->imageService->get(
                 $this->service->getMe()->avatar_id
             );
@@ -99,6 +87,7 @@ class SpecialistController extends Controller
      * @lrd:start
      * Get current Specialist route
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
     public function me(): JsonResponse
     {
@@ -115,7 +104,7 @@ class SpecialistController extends Controller
      * Get my card
      * @lrd:end
      */
-    public function getMyCard()
+    public function getMyCard(): JsonResponse
     {
         return $this->success(
             $this->service->getMyCard()

@@ -4,6 +4,13 @@ namespace App\Http\Requests\BusinessCard;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class BusinessCardGetRequest
+ *
+ * @package App\Http\Requests\BusinessCard
+ *
+ * @property integer $id
+ */
 class BusinessCardGetRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class BusinessCardGetRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:business_cards,id'
+            'id' => ['required', 'integer', 'exists:business_cards,id']
         ];
     }
 }

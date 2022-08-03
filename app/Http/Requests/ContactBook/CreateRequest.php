@@ -4,6 +4,13 @@ namespace App\Http\Requests\ContactBook;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class CreateRequest
+ *
+ * @package App\Http\Requests\ContactBook
+ *
+ * @property integer $client_id
+ */
 class CreateRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -29,7 +36,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id']
+            'client_id' => ['required', 'integer', 'exists:clients,id']
         ];
     }
 }

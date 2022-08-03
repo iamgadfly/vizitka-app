@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Client;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SpecialistData\FreeHoursRequest;
 use App\Http\Requests\SpecialistData\IdRequest;
@@ -20,8 +21,9 @@ class SpecialistDataController extends Controller
      * @lrd:start
      * Get Specialist's free hours for day
      * @lrd:end
+     * @throws SpecialistNotFoundException
      */
-    public function getFreeHours(FreeHoursRequest $request)
+    public function getFreeHours(FreeHoursRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getFreeHours($request->id, $request->date)
@@ -35,7 +37,7 @@ class SpecialistDataController extends Controller
      * Get Specialist's maintenances
      * @lrd:end
      */
-    public function getMaintenances(IdRequest $request)
+    public function getMaintenances(IdRequest $request): JsonResponse
     {
         return $this->success(
             $this->service->getSpecialistsMaintenances($request->id)

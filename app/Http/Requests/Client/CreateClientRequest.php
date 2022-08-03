@@ -8,6 +8,17 @@ use App\Helpers\RequestHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use function auth;
 
+/**
+ * Class CreateClientRequest
+ *
+ * @package App\Http\Requests\Client
+ *
+ * @property integer $user_id
+ * @property string $name
+ * @property string|null $surname
+ * @property integer|null $avatar_id
+ * @property integer $id
+ */
 class CreateClientRequest extends FormRequest
 {
     /**

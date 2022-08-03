@@ -2,8 +2,17 @@
 
 namespace App\Http\Requests\PillDisable;
 
+use DateTime;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class DeleteRequest
+ *
+ * @package App\Http\Requests\PillDisable
+ *
+ * @property DateTime $time
+ * @property DateTime $date
+ */
 class DeleteRequest extends FormRequest
 {
     protected function prepareForValidation()
