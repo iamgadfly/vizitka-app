@@ -219,7 +219,9 @@ class AppointmentService
                 if (is_null($schedule)) {
                     continue;
                 }
-                $output[$day] = $this->getSvgForDate($day, $minMax[0], $minMax[1], $schedule[0], $schedule[1]);
+                $output[$day] = dispatch_sync(function () use ($day, $minMax, $schedule) {
+                    return $this->getSvgForDate($day, $minMax[0], $minMax[1], $schedule[0], $schedule[1]);
+                });
             }
         }
 
