@@ -484,7 +484,7 @@ class AppointmentService
                 ];
                 $sectionOffset += $sectionOffsetValue;
             } else {
-                $sectionsCount = TimeHelper::getTimeIntervalAsInt($item['start'], $item['end']) / 15;
+                $sectionsCount = ceil(TimeHelper::getTimeIntervalAsInt($item['start'], $item['end']) / 15);
                 foreach (range(1, $sectionsCount) as $value) {
                     $svg[] = [
                         'stroke' => SvgHelper::getColorFromType($item['status']),
