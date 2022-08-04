@@ -43,7 +43,7 @@ services:
       - viz-net
 
   app-horizon:
-    image: viz-backend_app
+    image: app
     entrypoint: /entrypoint-horizon
     container_name: app-horizon
     restart: always
@@ -52,7 +52,7 @@ services:
     environment:
       - DB_HOST=postgres
     volumes:
-      - ./:/var/www
+      - ./:/opt/vizitka
     depends_on:
       - app
     networks:
