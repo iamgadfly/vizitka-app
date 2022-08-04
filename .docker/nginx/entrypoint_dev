@@ -39,8 +39,12 @@ cp -r resources/deep_link_files/assetlinks.json storage/app/public/deep_link_fil
 #php artisan lrd:generate
 
 # first arg is `-f` or `--some-option`
-if [ "${1#-}" != "$1" ]; then
-        set -- php-fpm "$@"
-fi
+#if [ "${1#-}" != "$1" ]; then
+ #       set -- php-fpm "$@"
+#fi
 
-exec "$@"
+#exec "$@"
+echo "--- /usr/bin/supervisord"
+/usr/bin/supervisord
+
+

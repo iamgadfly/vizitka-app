@@ -7,8 +7,11 @@ use App\Repositories\WorkSchedule\WorkScheduleDayRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class CreateWorkScheduleDays
+class CreateWorkScheduleDays implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public $afterCommit = true;
     /**
      * Create the event listener.
      *

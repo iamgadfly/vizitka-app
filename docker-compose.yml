@@ -8,6 +8,7 @@ services:
             context: ./
             dockerfile: .docker/nginx/Dockerfile
         container_name: app
+        image: viz-backend_app
         restart: unless-stopped
         working_dir: /var/www/
         environment:
@@ -52,6 +53,29 @@ services:
             - ${ADMINER_PORT}:8080
         links:
             - postgres
+        networks:
+            - viz-net
+
+    redis:
+        container_name: redis-viz
+        image: redis:alpine
+        restart: unless-stopped
+        networks:
+            - viz-net
+
+    app-horizon:
+        image: viz-backend_app
+        entrypoint: /entrypoint-horizon
+        container_name: app-horizon
+        restart: always
+        command: php -dmemory_limit=512M artisan horizon
+        working_dir: /var/www/
+        environment:
+            - DB_HOST=postgres
+        volumes:
+            - ./:/var/www
+        depends_on:
+            -   app
         networks:
             - viz-net
 

@@ -41,7 +41,7 @@ class EventServiceProvider extends ServiceProvider
     {
         // Observers
         Share::observe(ShareObserver::class);
-        BusinessCard::observe(BusinessCardObserver::class);
+//        BusinessCard::observe(BusinessCardObserver::class);
         WorkScheduleSettings::observe(WorkScheduleSettingsObserver::class);
         Specialist::observe(SpecialistObserver::class);
 

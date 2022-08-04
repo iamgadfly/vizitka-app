@@ -16,7 +16,7 @@ class WorkScheduleWorkSeeder extends Seeder
      */
     public function run()
     {
-        $totalDays = WorkScheduleDay::all()->count();
+        $totalDays = WorkScheduleDay::count();
         foreach (range(0, $totalDays - 1) as $i) {
             WorkScheduleWork::factory()->create();
         }
