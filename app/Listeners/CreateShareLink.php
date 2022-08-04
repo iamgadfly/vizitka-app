@@ -8,8 +8,11 @@ use App\Services\ShareService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class CreateShareLink
+class CreateShareLink implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public $afterCommit = true;
     /**
      * Create the event listener.
      *

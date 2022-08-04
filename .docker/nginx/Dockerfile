@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y \
     libvpx-dev \
     netcat \
     libpq-dev \
+    supervisor \
+    nano \
     && docker-php-ext-configure gd --with-freetype=/usr --with-jpeg=/usr \
     && apt-get install -y libmagickwand-dev --no-install-recommends
 
@@ -33,6 +35,12 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 RUN pecl install imagick
 
 RUN docker-php-ext-enable imagick
+
+# Install redis
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -45,10 +53,14 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 COPY .docker/nginx/entrypoint_dev /entrypoint_dev
+COPY .docker/nginx/entrypoint-horizon /entrypoint-horizon
+COPY .docker/nginx/horizon.conf /etc/supervisor
+COPY .docker/nginx/supervisord.conf /etc/supervisor
 RUN chmod +x /entrypoint_dev
+RUN chmod +x /entrypoint-horizon
 ENTRYPOINT [ "/entrypoint_dev" ]
 
 USER ${user}
 
 EXPOSE 9000
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord"]

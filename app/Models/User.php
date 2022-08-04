@@ -75,4 +75,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Client::class, 'user_id', 'id');
     }
+
+    public function isSpecialist(): bool
+    {
+        return !is_null($this->specialist);
+    }
+
+    public function isClient(): bool
+    {
+        return !is_null($this->client);
+    }
 }

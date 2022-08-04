@@ -15,20 +15,20 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            AdminUserSeeder::class,
             ActivityKindSeeder::class,
-            OnboardingSeeder::class,
-            ReportSeeder::class,
             UserSeeder::class,
             ClientSeeder::class,
             SpecialistSeeder::class,
+            WorkScheduleSettingsSeeder::class,
+            DeviceSeeder::class,
             BusinessCardSeeder::class,
             MaintenanceSettingsSeeder::class,
             MaintenanceSeeder::class,
-            WorkScheduleSettingsSeeder::class,
+            AdminUserSeeder::class,
+            OnboardingSeeder::class,
+            ReportSeeder::class,
             WorkScheduleWorkSeeder::class,
             WorkScheduleBreakSeeder::class,
-            DeviceSeeder::class
         ]);
     }
 }
