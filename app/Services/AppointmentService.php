@@ -172,7 +172,7 @@ class AppointmentService
 
         $appointments = $appointments->merge($breaks);
         $output->appointments = $appointments;
-        $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? null;
+        $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? [];
         $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
         if ($pills->isNotEmpty()) {
             $pills = $pills->map(function ($pill) {

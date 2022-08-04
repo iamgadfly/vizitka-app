@@ -2,6 +2,7 @@
 
 namespace App\Repositories\WorkSchedule;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleDay;
 use App\Models\WorkScheduleSettings;
@@ -36,6 +37,9 @@ class WorkScheduleWorkRepository extends Repository
         ])->get();
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public static function getWorkDay(string $date, ?int $specialistId = null): ?array
     {
         if (is_null($specialistId)) {
@@ -62,10 +66,7 @@ class WorkScheduleWorkRepository extends Repository
         ])->first();
 
         if (!is_null($single)) {
-            return [
-                Carbon::parse($single->start)->format('H:i'),
-                Carbon::parse($single->end)->format('H:i')
-            ];
+            return null;
         }
         // If not found single work schedule
         $day = WorkScheduleWork::where(['day_id' => $day_id]);
