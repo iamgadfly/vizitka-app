@@ -145,7 +145,7 @@ class AuthService
                 'user_id' => $user->id
             ]);
 
-            return $user->tokens()->create("Token for user #$user->id")->plainTextToken;
+            return $user->createToken("Token for user #$user->id")->plainTextToken;
         }
 
         throw new VerificationCodeIsntValidException;
