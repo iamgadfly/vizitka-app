@@ -234,7 +234,7 @@ Route::controller(SupportController::class)
     ->prefix('support')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::post('', 'createSupport')
+    Route::post('', 'createSupportAsSpecialist')
         ->name('specialist.support.create');
 });
 
