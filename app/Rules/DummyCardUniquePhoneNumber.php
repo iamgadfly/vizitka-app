@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Helpers\AuthHelper;
 use App\Models\Client;
 use App\Models\DummyBusinessCard;
 use App\Services\DummyBusinessCardService;
@@ -34,10 +35,10 @@ class DummyCardUniquePhoneNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        $client = Client::where('user_id', Auth::id())->first();
+        $clientId = AuthHelper::getClientIdFromAuth();
         DummyBusinessCard::where([
             'phone_number' => $this->phone,
-            'client_id' => $client->id
+            'client_id' => $clientId
         ])->first() !== null;
     }
 
