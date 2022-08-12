@@ -2,9 +2,11 @@
 
 namespace App\Rules;
 
+use App\Models\Client;
 use App\Models\DummyBusinessCard;
 use App\Services\DummyBusinessCardService;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class DummyCardUniquePhoneNumber implements Rule
 {
@@ -14,18 +16,13 @@ class DummyCardUniquePhoneNumber implements Rule
     private string $phone;
 
     /**
-     * @var int
-     */
-    private int $clientId;
-    /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(string $phone, int $clientId)
+    public function __construct(string $phone)
     {
         $this->phone = $phone;
-        $this->clientId = $clientId;
     }
 
     /**
@@ -37,9 +34,10 @@ class DummyCardUniquePhoneNumber implements Rule
      */
     public function passes($attribute, $value)
     {
+        $client = Client::where('user_id', Auth::id())->first();
         DummyBusinessCard::where([
             'phone_number' => $this->phone,
-            'client_id' => $this->clientId
+            'client_id' => $client->id
         ])->first() !== null;
     }
 

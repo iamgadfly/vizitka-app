@@ -136,7 +136,7 @@ class RequestHelper
             $rules['phone_number'][] = 'required';
         } elseif ($request->method() == 'PUT') {
             $rules['id'] = ['required', 'exists:dummy_business_cards,id'];
-            $rules['phone_number'][] = new DummyCardUniquePhoneNumber($request->phone_number, $request->client_id);
+            $rules['phone_number'][] = new DummyCardUniquePhoneNumber($request->phone_number);
         } else {
             $rules = [
                 'id' => ['required', 'exists:dummy_business_cards,id']
