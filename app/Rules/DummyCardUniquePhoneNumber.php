@@ -36,7 +36,7 @@ class DummyCardUniquePhoneNumber implements Rule
     public function passes($attribute, $value)
     {
         $clientId = AuthHelper::getClientIdFromAuth();
-        DummyBusinessCard::where([
+        return DummyBusinessCard::where([
             'phone_number' => $this->phone,
             'client_id' => $clientId
         ])->first() !== null;
