@@ -127,7 +127,7 @@ class RequestHelper
             'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
-            'phone_number' => ['string', 'bail']
+            'phone_number' => ['string', 'bail', 'unique:dummy_business_cards,phone_number']
         ];
         if ($request->method() == 'POST') {
             $rules['client_id'][] = 'required';
