@@ -59,6 +59,7 @@ class DummyBusinessCardService
                 'client_id' => AuthHelper::getClientIdFromAuth(),
                 'specialist_id' => $record->id
             ]);
+            $this->repository->deleteById($data['id']);
             if (is_null($recordItem)) {
                 $recordItem = $this->contactBookRepository->create([
                     'client_id' => AuthHelper::getClientIdFromAuth(),
@@ -68,7 +69,7 @@ class DummyBusinessCardService
             return new BusinessCardResource($recordItem->specialist->card);
         }
 
-        return $this->repository->deleteById($data['id']);
+        return $this->repository->update($data['id'], $data);
     }
 
     public function delete(int $id)
