@@ -68,7 +68,7 @@ class DummyBusinessCardService
             return new BusinessCardResource($recordItem->specialist->card);
         }
 
-        return $this->repository->update($data['id'], $data);
+        return $this->repository->deleteById($data['id']);
     }
 
     public function delete(int $id)
