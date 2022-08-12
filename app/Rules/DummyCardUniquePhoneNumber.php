@@ -12,14 +12,20 @@ class DummyCardUniquePhoneNumber implements Rule
      * @var string
      */
     private string $phone;
+
+    /**
+     * @var int
+     */
+    private int $clientId;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(string $phone)
+    public function __construct(string $phone, int $clientId)
     {
         $this->phone = $phone;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -31,7 +37,10 @@ class DummyCardUniquePhoneNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        DummyBusinessCard::where('phone_number', $this->phone)->first() !== null;
+        DummyBusinessCard::where([
+            'phone_number' => $this->phone,
+            'client_id' => $this->clientId
+        ])->first() !== null;
     }
 
     /**
