@@ -128,7 +128,7 @@ class RequestHelper
             'title' => ['string', 'nullable', 'bail'],
             'about' => ['string', 'nullable', 'bail'],
             'avatar_id' => ['exists:images,id', 'nullable', 'bail'],
-            'phone_number' => ['string', 'bail']
+            'phone_number' => ['string', 'bail', 'nullable']
         ];
         if ($request->method() == 'POST') {
             $rules['client_id'][] = 'required';
@@ -136,7 +136,9 @@ class RequestHelper
             $rules['phone_number'][] = 'required';
         } elseif ($request->method() == 'PUT') {
             $rules['id'] = ['required', 'exists:dummy_business_cards,id'];
-            $rules['phone_number'][] = new DummyCardUniquePhoneNumber($request->phone_number);
+            if (!is_null($request->phone_number)) {
+                $rules['phone_number'][] = new DummyCardUniquePhoneNumber($request->phone_number);
+            }
         } else {
             $rules = [
                 'id' => ['required', 'exists:dummy_business_cards,id']

@@ -48,6 +48,27 @@ class DummyBusinessCardService
 
     public function update(array $data)
     {
+        try {
+            $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
+        }  catch (\Exception) {
+            $record = null;
+        }
+
+        if (!is_null($record)) {
+            $recordItem = $this->contactBookRepository->whereFirst([
+                'client_id' => AuthHelper::getClientIdFromAuth(),
+                'specialist_id' => $record->id
+            ]);
+            $this->repository->deleteById($data['id']);
+            if (is_null($recordItem)) {
+                $recordItem = $this->contactBookRepository->create([
+                    'client_id' => AuthHelper::getClientIdFromAuth(),
+                    'specialist_id' => $record->id
+                ]);
+            }
+            return new BusinessCardResource($recordItem->specialist->card);
+        }
+
         return $this->repository->update($data['id'], $data);
     }
 

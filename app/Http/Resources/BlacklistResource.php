@@ -30,7 +30,10 @@ class BlacklistResource extends JsonResource
                 'name' => $this->dummyClient?->name,
                 'surname' => $this->dummyClient?->surname,
                 'full_name' => $this->dummyClient?->name . " " . $this->dummyClient?->surname,
-                'discount' => $this->dummyClient->discount * 100,
+                'discount' => [
+                    'label' => str( $this->dummyClient?->discount * 100)->value(),
+                    'value' => (float)$this->dummyClient?->discount
+                ],
                 'phone_number' => $this->dummyClient->phone_number,
                 'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
                 'notes' => $this->dummyClient?->notes,

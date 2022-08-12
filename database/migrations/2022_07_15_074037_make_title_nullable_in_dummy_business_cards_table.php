@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('dummy_business_cards', function (Blueprint $table) {
-            $table->string('title')->change();
-        });
+//        Schema::table('dummy_business_cards', function (Blueprint $table) {
+//            $table->string('title')->change();
+//        });
     }
 };

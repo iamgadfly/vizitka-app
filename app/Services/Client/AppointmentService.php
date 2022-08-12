@@ -138,6 +138,7 @@ class AppointmentService extends BaseAppointmentService
     {
         $usedOrders = [];
         $output = [];
+
         foreach ($appointments as $appointment) {
             $order = $appointment->order_number;
             if (in_array($order, $usedOrders)) {
@@ -164,7 +165,8 @@ class AppointmentService extends BaseAppointmentService
                         'value' => $record->maintenance->duration
                     ],
                     'start' => Carbon::parse($record->time_start)->format('H:i'),
-                    'end' => Carbon::parse($record->time_end)->format('H:i')
+                    'end' => Carbon::parse($record->time_end)->format('H:i'),
+                    'isOver' => Carbon::now() > Carbon::parse($record->date . ' ' . $record->time_end)
                 ];
             }
             $usedOrders[] = $order;

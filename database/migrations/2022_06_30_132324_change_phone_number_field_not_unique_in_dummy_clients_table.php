@@ -25,8 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('dummy_clients', function (Blueprint $table) {
-            $table->string('phone_number')->unique()->change();
-        });
+
     }
 };

@@ -25,7 +25,10 @@ class MaintenanceResource extends JsonResource
                 'label' => str($this->duration)->value(),
                 'value' => $this->duration
             ],
-            'discount' => $this->discount / 100
+            'discount' => [
+                'label' => str($this->discount / 100)->value(),
+                'value' =>  (float)$this->discount / 100
+            ],
         ];
     }
 }
