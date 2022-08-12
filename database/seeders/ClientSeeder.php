@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class ClientSeeder extends Seeder
 {
-    const NUMBER_TO_CREATE = 50;
+    const NUMBER_TO_CREATE = 70;
     /**
      * Run the database seeds.
      *
