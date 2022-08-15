@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\TranslationHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MaintenanceResource extends JsonResource
@@ -22,7 +23,7 @@ class MaintenanceResource extends JsonResource
                 'value' => $this->price
             ],
             'duration' => [
-                'label' => str($this->duration)->value(),
+                'label' => TranslationHelper::getDurationTicsToString($this->duration),
                 'value' => $this->duration
             ],
         ];

@@ -4,6 +4,9 @@ namespace App\Helpers;
 
 class TranslationHelper
 {
+    private static string $hours = '%d ч.';
+    private static string $minutes = '%d мин.';
+
     private static array $times = [
         0 => 'workSchedule.time.zeroMinutes',
         15 => 'workSchedule.time.fifteenMinutes',
@@ -53,5 +56,17 @@ class TranslationHelper
     public static function getTranslationForTime(int $time)
     {
         return self::$times[$time];
+    }
+
+    /**
+     * @param int $duraction
+     * @return string|null
+     */
+    public static function getDurationTicsToString(int $duraction): ?string
+    {
+        $hours = ($duraction / 60) >= 1 ? sprintf(self::$hours, ($duraction / 60)) : null;
+        $minutes = $duraction % 60 >= 1 ? sprintf(self::$minutes, ($duraction % 60)): "";
+
+        return $hours . $minutes;
     }
 }
