@@ -17,13 +17,37 @@ class TimeHelper
         while ($start->addMinutes(15) < $end) {
             $output[] = $start->format('H:i');
         }
-        $output[] = $end->format('H:i');
+        //TODO ПОЧЕМУ НЕЛЬЗЯ БЫЛО УДАЛИТЬ ЭТО А НЕ ВЫЗЫВАТЬ КОСТЫЛЬ ПОСТОЯННО В МИНУС 15 МИНУТ
+//        if (!$isBreak) {
+//            $output[] = $end->format('H:i');
+//        }
         return $output;
     }
 
+    /**
+     * @param $date
+     * @return array
+     */
     public static function getMonthInterval($date): array
     {
         $first = Carbon::parse($date)->firstOfMonth();
+        $last = Carbon::parse($date)->lastOfMonth();
+
+        $output = [$first->format('Y-m-d')];
+        while ($first->addDay() < $last) {
+            $output[] = $first->format('Y-m-d');
+        }
+        $output[] = $last->format('Y-m-d');
+        return $output;
+    }
+
+    /**
+     * @param $date
+     * @return array
+     */
+    public static function getMonthIntervalWithOutPastDates($date): array
+    {
+        $first = Carbon::now();
         $last = Carbon::parse($date)->lastOfMonth();
 
         $output = [$first->format('Y-m-d')];

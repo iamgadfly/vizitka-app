@@ -100,11 +100,29 @@ class SingleWorkScheduleService
     public function createBreak(array $data): bool
     {
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
+        $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
+
         $data['is_break'] = true;
         $data['day_id'] = WorkScheduleDayRepository::getDayFromString($weekday)?->id
             ?? WorkScheduleDayRepository::getDayIndexFromDate($data['date'])?->id;
-        $data['start'] = $data['time']['start'];
-        $data['end'] = $data['time']['end'];
+
+        foreach ($appo as $item) {
+            if (
+                !(
+                    (Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
+                    Carbon::parse($data['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i'))  ||
+                    Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
+                ) ||
+                !(
+                    (Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
+                    Carbon::parse($data['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
+                    Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
+                )
+            ) {
+                throw new \Exception('Есть запись в данный период времени', 422);
+            }
+        }
+
 
         $records = $this->repository->whereGet([
             'day_id' => $data['day_id'],

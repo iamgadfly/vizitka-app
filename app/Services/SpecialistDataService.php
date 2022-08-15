@@ -26,7 +26,7 @@ class SpecialistDataService
      */
     public function getFreeHours(int $specialistId, string $dateFromMonth): ?array
     {
-        $monthDates = TimeHelper::getMonthInterval($dateFromMonth);
+        $monthDates = TimeHelper::getMonthIntervalWithOutPastDates($dateFromMonth);
         $output = [];
         foreach ($monthDates as $date) {
             list($startDay, $endDay) = WorkScheduleWorkRepository::getWorkDay($date, $specialistId);

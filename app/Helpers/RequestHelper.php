@@ -154,7 +154,7 @@ class RequestHelper
             'user_id' => ['int', 'exists:users,id'],
             'name' => ['string', 'max:255'],
             'surname' => ['string', 'max:255'],
-            'avatar_id' => ['exists:images,id']
+            'avatar_id' => ['exists:images,id', 'nullable']
         ];
         if ($request->method() == 'POST') {
             $rules['user_id'][] = 'required';

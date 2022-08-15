@@ -309,7 +309,7 @@ class AppointmentService
             $item = [
                 'date' => $break->date,
                 'status' => 'break',
-                'interval' => TimeHelper::getTimeInterval($break->start, $break->end),
+                'interval' => TimeHelper::getTimeInterval($break->start, $break->end, true),
             ];
             $output[] = $item;
         }
@@ -332,6 +332,7 @@ class AppointmentService
             $records = $appointments->where('order_number', '=', $order);
             $minTime = min(array_column($records->toArray(), 'time_start'));
             $maxTime = max(array_column($records->toArray(), 'time_end'));
+
             $item = [
                 'order_number' => $order,
                 'date' => [
@@ -340,7 +341,7 @@ class AppointmentService
                 ],
                 'status' => $records->first()->status,
                 'interval' => TimeHelper::getTimeInterval(
-                    $minTime, Carbon::parse($maxTime)->addMinutes(-15)->format('H:i')
+                    $minTime, Carbon::parse($maxTime)->format('H:i')
                 ),
                 'services' => [],
                 'client' => [
@@ -351,7 +352,10 @@ class AppointmentService
                         ?? $records->first()->dummyClient?->phone_number,
                     'photo' => ImageHelper::getAssetFromFilename($records->first()->client?->avatar?->url
                         ?? $records->first()->dummyClient?->avatar?->url),
-                    'discount' => $records->first()?->dummyClient?->discount * 100 ?? null,
+                    'discount' => [
+                        'label' => str($records->first()?->dummyClient?->discount * 100)->value(),
+                        'value' => (float) $records->first()?->dummyClient?->discount
+                    ],
                     'type' => is_null($records->first()?->client) ? 'dummy' : 'client'
                 ],
                 'time' => [
