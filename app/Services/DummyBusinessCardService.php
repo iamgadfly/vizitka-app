@@ -50,7 +50,7 @@ class DummyBusinessCardService
     {
         try {
             $record = $this->specialistRepository->findByPhoneNumber($data['phone_number']);
-        }  catch (SpecialistNotFoundException) {
+        }  catch (\Exception) {
             $record = null;
         }
 
