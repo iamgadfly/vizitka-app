@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 class TranslationHelper
 {
-    private static string $hours = '%d ч.';
+    private static string $hours = '%d ч. ';
     private static string $minutes = '%d мин.';
 
     private static array $times = [
