@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Helpers\ImageHelper;
 use App\Helpers\TimeHelper;
+use App\Helpers\TranslationHelper;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -35,7 +36,7 @@ class AppointmentResource extends JsonResource
                         'value' => $this->maintenance->price
                     ],
                     'duration' => [
-                        'label' => str($this->maintenance->duration)->value(),
+                        'label' => TranslationHelper::getDurationTicsToString($this->maintenance->duration),
                         'value' => $this->maintenance->duration
                     ]
                 ],

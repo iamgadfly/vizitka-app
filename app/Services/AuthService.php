@@ -41,6 +41,7 @@ class AuthService
             $output['pin'] = !is_null($device?->pin);
             $output['specialist'] = !is_null($user->specialist);
             $output['client'] = !is_null($user->client);
+            $output['face'] = !is_null($device) ? $device?->face : false;
         } else {
             $output['user'] = false;
         }
@@ -230,5 +231,35 @@ class AuthService
         }
 
         return false;
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     * @throws InvalidDeviceException
+     * @throws InvalidLoginException
+     */
+    public function setFace(array $data): bool
+    {
+        $user = $this->service->searchByPhoneNumber($data['phone_number']) ?? throw new InvalidLoginException;
+        $device = $this->deviceService->getDevice($data['device_id'], $user->id)
+            ?? throw new InvalidDeviceException;
+
+        return $this->deviceService->setFace($user->id, $device->device_id);
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     * @throws InvalidDeviceException
+     * @throws InvalidLoginException
+     */
+    public function unsetFace(array $data): bool
+    {
+        $user = $this->service->searchByPhoneNumber($data['phone_number']) ?? throw new InvalidLoginException;
+        $device = $this->deviceService->getDevice($data['device_id'], $user->id)
+            ?? throw new InvalidDeviceException;
+
+        return $this->deviceService->unsetFace($user->id, $device->device_id);
     }
 }

@@ -65,7 +65,7 @@ class ImageService
      * @param UploadedFile $image
      * @return string
      */
-    private function storeImage(UploadedFile $image): string
+    public function storeImage(UploadedFile $image): string
     {
         $filename = date('H:i:s') . '-' . md5(auth()->id()) . '.' . $image->extension();
         $file_path = config('custom.photo_path') . '/' . $filename;

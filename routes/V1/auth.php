@@ -30,4 +30,10 @@ Route::controller(AuthController::class)
 
     Route::post('pin/unset', 'unsetPin')
         ->name('auth.pin.unset');
+
+    Route::post('face/set', 'setFace')
+        ->name('auth.face.set');
+
+    Route::post('face/unset', 'unsetFace')
+        ->name('auth.face.unset');
 });

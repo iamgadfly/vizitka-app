@@ -10,6 +10,7 @@ use App\Helpers\AuthHelper;
 use App\Helpers\ImageHelper;
 use App\Helpers\SvgHelper;
 use App\Helpers\TimeHelper;
+use App\Helpers\TranslationHelper;
 use App\Models\WorkScheduleSettings;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\MaintenanceRepository;
@@ -372,7 +373,7 @@ class AppointmentService
                         'value' => $record->maintenance->price
                     ],
                     'duration' => [
-                        'label' => str($record->maintenance->duration)->value(),
+                        'label' => TranslationHelper::getDurationTicsToString($record->maintenance->duration),
                         'value' => $record->maintenance->duration
                     ],
                     'interval' => TimeHelper::getTimeInterval($record->time_start, $record->time_end)
