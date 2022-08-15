@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 class TimeHelper
 {
-    public static function getTimeInterval(?string $start, ?string $end): array
+    public static function getTimeInterval(?string $start, ?string $end, ?bool $isBreak = false): array
     {
         if (is_null($start) || is_null($end)) {
             return [];
@@ -17,7 +17,9 @@ class TimeHelper
         while ($start->addMinutes(15) < $end) {
             $output[] = $start->format('H:i');
         }
-        $output[] = $end->format('H:i');
+//        if (!$isBreak) {
+//            $output[] = $end->format('H:i');
+//        }
         return $output;
     }
 
