@@ -60,9 +60,9 @@ class AppointmentRepository extends Repository
 
     /**
      * @param string $orderNumber
-     * @return Appointment|null
+     * @return Collection|null
      */
-    public function getAllByOrderNumber(string $orderNumber): ?Appointment
+    public function getAllByOrderNumber(string $orderNumber): ?Collection
     {
         return $this->model::where([
             'order_number' => $orderNumber
