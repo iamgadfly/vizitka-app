@@ -354,7 +354,7 @@ class AppointmentService
                         ?? $records->first()->dummyClient?->avatar?->url),
                     'discount' => [
                         'label' => str($records->first()?->dummyClient?->discount * 100)->value(),
-                        'value' => (float) $records->first()?->dummyClient?->discount * 100
+                        'value' => (float) $records->first()?->dummyClient?->discount
                     ],
                     'type' => is_null($records->first()?->client) ? 'dummy' : 'client'
                 ],
