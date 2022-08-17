@@ -50,4 +50,29 @@ class DeviceService
             'user_id' => $userId
         ]);
     }
+
+    public function setFace(int $userId, string $device_id,): bool
+    {
+        $device = $this->repository->whereFirst([
+            'user_id' => $userId,
+            'device_id' => $device_id
+        ]);
+        $device->face = true;
+        $device->save();
+
+        return true;
+    }
+
+    public function unsetFace(int $userId, string $device_id): bool
+    {
+        $device = $this->repository->whereFirst([
+            'user_id' => $userId,
+            'device_id' => $device_id
+        ]);
+
+        $device->face = false;
+        $device->save();
+
+        return true;
+    }
 }

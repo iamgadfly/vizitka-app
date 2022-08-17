@@ -27,6 +27,7 @@ use function auth;
 
 class AuthController extends Controller
 {
+    //TODO смотри setFace
     public function __construct(
         protected UserService $service,
         protected AuthService $authService,
@@ -156,6 +157,28 @@ class AuthController extends Controller
     {
         return $this->success(
             $this->authService->unsetPin($request->validated())
+        );
+    }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws InvalidDeviceException
+     */
+    public function setFace(SetPinRequest $request, AuthService $authService): JsonResponse
+    {
+        return $this->success(
+            $authService->setFace($request->validated())
+        );
+    }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws InvalidDeviceException
+     */
+    public function unsetFace(UnsetPinRequest $request, AuthService $authService): JsonResponse
+    {
+        return $this->success(
+            $authService->unsetFace($request->validated())
         );
     }
 }
