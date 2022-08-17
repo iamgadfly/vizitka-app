@@ -8,7 +8,13 @@ use Geocoder\Exception\Exception;
 
 class BusinessCardObserver
 {
-    public function creating(BusinessCard $businessCard): void
+    /**
+     * Handle the BusinessCard "created" event.
+     *
+     * @param  \App\Models\BusinessCard  $businessCard
+     * @return void
+     */
+    public function created(BusinessCard $businessCard)
     {
         if (is_null($businessCard->address)) {
             return;
@@ -18,17 +24,9 @@ class BusinessCardObserver
             $businessCard->latitude = $coordinates->getLatitude();
             $businessCard->longitude = $coordinates->getLongitude();
         } catch (Exception $e) {
+            $businessCard->latitude = null;
+            $businessCard->longitude = null;
         }
-    }
-    /**
-     * Handle the BusinessCard "created" event.
-     *
-     * @param  \App\Models\BusinessCard  $businessCard
-     * @return void
-     */
-    public function created(BusinessCard $businessCard)
-    {
-        //
     }
 
     /**
@@ -47,6 +45,8 @@ class BusinessCardObserver
             $businessCard->latitude = $coordinates->getLatitude();
             $businessCard->longitude = $coordinates->getLongitude();
         } catch (Exception $e) {
+            $businessCard->latitude = null;
+            $businessCard->longitude = null;
         }
     }
 
