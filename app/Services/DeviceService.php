@@ -51,7 +51,7 @@ class DeviceService
         ]);
     }
 
-    public function setFace(int $userId, string $device_id,): bool
+    public function setFace(int $userId, string $device_id): bool
     {
         $device = $this->repository->whereFirst([
             'user_id' => $userId,

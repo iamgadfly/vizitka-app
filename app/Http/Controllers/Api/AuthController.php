@@ -164,7 +164,7 @@ class AuthController extends Controller
      * @throws InvalidLoginException
      * @throws InvalidDeviceException
      */
-    public function setFace(SetPinRequest $request, AuthService $authService): JsonResponse
+    public function setFace(UnsetPinRequest $request, AuthService $authService): JsonResponse
     {
         return $this->success(
             $authService->setFace($request->validated())
