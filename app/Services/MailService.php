@@ -81,7 +81,7 @@ class MailService
 
         $res = $client->request('POST', 'http://smtp.mailganer.com/api/v2/mail/send', [
             'headers' => [
-                'Authorization' => 'CodeRequest 359fdc947d443f62c0207390d2d268e5'
+                'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
             ],
             'json' => [
                 "email_from" => "Domain <from@domain.com>",
@@ -98,7 +98,5 @@ class MailService
                 ]
             ]
         ]);
-
-        dd($res->getBody());
     }
 }
