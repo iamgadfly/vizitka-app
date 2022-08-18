@@ -41,7 +41,7 @@ class AuthService
             $output['pin'] = !is_null($device?->pin);
             $output['specialist'] = !is_null($user->specialist);
             $output['client'] = !is_null($user->client);
-            $output['face'] = $device->face;
+            $output['face'] = !is_null($device) ? $device?->face : false;
         } else {
             $output['user'] = false;
         }

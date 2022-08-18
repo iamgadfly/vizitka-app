@@ -4,12 +4,10 @@ namespace App\Services;
 
 
 use App\Exceptions\SpecialistNotFoundException;
-use App\Helpers\AuthHelper;
-use App\Mail\ReportMail;
-use App\Mail\SupportMail;
 use App\Models\Report;
 use App\Repositories\ClientRepository;
 use App\Repositories\SpecialistRepository;
+use GuzzleHttp\Client;
 use Illuminate\Http\UploadedFile;
 
 class MailService
@@ -30,7 +28,7 @@ class MailService
         $report->reason = __('users.reports.' . $data['reason']);
         //TODO: Update when I get new mail service
 //        \Mail::to(config('custom.report_mail'))->send(new ReportMail($report));
-
+        $this->sendMessage($report);
         return true;
     }
 
@@ -74,5 +72,33 @@ class MailService
             ];
         }
         return $output;
+    }
+
+    private function sendMessage($report)
+    {
+        $client = new Client();
+        $html = view('emails.report', ['report' => $report])->render();
+
+        $res = $client->request('POST', 'http://smtp.mailganer.com/api/v2/mail/send', [
+            'headers' => [
+                'Authorization' => 'CodeRequest 359fdc947d443f62c0207390d2d268e5'
+            ],
+            'json' => [
+                "email_from" => "Domain <from@domain.com>",
+                "email_to" => "oleg.voloshin@softlex.pro",
+                "subject" => "Жалоба на специалиста",
+                "message_text" => $html,
+                "headers" => [
+                    "foo1" => "bar1",
+                    "foo2" => "bar2"
+                ],
+                "params" => [
+                    "user" => "Вася",
+                    "other" => "шмель"
+                ]
+            ]
+        ]);
+
+        dd($res->getBody());
     }
 }
