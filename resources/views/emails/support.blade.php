@@ -1,5 +1,17 @@
-@component('mail::message')
-    # Обращение от {{ $data->fullName }}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Описание страницы" />
+</head>
+<body>
+    Обращение от {{ $data->fullName }}
+    <br>
+    <br>
     Телефон: {{ $data->phoneNumber }}
+    <br>
+    <br>
     {{ $data->text }}
-@endcomponent
+    <br>
+    {{ $data->file}}
+</body>
+</html>
