@@ -86,6 +86,7 @@ class MailService
     /**
      * @param $html
      * @param $subject
+     * @param $mail
      * @return void
      * @throws GuzzleException
      */
