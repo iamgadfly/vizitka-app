@@ -97,7 +97,16 @@ class MailService
     private function sendMessage($html, $subject, $mail)
     {
         $client = new Client();
-
+        $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=reports@vizitka.bz',[
+            'headers' => [
+                'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
+            ]
+        ]);
+        $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=help@vizitka.bz',[
+            'headers' => [
+                'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
+            ]
+        ]);
         $client->request('POST', 'http://smtp.mailganer.com/api/v2/mail/send', [
             'headers' => [
                 'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
