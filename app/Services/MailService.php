@@ -35,7 +35,7 @@ class MailService
         return true;
     }
 
-    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file)
+    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file = null)
     {
         $specialist = $this->specialistRepository->findById($data['id']);
         $mail = collect();
@@ -43,16 +43,17 @@ class MailService
         $mail->fullName = $specialist->name . " " . $specialist?->surname;
         $mail->phoneNumber = $specialist->user->phone_number;
         $mail->email = $data['email'];
-        $filePath = $this->imageService->storeImage($file);
-        $mail->file = env('APP_URL') . $filePath;
-
+        if (!is_null($file)) {
+            $filePath = $this->imageService->storeImage($file);
+            $mail->file = env('APP_URL') . $filePath;
+        }
         $html = view('emails.support', ['data' => $mail])->render();
         $this->sendMessage($html, 'Обращение от специалиста');
 
         return true;
     }
 
-    public function sendMailToSupportAsClient(array $data, UploadedFile $file)
+    public function sendMailToSupportAsClient(array $data, UploadedFile $file = null)
     {
         $client = $this->clientRepository->whereFirst(['id' => $data['id']]);
         $mail = collect();
@@ -60,10 +61,10 @@ class MailService
         $mail->fullName = $client->name . " " . $client?->surname;
         $mail->phoneNumber = $client->user->phone_number;
         $mail->email = $data['email'];
-
-        $filePath = $this->imageService->storeImage($file);
-        $mail->file = env('APP_URL') . $filePath;
-
+        if (!is_null($file)) {
+            $filePath = $this->imageService->storeImage($file);
+            $mail->file = env('APP_URL') . $filePath;
+        }
         $html = view('emails.support', ['data' => $mail])->render();
         $this->sendMessage($html, 'Обращение от клиента');
         return true;
