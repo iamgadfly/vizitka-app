@@ -31,7 +31,7 @@ class MailService
         $report->reason = __('users.reports.' . $data['reason']);
 
         $html = view('emails.report', ['report' => $report])->render();
-        $this->sendMessage($html, 'Жалоба на специалиста');
+        $this->sendMessage($html, 'Жалоба на специалиста', config('custom.from_mail'));
         return true;
     }
 
@@ -48,7 +48,7 @@ class MailService
             $mail->file = env('APP_URL') . $filePath;
         }
         $html = view('emails.support', ['data' => $mail])->render();
-        $this->sendMessage($html, 'Обращение от специалиста');
+        $this->sendMessage($html, 'Обращение от специалиста', config('custom.support_mail'));
 
         return true;
     }
@@ -66,7 +66,7 @@ class MailService
             $mail->file = env('APP_URL') . $filePath;
         }
         $html = view('emails.support', ['data' => $mail])->render();
-        $this->sendMessage($html, 'Обращение от клиента');
+        $this->sendMessage($html, 'Обращение от клиента', config('custom.support_mail'));
         return true;
     }
 
@@ -89,7 +89,7 @@ class MailService
      * @return void
      * @throws GuzzleException
      */
-    private function sendMessage($html, $subject)
+    private function sendMessage($html, $subject, $mail)
     {
         $client = new Client();
 
@@ -99,7 +99,7 @@ class MailService
             ],
             'json' => [
                 "email_from" => "VIZITKA<" . config('custom.from_mail') . ">",
-                "email_to" => config('custom.from_mail'),
+                "email_to" => $mail,
                 "subject" => $subject,
                 "message_text" => $html
             ]
