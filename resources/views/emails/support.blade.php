@@ -12,6 +12,8 @@
     <br>
     {{ $data->text }}
     <br>
-    {{ $data->file}}
+    @if($data->file)
+        {{ $data->file}}
+    @endif
 </body>
 </html>

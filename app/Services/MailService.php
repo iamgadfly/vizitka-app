@@ -46,6 +46,8 @@ class MailService
         if (!is_null($file)) {
             $filePath = $this->imageService->storeImage($file);
             $mail->file = env('APP_URL') . $filePath;
+        } else {
+            $mail->file = null;
         }
         $html = view('emails.support', ['data' => $mail])->render();
         $this->sendMessage($html, 'Обращение от специалиста', config('custom.support_mail'));
@@ -64,6 +66,8 @@ class MailService
         if (!is_null($file)) {
             $filePath = $this->imageService->storeImage($file);
             $mail->file = env('APP_URL') . $filePath;
+        } else {
+            $mail->file = null;
         }
         $html = view('emails.support', ['data' => $mail])->render();
         $this->sendMessage($html, 'Обращение от клиента', config('custom.support_mail'));
