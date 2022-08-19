@@ -107,23 +107,44 @@ class SingleWorkScheduleService
             ?? WorkScheduleDayRepository::getDayIndexFromDate($data['date'])?->id;
 
         foreach ($appo as $item) {
-            if (
-                !(
-                    (Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
-                    Carbon::parse($data['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i'))  ||
-                    Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
-                ) ||
-                !(
-                    (Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
-                    Carbon::parse($data['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
-                    Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
-                )
-            ) {
-                throw new \Exception('Есть запись в данный период времени', 422);
+            if ($item['status'] != 'break') {
+                if (
+                    !(
+                        (Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
+                            Carbon::parse($data['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
+                        Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
+                    ) ||
+                    !(
+                        (Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
+                            Carbon::parse($data['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
+                        Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
+                    )
+                ) {
+                    throw new \Exception('Есть запись в данный период времени', 422);
+                }
+            }
+            if ($item['status'] == 'break') {
+                if (
+                    !(
+                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i') &&
+                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')) ||
+                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')
+                    ) ||
+                    !(
+                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i') &&
+                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')) ||
+                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')
+                    )
+                ) {
+                    throw new \Exception('Есть запись в данный период времени', 422);
+                }
             }
         }
-
-
+        //TODO KOLYA
+        if (isset($data['time']['start']) && isset($data['time']['end']) ) {
+            $data['start'] = $data['time']['start'];
+            $data['end'] = $data['time']['end'];
+        }
         $records = $this->repository->whereGet([
             'day_id' => $data['day_id'],
             'start' => $data['start'],

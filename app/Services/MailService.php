@@ -31,11 +31,11 @@ class MailService
         $report->reason = __('users.reports.' . $data['reason']);
 
         $html = view('emails.report', ['report' => $report])->render();
-        $this->sendMessage($html, 'Жалоба на специалиста');
+        $this->sendMessage($html, 'Жалоба на специалиста', config('custom.from_mail'));
         return true;
     }
 
-    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file)
+    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file = null)
     {
         $specialist = $this->specialistRepository->findById($data['id']);
         $mail = collect();
@@ -43,16 +43,19 @@ class MailService
         $mail->fullName = $specialist->name . " " . $specialist?->surname;
         $mail->phoneNumber = $specialist->user->phone_number;
         $mail->email = $data['email'];
-        $filePath = $this->imageService->storeImage($file);
-        $mail->file = env('APP_URL') . $filePath;
-
+        if (!is_null($file)) {
+            $filePath = $this->imageService->storeImage($file);
+            $mail->file = env('APP_URL') . $filePath;
+        } else {
+            $mail->file = null;
+        }
         $html = view('emails.support', ['data' => $mail])->render();
-        $this->sendMessage($html, 'Обращение от специалиста');
+        $this->sendMessage($html, 'Обращение от специалиста', config('custom.support_mail'));
 
         return true;
     }
 
-    public function sendMailToSupportAsClient(array $data, UploadedFile $file)
+    public function sendMailToSupportAsClient(array $data, UploadedFile $file = null)
     {
         $client = $this->clientRepository->whereFirst(['id' => $data['id']]);
         $mail = collect();
@@ -60,12 +63,14 @@ class MailService
         $mail->fullName = $client->name . " " . $client?->surname;
         $mail->phoneNumber = $client->user->phone_number;
         $mail->email = $data['email'];
-
-        $filePath = $this->imageService->storeImage($file);
-        $mail->file = env('APP_URL') . $filePath;
-
+        if (!is_null($file)) {
+            $filePath = $this->imageService->storeImage($file);
+            $mail->file = env('APP_URL') . $filePath;
+        } else {
+            $mail->file = null;
+        }
         $html = view('emails.support', ['data' => $mail])->render();
-        $this->sendMessage($html, 'Обращение от клиента');
+        $this->sendMessage($html, 'Обращение от клиента', config('custom.support_mail'));
         return true;
     }
 
@@ -85,20 +90,30 @@ class MailService
     /**
      * @param $html
      * @param $subject
+     * @param $mail
      * @return void
      * @throws GuzzleException
      */
-    private function sendMessage($html, $subject)
+    private function sendMessage($html, $subject, $mail)
     {
         $client = new Client();
-
+        $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=reports@vizitka.bz',[
+            'headers' => [
+                'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
+            ]
+        ]);
+        $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=help@vizitka.bz',[
+            'headers' => [
+                'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
+            ]
+        ]);
         $client->request('POST', 'http://smtp.mailganer.com/api/v2/mail/send', [
             'headers' => [
                 'Authorization' => 'CodeRequest MGXiNaI0gxMSo6dXpLVTA+WDx1PlMzIztySDp2VTQkQV4+VD86WHp6PkVmdTdaVF5adUhEOVpKSVZeXlk5PVc='
             ],
             'json' => [
                 "email_from" => "VIZITKA<" . config('custom.from_mail') . ">",
-                "email_to" => config('custom.from_mail'),
+                "email_to" => $mail,
                 "subject" => $subject,
                 "message_text" => $html
             ]

@@ -19,6 +19,7 @@ class DuplicateResource extends JsonResource
             'id' => $this->id,
             'service' => $this->maintenance->title,
             'date' => $this->date,
+            'status' => $this->status,
             'time' => [
                 'start' => Carbon::parse($this->time_start)->format('H:i'),
                 'end' => Carbon::parse($this->time_end)->format('H:i'),

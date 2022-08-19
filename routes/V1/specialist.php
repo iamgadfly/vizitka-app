@@ -231,7 +231,7 @@ Route::controller(ShareController::class)
 
 // Report Routes
 Route::controller(SupportController::class)
-    ->prefix('support')
+    ->prefix('specialist/support')
     ->middleware('auth:sanctum')->group(function () {
 
     Route::post('', 'createSupportAsSpecialist')
