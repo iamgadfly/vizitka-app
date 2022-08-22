@@ -47,7 +47,7 @@ class ShareController extends Controller
      */
     public function get(GetByHashRequest $request): RedirectResponse
     {
-        return \response()->redirectTo($this->service->getByHash($request->hash));
+        return \redirect()->away($this->service->getByHash($request->hash));
     }
 
     /**
