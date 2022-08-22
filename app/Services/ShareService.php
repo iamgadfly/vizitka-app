@@ -16,7 +16,7 @@ class ShareService
 
     public function createShortlink(string $url, $sharableType, $sharableId)
     {
-        $url = str($url)->replace(config('app.url') . '/', '')->value();
+        $url = str($url)->ltrim('/')->value();
         $link = $this->repository->whereFirst([
             'url' => $url,
             ['deactivated_at', '>=', Carbon::now()]
