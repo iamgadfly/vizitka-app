@@ -262,4 +262,19 @@ class AuthService
 
         return $this->deviceService->unsetFace($user->id, $device->device_id);
     }
+
+    /**
+     * @throws InvalidLoginException
+     * @throws InvalidDeviceException
+     */
+    public function logout(array $data): bool
+    {
+        $device = $this->deviceService->getDevice($data['device_id'], $data['user_id'])
+            ?? throw new InvalidDeviceException;
+
+        $this->deviceService->removeDevice($data['user_id'], $device->device_id);
+        auth()->user()->tokens()->delete();
+
+        return true;
+    }
 }

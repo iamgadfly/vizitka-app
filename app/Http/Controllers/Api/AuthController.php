@@ -12,6 +12,7 @@ use App\Exceptions\VerificationCodeIsntValidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Device\UnsetPinRequest;
 use App\Http\Requests\User\IsUserExistsRequest;
+use App\Http\Requests\User\LogoutRequest;
 use App\Http\Requests\User\SetPinRequest;
 use App\Http\Requests\User\SignInRequest;
 use App\Http\Requests\User\SignUpRequest;
@@ -71,16 +72,19 @@ class AuthController extends Controller
     }
 
     /**
+     * @param LogoutRequest $request
      * @return JsonResponse
+     * @throws InvalidDeviceException
+     * @throws InvalidLoginException
      * @lrd:start
      * Logout route
      * @lrd:end
      */
-    public function logout(): JsonResponse
+    public function logout(LogoutRequest $request): JsonResponse
     {
-        auth()->user()->tokens()->delete();
-
-        return $this->success(null, 'Tokens revoked', Response::HTTP_OK);
+        return $this->success($this->authService->logout(
+            $request->validated()
+        ));
     }
 
     /**

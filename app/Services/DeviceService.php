@@ -18,6 +18,15 @@ class DeviceService
         return true;
     }
 
+    public function removeDevice(int $userId, string $deviceId): ?bool
+    {
+        $device = $this->repository->whereFirst([
+            'user_id' => $userId,
+            'device_id' => $deviceId
+        ]);
+        return $device->delete();
+    }
+
     public function setPin(int $userId, string $device_id, string $pin): bool
     {
         $device = $this->repository->whereFirst([
