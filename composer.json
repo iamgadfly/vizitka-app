@@ -25,6 +25,7 @@
         "orlyapps/nova-belongsto-depend": "^3.0",
         "predis/predis": "^2.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-data": "^2.0",
         "symfony/http-client": "^6.1",
         "symfony/mailgun-mailer": "^6.1",
         "toin0u/geocoder-laravel": "^4.5"

@@ -17,10 +17,6 @@ class TimeHelper
         while ($start->addMinutes(15) < $end) {
             $output[] = $start->format('H:i');
         }
-        //TODO ПОЧЕМУ НЕЛЬЗЯ БЫЛО УДАЛИТЬ ЭТО А НЕ ВЫЗЫВАТЬ КОСТЫЛЬ ПОСТОЯННО В МИНУС 15 МИНУТ
-//        if (!$isBreak) {
-//            $output[] = $end->format('H:i');
-//        }
         return $output;
     }
 
@@ -119,5 +115,10 @@ class TimeHelper
     private static function isInInterval($needle, $haystack): bool
     {
         return in_array($needle, $haystack);
+    }
+
+    public static function getFormattedTime(string $time, string $format = 'H:i'): string
+    {
+        return Carbon::parse($time)->format($format);
     }
 }

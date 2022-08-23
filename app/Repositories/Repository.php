@@ -53,6 +53,11 @@ class Repository
         return $this->model::where($condition)->get();
     }
 
+    public function massDelete(array $ids)
+    {
+        return $this->model::destroy($ids);
+    }
+
     /**
      * @throws SpecialistNotFoundException
      */

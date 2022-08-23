@@ -102,17 +102,25 @@ class AuthService
     {
         $phoneNumber = $data['phone_number'];
         $verificationCode = $data['verification_code'];
+        $userAlreadyExists = false;
 
-        $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new UserNotFoundException;
+        $user = $this->service->searchByPhoneNumber($phoneNumber, false);
 
-        if ($user->is_verified) {
+        if (is_null($user)) {
+            $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new UserNotFoundException();
+            $userAlreadyExists = true;
+        }
+
+        if ($user->is_verified && !$userAlreadyExists) {
             throw new UserAlreadyVerifiedException;
         }
 
         if ($user->verification_code == $verificationCode) {
-            $user->phone_number_verified_at = Carbon::now();
-            $user->is_verified = true;
-            $user->save();
+            if (!$userAlreadyExists) {
+                $user->phone_number_verified_at = Carbon::now();
+                $user->is_verified = true;
+                $user->save();
+            }
 
             $this->deviceService->create([
                 'device_id' => $data['device_id'],
