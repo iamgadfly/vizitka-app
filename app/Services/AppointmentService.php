@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DataObject\AppointmentForCalendarData;
 use App\Exceptions\BaseException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
@@ -18,11 +19,9 @@ use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
 use App\Repositories\WorkSchedule\WorkScheduleSettingsRepository;
 use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
 use Carbon\Carbon;
-use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Nette\Utils\Random;
 use Symfony\Component\HttpFoundation\Response;
-use function Clue\StreamFilter\fun;
 
 
 class AppointmentService
@@ -48,6 +47,7 @@ class AppointmentService
      * @param array $data
      * @param string|null $orderNumber
      * @return array
+     * @throws SpecialistNotFoundException
      * @throws TimeIsNotValidException
      */
     public function create(array $data, ?string $orderNumber = null): array
@@ -99,6 +99,7 @@ class AppointmentService
     /**
      * @param array $data
      * @return array
+     * @throws SpecialistNotFoundException
      * @throws TimeIsNotValidException
      */
     public function update(array $data): array
@@ -159,20 +160,23 @@ class AppointmentService
     /**
      * @param string $date
      * @param int|null $specialistId
-     * @return Collection
+     * @return AppointmentForCalendarData
      * @throws SpecialistNotFoundException
      */
-    public function getAllByDay(string $date, ?int $specialistId = null): Collection
+    public function getAllByDay(string $date, ?int $specialistId = null): AppointmentForCalendarData
     {
         if (is_null($specialistId)) {
             $specialistId = AuthHelper::getSpecialistIdFromAuth();
         }
-        $output = collect();
-        $appointments = $this->convertToOrderType(collect($this->repository->getAllByDate($date, $specialistId)));
-        $breaks = $this->convertBreakToOrderType(collect($this->breakRepository->getBreaksForDay($date, true, $specialistId)));
+        $appointments = $this->convertToOrderType(
+            collect($this->repository->getAllByDate($date, $specialistId))
+        );
+
+        $breaks = $this->convertBreakToOrderType(
+            collect($this->breakRepository->getBreaksForDay($date, true, $specialistId))
+        );
 
         $appointments = $appointments->merge($breaks);
-        $output->appointments = $appointments;
         $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? [];
         $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
         if ($pills->isNotEmpty()) {
@@ -182,20 +186,19 @@ class AppointmentService
         } else {
             $pills = [];
         }
-        $output->disabled = $pills;
 
         if (!empty($times)) {
             $times = TimeHelper::getTimeInterval($times[0], $times[1]);
             $times = ArrayHelper::arrayWithoutIntersections($times, $pills);
         } else {
-            $workSchedule = [];
+            $times = [];
         }
 
-        $output->workSchedule = $times;
-        $output->smartSchedule = WorkScheduleSettings::where([
+        $smartSchedule = WorkScheduleSettings::where([
             'specialist_id' => $specialistId
         ])->first()->smart_schedule;
-        return $output;
+
+        return new AppointmentForCalendarData($appointments, $pills, $times, $smartSchedule);
     }
 
     /**
@@ -250,6 +253,7 @@ class AppointmentService
     /**
      * @param string $date
      * @return array
+     * @throws SpecialistNotFoundException
      */
     public function getMinMaxTimes(string $date): array
     {
@@ -276,10 +280,7 @@ class AppointmentService
      */
     public function massDelete(array $data): bool
     {
-        foreach ($data['ids'] as $id) {
-            $this->repository->deleteById($id);
-        }
-        return true;
+        return $this->repository->massDelete($data['ids']);
     }
 
     /**
@@ -310,7 +311,7 @@ class AppointmentService
             $item = [
                 'date' => $break->date,
                 'status' => 'break',
-                'interval' => TimeHelper::getTimeInterval($break->start, $break->end, true),
+                'interval' => TimeHelper::getTimeInterval($break->start, $break->end),
             ];
             $output[] = $item;
         }
@@ -337,12 +338,12 @@ class AppointmentService
             $item = [
                 'order_number' => $order,
                 'date' => [
-                    'label' => Carbon::parse($records->first()->date)->format('d.m.Y'),
+                    'label' => TimeHelper::getFormattedTime($records->first()->date, 'd.m.Y'),
                     'value' => $records->first()->date
                 ],
                 'status' => $records->first()->status,
                 'interval' => TimeHelper::getTimeInterval(
-                    $minTime, Carbon::parse($maxTime)->format('H:i')
+                    TimeHelper::getFormattedTime($minTime), TimeHelper::getFormattedTime($maxTime)
                 ),
                 'services' => [],
                 'client' => [
@@ -360,8 +361,8 @@ class AppointmentService
                     'type' => is_null($records->first()?->client) ? 'dummy' : 'client'
                 ],
                 'time' => [
-                    'start' => Carbon::parse($minTime)->format('H:i'),
-                    'end' => Carbon::parse($maxTime)->format('H:i')
+                    'start' => TimeHelper::getFormattedTime($minTime),
+                    'end' => TimeHelper::getFormattedTime($maxTime)
                 ]
             ];
             foreach ($records as $record) {
@@ -394,11 +395,11 @@ class AppointmentService
     private function isInInterval(array $data): void
     {
         $appointments = $this->repository->getAllByDate($data['date']);
-        $start = strtotime(Carbon::parse($data['time_start'])->format('H:i'));
-        $end = strtotime(Carbon::parse($data['time_end'])->format('H:i'));
+        $start = strtotime(TimeHelper::getFormattedTime($data['time_start']));
+        $end = strtotime(TimeHelper::getFormattedTime($data['time_end']));
         foreach ($appointments as $appointment) {
-            $appointment_start = strtotime(Carbon::parse($appointment->time_start)->format('H:i'));
-            $appointment_end = strtotime(Carbon::parse($appointment->time_end)->format('H:i'));
+            $appointment_start = strtotime(TimeHelper::getFormattedTime($appointment->time_start));
+            $appointment_end = strtotime(TimeHelper::getFormattedTime($appointment->time_end));
             if (($start >= $appointment_start && $start < $appointment_end)
                 || ($end > $appointment_start && $end <= $appointment_end)
                 || ($start < $appointment_start && $end > $appointment_end)
@@ -441,40 +442,10 @@ class AppointmentService
         $sectionOffset = 70 / $intervalsCount;
         $sectionOffsetValue = $sectionOffset;
         $interval = TimeHelper::getTimeIntervalAsFreeAppointment($minTime, $maxTime, $startDay, $endDay);
-        $convertedAppointments = [];
-        $convertedBreaks = [];
-        foreach ($appointments as $appointment)
-        {
-            $start = Carbon::parse($appointment->time_start)->format('H:i');
-            $end = Carbon::parse($appointment->time_end)->format('H:i');
-            foreach ($interval as $index => $item) {
-                // try to find interval intersections
-                if ($item['start'] >= $start && $item['end'] <= $end) {
-                    unset($interval[$index]);
-                }
-            }
-            $convertedAppointments[] = [
-                'start' => $start,
-                'end' => $end,
-                'status' => $appointment->status
-            ];
-        }
+        $convertedAppointments = $this->convertAppointmentsForSchedule($appointments, $interval);
+        $convertedBreaks = $this->convertBreakForSchedule($breaks, $interval);
 
-        foreach ($breaks as $break)
-        {
-            $start = Carbon::parse($break[0])->format('H:i');
-            $end = Carbon::parse($break[1])->format('H:i');
-            foreach ($interval as $index => $item) {
-                if ($item['start'] >= $start && $item['end'] <= $end) {
-                    unset($interval[$index]);
-                }
-            }
-            $convertedBreaks[] = [
-                'start' => Carbon::parse($break[0])->format('H:i'),
-                'end' => Carbon::parse($break[1])->format('H:i'),
-                'status' => 'break'
-            ];
-        }
+
         $svg = [];
         $all = array_merge($convertedAppointments, $convertedBreaks, $interval);
 
@@ -508,5 +479,50 @@ class AppointmentService
             'strokeDashoffset' => -70
         ];
         return $svg;
+    }
+
+    private function convertBreakForSchedule($breaks, $interval): array
+    {
+        $output = [];
+        foreach ($breaks as $break)
+        {
+            $start = TimeHelper::getFormattedTime($break[0]);
+            $end = TimeHelper::getFormattedTime($break[1]);
+            foreach ($interval as $index => $item) {
+                if ($item['start'] >= $start && $item['end'] <= $end) {
+                    unset($interval[$index]);
+                }
+            }
+            $output[] = [
+                'start' => TimeHelper::getFormattedTime($break[0]),
+                'end' => TimeHelper::getFormattedTime($break[1]),
+                'status' => 'break'
+            ];
+        }
+
+        return $output;
+    }
+
+    private function convertAppointmentsForSchedule($appointments, $interval): array
+    {
+        $output = [];
+        foreach ($appointments as $appointment)
+        {
+            $start = TimeHelper::getFormattedTime($appointment->time_start);
+            $end = TimeHelper::getFormattedTime($appointment->time_end);
+            foreach ($interval as $index => $item) {
+                // try to find interval intersections
+                if ($item['start'] >= $start && $item['end'] <= $end) {
+                    unset($interval[$index]);
+                }
+            }
+            $output[] = [
+                'start' => $start,
+                'end' => $end,
+                'status' => $appointment->status
+            ];
+        }
+
+        return $output;
     }
 }

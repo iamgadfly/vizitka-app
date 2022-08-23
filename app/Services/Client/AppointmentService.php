@@ -7,6 +7,7 @@ use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\TimeIsNotValidException;
 use App\Helpers\AuthHelper;
 use App\Helpers\ImageHelper;
+use App\Helpers\TimeHelper;
 use App\Http\Resources\SpecialistResource;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
@@ -118,10 +119,10 @@ class AppointmentService extends BaseAppointmentService
 
     /**
      * @param array $data
-     * @return mixed
+     * @return Collection<Appointment>
      * @throws ClientNotFoundException
      */
-    public function checkForDuplicates(array $data)
+    public function checkForDuplicates(array $data): Collection
     {
         return Appointment::where([
             'client_id' => AuthHelper::getClientIdFromAuth(),
@@ -164,8 +165,8 @@ class AppointmentService extends BaseAppointmentService
                         'label' => str($record->maintenance->duration)->value(),
                         'value' => $record->maintenance->duration
                     ],
-                    'start' => Carbon::parse($record->time_start)->format('H:i'),
-                    'end' => Carbon::parse($record->time_end)->format('H:i'),
+                    'start' => TimeHelper::getFormattedTime($record->time_start),
+                    'end' => TimeHelper::getFormattedTime($record->time_end),
                     'isOver' => Carbon::now() > Carbon::parse($record->date . ' ' . $record->time_end)
                 ];
             }
@@ -184,11 +185,11 @@ class AppointmentService extends BaseAppointmentService
     private function isInInterval(array $data): void
     {
         $appointments = $this->repository->getAllByDate($data['date'], $data['specialist_id']);
-        $start = strtotime(Carbon::parse($data['time_start'])->format('H:i'));
-        $end = strtotime(Carbon::parse($data['time_end'])->format('H:i'));
+        $start = TimeHelper::getFormattedTime($data['time_start']);
+        $end = TimeHelper::getFormattedTime($data['time_end']);
         foreach ($appointments as $appointment) {
-            $appointment_start = strtotime(Carbon::parse($appointment->time_start)->format('H:i'));
-            $appointment_end = strtotime(Carbon::parse($appointment->time_end)->format('H:i'));
+            $appointment_start = TimeHelper::getFormattedTime($appointment->time_start);
+            $appointment_end = TimeHelper::getFormattedTime($appointment->time_end);
             if (($start >= $appointment_start && $start < $appointment_end)
                 || ($end > $appointment_start && $end <= $appointment_end)
                 || ($start < $appointment_start && $end > $appointment_end)
