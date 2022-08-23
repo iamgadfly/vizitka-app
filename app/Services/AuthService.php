@@ -50,11 +50,12 @@ class AuthService
 
     /**
      * @param string $phoneNumber
+     * @return bool
      * @throws GuzzleException
      * @throws InvalidLoginException
      * @throws SMSNotSentException
      */
-    public function resendSms(string $phoneNumber): void
+    public function resendSms(string $phoneNumber): bool
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new InvalidLoginException;
 
@@ -68,15 +69,18 @@ class AuthService
 
         $user->verification_code = $verification_code;
         $user->save();
+
+        return true;
     }
 
     /**
      * @param string $phoneNumber
+     * @return bool
      * @throws GuzzleException
      * @throws InvalidLoginException
      * @throws SMSNotSentException
      */
-    public function forget(string $phoneNumber): void
+    public function forget(string $phoneNumber): bool
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new InvalidLoginException;
         $verification_code = Random::generate(4, '0-9');
@@ -89,6 +93,8 @@ class AuthService
 
         $user->verification_code = $verification_code;
         $user->save();
+
+        return true;
     }
 
     /**
