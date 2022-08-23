@@ -51,6 +51,20 @@ class AuthController extends Controller
     }
 
     /**
+     * @param SignUpRequest $request
+     * @return JsonResponse
+     * @throws GuzzleException
+     * @throws InvalidLoginException
+     * @throws SMSNotSentException
+     */
+    public function forgetPin(SignUpRequest $request)
+    {
+        return $this->success(
+            $this->authService->forget($request->phone_number)
+        );
+    }
+
+    /**
      * @param VerificationRequest $request
      * @return JsonResponse
      * @throws UserAlreadyVerifiedException
@@ -183,6 +197,13 @@ class AuthController extends Controller
     {
         return $this->success(
             $authService->unsetFace($request->validated())
+        );
+    }
+
+    public function resendSms(SignUpRequest $request)
+    {
+        return $this->success(
+            $this->authService->resendSms($request->phone_number)
         );
     }
 }
