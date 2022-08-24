@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property string $device_id
  * @property string $pin
+ * @property bool $face
  *
  * Relations
  *

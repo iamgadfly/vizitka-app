@@ -7,10 +7,12 @@ use App\Exceptions\RecordIsAlreadyExistsException;
 use App\Exceptions\RecordNotFoundException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
+use App\Models\ContactBook;
 use App\Models\Specialist;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyBusinessCardRepository;
 use App\Repositories\SpecialistRepository;
+use Illuminate\Support\Collection;
 
 
 class ContactBookForClientService
@@ -22,10 +24,14 @@ class ContactBookForClientService
     ) {}
 
     /**
-     * @throws RecordIsAlreadyExistsException
+     * @param int $specialistId
+     * @param int|null $clientId
+     * @return ContactBook
+     *
      * @throws ClientNotFoundException
+     * @throws RecordIsAlreadyExistsException
      */
-    public function create(int $specialistId, int $clientId = null)
+    public function create(int $specialistId, int $clientId = null): ContactBook
     {
         if (is_null($clientId)) {
             $clientId = AuthHelper::getClientIdFromAuth();
@@ -44,6 +50,8 @@ class ContactBookForClientService
     }
 
     /**
+     * @param array $data
+     * @return array
      * @throws ClientNotFoundException
      */
     public function massCreate(array $data): array
@@ -63,19 +71,15 @@ class ContactBookForClientService
                     continue;
                 }
             } else {
-                try {
-                    $output[] = $this->businessCardRepository->create([
-                        'name' => $item['name'],
-                        'surname' => $item['surname'],
-                        'phone_number' => $item['phone_number'],
-                        'title' => null,
-                        'avatar_id' => null,
-                        'about' => null,
-                        'client_id' => AuthHelper::getClientIdFromAuth()
-                    ]);
-                } catch (RecordIsAlreadyExistsException $e) {
-                    continue;
-                }
+                $output[] = $this->businessCardRepository->create([
+                    'name' => $item['name'],
+                    'surname' => $item['surname'],
+                    'phone_number' => $item['phone_number'],
+                    'title' => null,
+                    'avatar_id' => null,
+                    'about' => null,
+                    'client_id' => AuthHelper::getClientIdFromAuth()
+                ]);
             }
         }
         return $output;
@@ -83,10 +87,13 @@ class ContactBookForClientService
 
 
     /**
-     * @throws RecordNotFoundException
+     * @param int $specialistId
+     * @param string $type
+     * @return bool|null
      * @throws ClientNotFoundException
+     * @throws RecordNotFoundException
      */
-    public function delete(int $specialistId, string $type)
+    public function delete(int $specialistId, string $type): ?bool
     {
         if ($type == 'specialist') {
             $record = $this->repository->whereFirst([
@@ -104,7 +111,11 @@ class ContactBookForClientService
         return $record->delete();
     }
 
-    public function get(int $clientId)
+    /**
+     * @param int $clientId
+     * @return Collection
+     */
+    public function get(int $clientId): Collection
     {
         $contacts = $this->repository->whereGet([
             'client_id' => $clientId

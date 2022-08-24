@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Http\Resources\MaintenanceSettingsResource;
 use App\Repositories\MaintenanceRepository;
@@ -24,7 +25,6 @@ class MaintenanceService
         $settings = $this->maintenanceSettingsRepository->mySettings();
         if ($settings) {
             $this->repository->deleteAllForCurrentUser($settings->id);
-//            throw new MaintenanceSettingsIsAlreadyExistingException;
         }
 
         try {
@@ -70,7 +70,7 @@ class MaintenanceService
     }
 
     /**
-     * @throws \App\Exceptions\SpecialistNotFoundException
+     * @throws SpecialistNotFoundException
      */
     public function update(array $data): bool
     {

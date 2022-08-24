@@ -10,12 +10,12 @@ class CardBackgroundHelper
     /**
      * @var string
      */
-    private static $imagePath = 'images/card_backgrounds/';
+    private static string $imagePath = 'images/card_backgrounds/';
 
     /**
      * @var array<string>
      */
-    public static $files = [
+    public static array $files = [
         'barber', 'hairdresser_1', 'hairdresser_2',
         'manicure_1', 'manicure_2', 'default',
         'neutral_beauty_1', 'neutral_beauty_2',
@@ -25,7 +25,7 @@ class CardBackgroundHelper
         'resnizi', 'visagiste', 'browist'
     ];
 
-    private static $specialistColor = [
+    private static array $specialistColor = [
         'barber' => [
             'gradientColor' => '#414141',
             'textColor' => '#FFFFFF',

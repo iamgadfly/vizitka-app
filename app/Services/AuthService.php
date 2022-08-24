@@ -138,35 +138,7 @@ class AuthService
 
         throw new VerificationCodeIsntValidException;
     }
-
-
-    /**
-     * @param array $data
-     * @return bool
-     * @throws UserNotFoundException
-     * @throws VerificationCodeIsntValidException
-     */
-    public function verifyNewDevice(array $data): bool
-    {
-        $phoneNumber = $data['phone_number'];
-        $verificationCode = $data['verification_code'];
-
-        $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new UserNotFoundException;
-
-        if ($user->verification_code == $verificationCode) {
-
-            $this->deviceService->create([
-                'device_id' => $data['device_id'],
-                'user_id' => $user->id
-            ]);
-
-            return $user->createToken("Token for user #$user->id")->plainTextToken;
-        }
-
-        throw new VerificationCodeIsntValidException;
-    }
-
-
+    
     /**
      * @param string $phoneNumber
      * @param string $deviceId

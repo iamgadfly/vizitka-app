@@ -56,9 +56,4 @@ class SpecialistDataService
         });
         return MaintenanceResource::collection($maintenances);
     }
-
-    public function getClientsHisotryForSpecialist(array $data)
-    {
-
-    }
 }

@@ -5,11 +5,13 @@ namespace App\Services;
 
 use App\Exceptions\SpecialistNotFoundException;
 use App\Models\Report;
+use App\Models\Specialist;
 use App\Repositories\ClientRepository;
 use App\Repositories\SpecialistRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 class MailService
 {
@@ -35,41 +37,26 @@ class MailService
         return true;
     }
 
-    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file = null)
+    /**
+     * @throws GuzzleException
+     * @throws SpecialistNotFoundException
+     */
+    public function sendMailToSupportAsSpecialist(array $data, UploadedFile $file = null): bool
     {
         $specialist = $this->specialistRepository->findById($data['id']);
-        $mail = collect();
-        $mail->text = $data['text'];
-        $mail->fullName = $specialist->name . " " . $specialist?->surname;
-        $mail->phoneNumber = $specialist->user->phone_number;
-        $mail->email = $data['email'];
-        if (!is_null($file)) {
-            $filePath = $this->imageService->storeImage($file);
-            $mail->file = env('APP_URL') . $filePath;
-        } else {
-            $mail->file = null;
-        }
-        $html = view('emails.support', ['data' => $mail])->render();
+        $html = $this->getRenderedSupportMail($data, $specialist, $file);
         $this->sendMessage($html, 'Обращение от специалиста', config('custom.support_mail'));
 
         return true;
     }
 
-    public function sendMailToSupportAsClient(array $data, UploadedFile $file = null)
+    /**
+     * @throws GuzzleException
+     */
+    public function sendMailToSupportAsClient(array $data, UploadedFile $file = null): bool
     {
         $client = $this->clientRepository->whereFirst(['id' => $data['id']]);
-        $mail = collect();
-        $mail->text = $data['text'];
-        $mail->fullName = $client->name . " " . $client?->surname;
-        $mail->phoneNumber = $client->user->phone_number;
-        $mail->email = $data['email'];
-        if (!is_null($file)) {
-            $filePath = $this->imageService->storeImage($file);
-            $mail->file = env('APP_URL') . $filePath;
-        } else {
-            $mail->file = null;
-        }
-        $html = view('emails.support', ['data' => $mail])->render();
+        $html = $this->getRenderedSupportMail($data, $client, $file);
         $this->sendMessage($html, 'Обращение от клиента', config('custom.support_mail'));
         return true;
     }
@@ -96,6 +83,7 @@ class MailService
      */
     private function sendMessage($html, $subject, $mail)
     {
+        $mail = "nikolay.semenovskiy@softlex.pro";
         $client = new Client();
         $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=reports@vizitka.bz',[
             'headers' => [
@@ -118,5 +106,27 @@ class MailService
                 "message_text" => $html
             ]
         ]);
+    }
+
+    /**
+     * @param array $data
+     * @param Specialist|\App\Models\Client $authenticatable
+     * @param UploadedFile|null $file
+     * @return string
+     */
+    private function getRenderedSupportMail(array $data, Specialist|\App\Models\Client $authenticatable, ?UploadedFile $file): string
+    {
+        $mail = collect();
+        $mail->text = $data['text'];
+        $mail->fullName = $authenticatable->name . " " . $authenticatable?->surname;
+        $mail->phoneNumber = $authenticatable->user->phone_number;
+        $mail->email = $data['email'];
+        if (!is_null($file)) {
+            $filePath = $this->imageService->storeImage($file);
+            $mail->file = config('app.url') . $filePath;
+        } else {
+            $mail->file = null;
+        }
+        return view('emails.support', ['data' => $mail])->render();
     }
 }

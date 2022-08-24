@@ -15,9 +15,6 @@ Route::controller(AuthController::class)
     Route::post('verify', 'verification')
         ->name('auth.verification');
 
-    Route::post('newDevice/verify', 'newDeviceVerify')
-        ->name('auth.new.device.verification');
-
     Route::post('logout', 'logout')
         ->middleware('auth:sanctum')
         ->name('auth.logout');

@@ -27,7 +27,7 @@ class WorkScheduleTypeHelper
         return array_keys(self::$translations);
     }
 
-    public static function get(string $type)
+    public static function get(string $type): array|string|Translator|Application|null
     {
         return __(self::$translations[$type]);
     }

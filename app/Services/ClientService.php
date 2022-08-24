@@ -18,23 +18,36 @@ class ClientService
     ) {}
 
     /**
-     * @throws RecordIsAlreadyExistsException
+     * @param array $data
+     * @return Client
      */
-    public function create(array $data)
+    public function create(array $data): Client
     {
         return $this->repository->create($data);
     }
 
-    public function update(array $data)
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function update(array $data): bool
     {
         return $this->repository->update($data['id'], $data);
     }
 
+    /**
+     * @param $id
+     * @return Client|null
+     */
     public function findByUserId($id): ?Client
     {
         return $this->repository->findByUserId($id);
     }
 
+    /**
+     * @param $id
+     * @return Client|null
+     */
     public function getClientData($id): ?Client
     {
         if (is_null($id)) {
@@ -44,6 +57,7 @@ class ClientService
     }
 
     /**
+     * @return Client
      * @throws UserNotFoundException
      */
     public function getMe(): Client

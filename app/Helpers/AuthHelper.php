@@ -15,6 +15,9 @@ class AuthHelper
         return auth()->user()->specialist->id ?? throw new SpecialistNotFoundException;
     }
 
+    /**
+     * @throws ClientNotFoundException
+     */
     public static function getClientIdFromAuth(): ?int
     {
         return auth()->user()->client->id ?? throw new ClientNotFoundException;
