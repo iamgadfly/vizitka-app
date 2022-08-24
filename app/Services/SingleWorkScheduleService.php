@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\BaseException;
 use App\Exceptions\RecordIsAlreadyExistsException;
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Helpers\TimeHelper;
 use App\Repositories\WorkSchedule\SingleWorkScheduleRepository;
@@ -95,10 +96,14 @@ class SingleWorkScheduleService
     }
 
     /**
+     * @param array $data
+     * @return bool
      * @throws RecordIsAlreadyExistsException
+     * @throws SpecialistNotFoundException
      */
     public function createBreak(array $data): bool
     {
+        $data['date'] = $data['date']['value'];
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
         $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
 

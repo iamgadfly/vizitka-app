@@ -26,7 +26,9 @@ class CreateRequest extends FormRequest
         return [
             'break' => ['required', 'array', 'bail'],
             'break.time' => ['required', 'array', 'bail'],
-            'break.date' => ['date_format:Y-m-d', 'nullable', 'bail'],
+            'break.date' => ['array', 'nullable', 'bail'],
+            'break.date.label' => ['string', 'nullable', 'bail'],
+            'break.date.value' => ['date_format:Y-m-d', 'nullable', 'bail'],
             'break.time.start' => ['date_format:H:i', 'nullable', 'bail'],
             'break.time.end' => ['date_format:H:i', 'nullable', 'bail'],
             'weekend' => ['required', 'array', 'bail'],
