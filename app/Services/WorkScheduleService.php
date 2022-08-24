@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\SpecialistCreatedEvent;
 use App\Exceptions\RecordNotFoundException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Exceptions\WorkScheduleSettingsIsAlreadyExistingException;
@@ -26,7 +27,6 @@ class WorkScheduleService
 
     /**
      * @throws WorkScheduleSettingsIsAlreadyExistingException
-     * @throws SpecialistNotFoundException
      */
     public function create(array $data, bool $onUpdate = false): WorkScheduleSettingsResource
     {
@@ -61,6 +61,22 @@ class WorkScheduleService
                 'workdays_count' => $workdaysCount,
                 'weekdays_count' => $weekdaysCount
             ]);
+
+            if ($data['type']['value'] == 'sliding') {
+                $this->dayRepository->fillDaysForSlidingType(
+                    $settings->id, $settings->workdays_count, $settings->weekdays_count
+                );
+            } else {
+                $this->dayRepository->fillDaysNotForSlidingType($settings->id);
+            }
+
+            if (!$onUpdate) {
+                $specialist = $settings->specialist;
+                $specialist->is_registered = true;
+                $specialist->save();
+                event(new SpecialistCreatedEvent($specialist));
+            }
+
             $type = $data['type']['value'];
             if ($type == 'standard') {
                 $weekends = $data['standardSchedule']['weekends'];
@@ -84,12 +100,7 @@ class WorkScheduleService
                     $workdaysCount, $weekdaysCount, $work, $breakType, $breaks
                 );
             }
-            if (!$onUpdate) {
-                //make specialist registered
-                $specialist = $this->specialistRepository->findById($data['specialist_id'], false);
-                $specialist->is_registered = true;
-                $specialist->save();
-            }
+
             \DB::commit();
             return new WorkScheduleSettingsResource($settings);
         } catch (\PDOException $e) {

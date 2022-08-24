@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\SpecialistCreatedEvent;
 use App\Exceptions\MaintenanceSettingsIsAlreadyExistingException;
 use App\Exceptions\SpecialistNotCreatedException;
 use App\Exceptions\SpecialistNotFoundException;

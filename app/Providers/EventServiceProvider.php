@@ -6,6 +6,7 @@ use App\Events\SpecialistCreatedEvent;
 use App\Events\WorkScheduleSettingsCreated;
 use App\Listeners\CreateShareLink;
 use App\Listeners\CreateWorkScheduleDays;
+use App\Listeners\UpdateBusinessCards;
 use App\Models\BusinessCard;
 use App\Models\Share;
 use App\Models\Specialist;
@@ -42,12 +43,10 @@ class EventServiceProvider extends ServiceProvider
         // Observers
         Share::observe(ShareObserver::class);
 //        BusinessCard::observe(BusinessCardObserver::class);
-        WorkScheduleSettings::observe(WorkScheduleSettingsObserver::class);
-        Specialist::observe(SpecialistObserver::class);
 
         // Event listeners
-        Event::listen(WorkScheduleSettingsCreated::class, CreateWorkScheduleDays::class);
         Event::listen(SpecialistCreatedEvent::class, CreateShareLink::class);
+        Event::listen(SpecialistCreatedEvent::class, UpdateBusinessCards::class);
     }
 
     /**

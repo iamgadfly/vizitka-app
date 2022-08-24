@@ -12,7 +12,7 @@ class CreateShareLink implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    public $afterCommit = true;
+    public bool $afterCommit = true;
     /**
      * Create the event listener.
      *
