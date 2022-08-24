@@ -67,12 +67,26 @@ class SingleWorkScheduleService
         return true;
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function createWorkday(array $data): bool
     {
         foreach ($data['dates'] as $date) {
             $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
             $dayId = WorkScheduleDayRepository::getDayFromString($weekday)->id
                 ?? WorkScheduleDayRepository::getDayIndexFromDate($date)->id;
+
+            $record = $this->repository->whereGet([
+                'date' => $date,
+                'day_id' => $dayId
+            ])->map
+                ->only(['id'])
+                ->flatten()
+                ->toArray();
+
+            $this->repository->massDelete($record);
+
             $recordWorkday = [
                 'day_id' => $dayId,
                 'date' => $date,
