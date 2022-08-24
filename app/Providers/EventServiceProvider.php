@@ -38,11 +38,11 @@ class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // Observers
         Share::observe(ShareObserver::class);
-//        BusinessCard::observe(BusinessCardObserver::class);
+        BusinessCard::observe(BusinessCardObserver::class);
 
         // Event listeners
         Event::listen(SpecialistCreatedEvent::class, CreateShareLink::class);
