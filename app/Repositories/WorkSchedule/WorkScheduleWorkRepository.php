@@ -3,6 +3,8 @@
 namespace App\Repositories\WorkSchedule;
 
 use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
+use App\Helpers\TimeHelper;
 use App\Models\SingleWorkSchedule;
 use App\Models\WorkScheduleDay;
 use App\Models\WorkScheduleSettings;
@@ -43,7 +45,7 @@ class WorkScheduleWorkRepository extends Repository
     public static function getWorkDay(string $date, ?int $specialistId = null): ?array
     {
         if (is_null($specialistId)) {
-            $specialistId = self::getSpecialistIdFromAuth();
+            $specialistId = AuthHelper::getSpecialistIdFromAuth();
         }
         // Try to get single work schedule for a day
         $settings = WorkScheduleSettings::where([
@@ -64,17 +66,19 @@ class WorkScheduleWorkRepository extends Repository
             'day_id' => $day_id,
             'is_break' => false
         ])->first();
-
-        if (!is_null($single)) {
-            return null;
+        if ($single) {
+            return [
+                TimeHelper::getFormattedTime($single->start),
+                TimeHelper::getFormattedTime($single->end)
+            ];
         }
         // If not found single work schedule
         $day = WorkScheduleWork::where(['day_id' => $day_id]);
 
         if (is_null($day->first()?->start)) return null;
         return [
-            Carbon::parse($day->first()->start)->format('H:i'),
-            Carbon::parse($day->first()->end)->format('H:i')
+            TimeHelper::getFormattedTime($day->first()->start),
+            TimeHelper::getFormattedTime($day->first()->end)
         ];
     }
 }
