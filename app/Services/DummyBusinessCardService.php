@@ -7,9 +7,11 @@ use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Http\Resources\BusinessCardResource;
 use App\Http\Resources\DummyBusinessCardResource;
+use App\Models\DummyBusinessCard;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\DummyBusinessCardRepository;
 use App\Repositories\SpecialistRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class DummyBusinessCardService
@@ -80,5 +82,16 @@ class DummyBusinessCardService
     public function get(int $id)
     {
         return $this->repository->getById($id);
+    }
+
+    /**
+     * @param string $phoneNumber
+     * @return Collection<DummyBusinessCard>
+     */
+    public function getByPhoneNumber(string $phoneNumber): Collection
+    {
+        return $this->repository->whereGet([
+            'phone_number' => $phoneNumber
+        ]);
     }
 }

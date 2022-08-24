@@ -25,9 +25,11 @@ class ContactBookForClientService
      * @throws RecordIsAlreadyExistsException
      * @throws ClientNotFoundException
      */
-    public function create(int $specialistId)
+    public function create(int $specialistId, int $clientId = null)
     {
-        $clientId = AuthHelper::getClientIdFromAuth();
+        if (is_null($clientId)) {
+            $clientId = AuthHelper::getClientIdFromAuth();
+        }
         $record = $this->repository->whereFirst([
             'specialist_id' => $specialistId,
             'client_id' => $clientId

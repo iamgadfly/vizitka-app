@@ -4,6 +4,9 @@ namespace App\Repositories\WorkSchedule;
 
 use App\Models\WorkScheduleSettings;
 
+/**
+ * @method WorkScheduleSettings create(array $data)
+ */
 class WorkScheduleSettingsRepository extends Repository
 {
     public function __construct(WorkScheduleSettings $model)
