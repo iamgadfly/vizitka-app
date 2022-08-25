@@ -16,17 +16,7 @@ class BusinessCardObserver
      */
     public function created(BusinessCard $businessCard)
     {
-        if (is_null($businessCard->address)) {
-            return;
-        }
-        try {
-            $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
-            $businessCard->latitude = $coordinates->getLatitude();
-            $businessCard->longitude = $coordinates->getLongitude();
-        } catch (Exception $e) {
-            $businessCard->latitude = null;
-            $businessCard->longitude = null;
-        }
+        $this->getCoordinates($businessCard);
     }
 
     /**
@@ -37,17 +27,7 @@ class BusinessCardObserver
      */
     public function updated(BusinessCard $businessCard)
     {
-        if (is_null($businessCard->address)) {
-            return;
-        }
-        try {
-            $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
-            $businessCard->latitude = $coordinates->getLatitude();
-            $businessCard->longitude = $coordinates->getLongitude();
-        } catch (Exception $e) {
-            $businessCard->latitude = null;
-            $businessCard->longitude = null;
-        }
+        $this->getCoordinates($businessCard);
     }
 
     /**
@@ -81,5 +61,25 @@ class BusinessCardObserver
     public function forceDeleted(BusinessCard $businessCard)
     {
         //
+    }
+
+    /**
+     * @param BusinessCard $businessCard
+     * @return void
+     */
+    private function getCoordinates(BusinessCard $businessCard): void
+    {
+        if (is_null($businessCard->address)) {
+            return;
+        }
+        try {
+            $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
+            $businessCard->latitude = $coordinates->getLatitude();
+            $businessCard->longitude = $coordinates->getLongitude();
+        } catch (Exception $e) {
+            $businessCard->latitude = null;
+            $businessCard->longitude = null;
+        }
+        $businessCard->save();
     }
 }
