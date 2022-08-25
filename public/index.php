@@ -2,7 +2,7 @@
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
-
+ini_set('pm.max_children', 10);
 define('LARAVEL_START', microtime(true));
 
 /*
