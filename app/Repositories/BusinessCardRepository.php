@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use App\Models\BusinessCard;
 
 class BusinessCardRepository extends Repository
@@ -11,14 +13,14 @@ class BusinessCardRepository extends Repository
         parent::__construct($model);
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function create(array $data)
     {
-        $model = $this->whereFirst([
-            'specialist_id' => auth()->user()->specialist->id
-        ]);
-        if ($model) {
-            $model->delete();
-        }
+        $this->whereFirst([
+            'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+        ])->delete();
         return $this->model::create($data);
     }
 }

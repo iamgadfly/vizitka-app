@@ -32,6 +32,10 @@ return [
     */
 
     'stores' => [
+        'geocode' => [
+            'driver' => 'redis',
+            'connection' => 'geocode-cache'
+        ],
 
         'apc' => [
             'driver' => 'apc',
