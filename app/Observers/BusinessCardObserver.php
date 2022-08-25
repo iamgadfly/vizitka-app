@@ -16,7 +16,7 @@ class BusinessCardObserver
      */
     public function created(BusinessCard $businessCard)
     {
-        $this->getCoordinates($businessCard);
+        $this->setCoordinates($businessCard)->save();
     }
 
     /**
@@ -27,59 +27,28 @@ class BusinessCardObserver
      */
     public function updated(BusinessCard $businessCard)
     {
-        $this->getCoordinates($businessCard);
-    }
-
-    /**
-     * Handle the BusinessCard "deleted" event.
-     *
-     * @param  \App\Models\BusinessCard  $businessCard
-     * @return void
-     */
-    public function deleted(BusinessCard $businessCard)
-    {
-        //
-    }
-
-    /**
-     * Handle the BusinessCard "restored" event.
-     *
-     * @param  \App\Models\BusinessCard  $businessCard
-     * @return void
-     */
-    public function restored(BusinessCard $businessCard)
-    {
-        //
-    }
-
-    /**
-     * Handle the BusinessCard "force deleted" event.
-     *
-     * @param  \App\Models\BusinessCard  $businessCard
-     * @return void
-     */
-    public function forceDeleted(BusinessCard $businessCard)
-    {
-        //
+        $this->setCoordinates($businessCard)->save();
     }
 
     /**
      * @param BusinessCard $businessCard
-     * @return void
+     * @return BusinessCard
      */
-    private function getCoordinates(BusinessCard $businessCard): void
+    private function setCoordinates(BusinessCard $businessCard): BusinessCard
     {
         if (is_null($businessCard->address)) {
-            return;
+            return $businessCard;
         }
         try {
             $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
             $businessCard->latitude = $coordinates->getLatitude();
             $businessCard->longitude = $coordinates->getLongitude();
+            dd($coordinates);
         } catch (Exception $e) {
             $businessCard->latitude = null;
             $businessCard->longitude = null;
         }
-        $businessCard->save();
+
+        return $businessCard;
     }
 }
