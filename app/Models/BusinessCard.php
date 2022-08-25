@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\GeocodeService;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,5 +39,29 @@ class BusinessCard extends Model
     public function specialist(): BelongsTo
     {
         return $this->belongsTo(Specialist::class, 'specialist_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updating(function (BusinessCard $model) {
+           $coordinates = GeocodeService::fromAddress($model->address)->first()->getCoordinates();
+           if ($coordinates->isEmpty()) {
+               return;
+           }
+           $model->latitude = $coordinates->getLatitude();
+           $model->longitude = $coordinates->getLongitude();
+        });
+
+        static::creating(function (BusinessCard $model) {
+            $coordinates = GeocodeService::fromAddress($model->address);
+            if ($coordinates->isEmpty()) {
+                return;
+            }
+            $coordinates = $coordinates->first()->getCoordinates();
+            $model->latitude = $coordinates->getLatitude();
+            $model->longitude = $coordinates->getLongitude();
+        });
     }
 }
