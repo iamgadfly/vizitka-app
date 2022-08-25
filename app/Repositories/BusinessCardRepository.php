@@ -16,7 +16,7 @@ class BusinessCardRepository extends Repository
         $model = $this->whereFirst([
             'specialist_id' => auth()->user()->specialist->id
         ]);
-        if (!is_null($model)) {
+        if ($model) {
             $model->delete();
         }
         return $this->model::create($data);
