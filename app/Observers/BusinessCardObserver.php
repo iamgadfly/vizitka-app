@@ -44,8 +44,8 @@ class BusinessCardObserver
             $businessCard->latitude = $coordinates->getLatitude();
             $businessCard->longitude = $coordinates->getLongitude();
         } catch (Exception $e) {
-            $businessCard->latitude = null;
-            $businessCard->longitude = null;
+            $businessCard->latitude = 0;
+            $businessCard->longitude = 0;
         }
 
         return $businessCard;
