@@ -47,11 +47,9 @@ class BusinessCardObserver implements ShouldQueue
             return;
         }
         try {
-//            $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
-//            $data = app('gecooder')->geocode($businessCard->address);
-//            dd($data);
-//            $businessCard->latitude = $coordinates->getLatitude();
-//            $businessCard->longitude = $coordinates->getLongitude();
+            $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
+            $businessCard->latitude = $coordinates->getLatitude();
+            $businessCard->longitude = $coordinates->getLongitude();
         } catch (Exception $e) {
             $businessCard->latitude = 0;
             $businessCard->longitude = 0;
