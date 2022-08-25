@@ -43,7 +43,6 @@ class BusinessCardObserver
             $coordinates = GeocodeService::fromAddress($businessCard->address)->first()->getCoordinates();
             $businessCard->latitude = $coordinates->getLatitude();
             $businessCard->longitude = $coordinates->getLongitude();
-            dd($coordinates);
         } catch (Exception $e) {
             $businessCard->latitude = null;
             $businessCard->longitude = null;
