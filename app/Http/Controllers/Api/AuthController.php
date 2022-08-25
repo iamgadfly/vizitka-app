@@ -122,22 +122,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param VerificationRequest $request
-     * @return JsonResponse
-     * @throws UserNotFoundException
-     * @throws VerificationCodeIsntValidException
-     * @lrd:start
-     * New Device Verify
-     * @lrd:end
-     */
-    public function newDeviceVerify(VerificationRequest $request): JsonResponse
-    {
-        return $this->success(
-            $this->authService->verifyNewDevice($request->validated())
-        );
-    }
-
-    /**
      * @param SignInRequest $request
      * @return JsonResponse
      * @throws GuzzleException
@@ -200,6 +184,11 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * @throws InvalidLoginException
+     * @throws GuzzleException
+     * @throws SMSNotSentException
+     */
     public function resendSms(SignUpRequest $request)
     {
         return $this->success(

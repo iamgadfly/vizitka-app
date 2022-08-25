@@ -48,6 +48,11 @@ class DummyBusinessCardService
         return new DummyBusinessCardResource($this->repository->create($data));
     }
 
+    /**
+     * @param array $data
+     * @return BusinessCardResource|bool
+     * @throws ClientNotFoundException
+     */
     public function update(array $data)
     {
         try {
@@ -74,21 +79,21 @@ class DummyBusinessCardService
         return $this->repository->update($data['id'], $data);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         return $this->repository->deleteById($id);
     }
 
-    public function get(int $id)
+    public function get(int $id): DummyBusinessCard
     {
         return $this->repository->getById($id);
     }
 
     /**
      * @param string $phoneNumber
-     * @return Collection<DummyBusinessCard>
+     * @return \Illuminate\Support\Collection
      */
-    public function getByPhoneNumber(string $phoneNumber): Collection
+    public function getByPhoneNumber(string $phoneNumber): \Illuminate\Support\Collection
     {
         return $this->repository->whereGet([
             'phone_number' => $phoneNumber

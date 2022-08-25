@@ -7,11 +7,13 @@ use App\Exceptions\RecordNotFoundException;
 use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Models\Client;
+use App\Models\ContactBook;
 use App\Repositories\ClientRepository;
 use App\Repositories\ContactBookRepository;
 use App\Repositories\ContactDataRepository;
 use App\Repositories\DummyBusinessCardRepository;
 use App\Repositories\DummyClientRepository;
+use Illuminate\Support\Collection;
 
 
 class ContactBookService
@@ -25,10 +27,12 @@ class ContactBookService
     ) {}
 
     /**
+     * @param array $data
+     * @return ContactBook
      * @throws RecordIsAlreadyExistsException
      * @throws SpecialistNotFoundException
      */
-    public function create(array $data)
+    public function create(array $data): ContactBook
     {
         $clientId = $data['client_id'];
         if ($data['type'] == 'client') {
@@ -51,6 +55,8 @@ class ContactBookService
     }
 
     /**
+     * @param array $data
+     * @return array
      * @throws SpecialistNotFoundException
      */
     public function massCreate(array $data): array
@@ -90,9 +96,11 @@ class ContactBookService
     }
 
     /**
+     * @param array $data
+     * @return bool|null
      * @throws RecordNotFoundException
      */
-    public function delete(array $data)
+    public function delete(array $data): ?bool
     {
         $clientId = $data['client_id'];
         if ($data['type'] == 'client') {
@@ -111,9 +119,10 @@ class ContactBookService
     }
 
     /**
-     * @throws SpecialistNotFoundException
+     * @param int $specialistId
+     * @return Collection
      */
-    public function get(int $specialistId)
+    public function get(int $specialistId): Collection
     {
         $items = $this->repository->whereGet([
             'specialist_id' => $specialistId
@@ -130,7 +139,11 @@ class ContactBookService
         return $items;
     }
 
-    public function getForClient(int $clientId)
+    /**
+     * @param int $clientId
+     * @return Collection
+     */
+    public function getForClient(int $clientId): Collection
     {
         $contacts = $this->repository->whereGet([
             'client_id' => $clientId
@@ -144,6 +157,8 @@ class ContactBookService
     }
 
     /**
+     * @param array $data
+     * @return bool
      * @throws SpecialistNotFoundException
      */
     public function massDelete(array $data): bool

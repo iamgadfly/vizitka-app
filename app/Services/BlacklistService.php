@@ -8,6 +8,7 @@ use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\AuthHelper;
 use App\Repositories\BlacklistRepository;
 use App\Repositories\ContactBookRepository;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
@@ -56,11 +57,11 @@ class BlacklistService
     /**
      * @param int $id
      * @param string $type
-     * @return mixed
+     * @return bool
      * @throws RecordNotFoundException
      * @throws SpecialistNotFoundException
      */
-    public function delete(int $id, string $type)
+    public function delete(int $id, string $type): bool
     {
         $type_id = $type == 'client' ? 'blacklisted_id' : 'dummy_client_id';
         $record = $this->contactBookRepository->thrashedRecord($id, $type);
@@ -80,9 +81,9 @@ class BlacklistService
 
     /**
      * @param int $specialist_id
-     * @return mixed
+     * @return Collection
      */
-    public function get(int $specialist_id)
+    public function get(int $specialist_id): Collection
     {
         return $this->repository->whereGet([
             'specialist_id' => $specialist_id

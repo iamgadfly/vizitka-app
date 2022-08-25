@@ -13,6 +13,7 @@ use App\Models\Specialist;
 use App\Repositories\BusinessCardRepository;
 use App\Repositories\SpecialistRepository;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Collection;
 
 class SpecialistService
 {
@@ -27,17 +28,11 @@ class SpecialistService
     /**
      * @throws SpecialistNotCreatedException
      */
-    public function create(array $data)
+    public function create(array $data): Specialist
     {
         try {
             \DB::beginTransaction();
-            if (!is_null($data['avatar']['id'])) {
-                $data['avatar_id'] = $data['avatar']['id'];
-            }
-            if (!isset($data['title'])) {
-                $data['title'] = $data['activity_kind']['label'];
-            }
-            $data['activity_kind_id'] = $data['activity_kind']['value'];
+            $data = $this->prepareForCreate($data);
             $data['background_image'] = CardBackgroundHelper::filenameFromActivityKind(
                 $data['background_image']['value']
             );
@@ -59,13 +54,7 @@ class SpecialistService
     {
         try {
             \DB::beginTransaction();
-            if (!is_null($data['avatar']['id'])) {
-                $data['avatar_id'] = $data['avatar']['id'];
-            }
-            if (!isset($data['title'])) {
-                $data['title'] = $data['activity_kind']['label'];
-            }
-            $data['activity_kind_id'] = $data['activity_kind']['value'];
+            $data = $this->prepareForCreate($data);
             $this->repository->update($data['id'], $data);
             $data['card_id'] = $this->repository->getById($data['id'])->card->id;
             $data['background_image'] = CardBackgroundHelper::filenameFromActivityKind($data['background_image']['value']);
@@ -79,6 +68,9 @@ class SpecialistService
         }
     }
 
+    /**
+     * @throws SpecialistNotFoundException
+     */
     public function findByUserId(int $id): ?Specialist
     {
         return $this->repository->findByUserId($id);
@@ -109,7 +101,7 @@ class SpecialistService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getMyCard()
+    public function getMyCard(): Collection
     {
         $specialist = $this->repository->getById(AuthHelper::getSpecialistIdFromAuth());
         $card = str($specialist->card->background_image)
@@ -117,5 +109,21 @@ class SpecialistService
             ->replace('.jpg', '')
             ->value();
         return CardBackgroundHelper::getCardFromActivityKind($card);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function prepareForCreate(array $data): array
+    {
+        if (!is_null($data['avatar']['id'])) {
+            $data['avatar_id'] = $data['avatar']['id'];
+        }
+        if (!isset($data['title'])) {
+            $data['title'] = $data['activity_kind']['label'];
+        }
+        $data['activity_kind_id'] = $data['activity_kind']['value'];
+        return $data;
     }
 }

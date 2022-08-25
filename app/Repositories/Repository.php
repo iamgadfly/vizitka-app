@@ -19,7 +19,7 @@ class Repository
         return $this->model::all();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->model::find($id);
     }
