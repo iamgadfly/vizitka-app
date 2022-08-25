@@ -13,9 +13,12 @@ class BusinessCardRepository extends Repository
 
     public function create(array $data)
     {
-        return $this->model::updateOrCreate(
-            ['specialist_id' => auth()->user()->specialist->id],
-            $data
-        );
+        $model = $this->whereFirst([
+            'specialist_id' => auth()->user()->specialist->id
+        ]);
+        if (!is_null($model)) {
+            $model->delete();
+        }
+        return $this->model::create($data);
     }
 }
