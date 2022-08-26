@@ -29,8 +29,8 @@ class SingleWorkScheduleService
         if (is_null($saveFlag) && !$isBreak) {
             $count = $this->appointmentService->getAppointmentsInInterval([
                 'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
-                'start' => $data['weekend']['start'],
-                'end' => $data['weekend']['end']
+                'start' => $data['weekend']['start']['value'],
+                'end' => $data['weekend']['end']['value']
             ]);
             if ($count > 0) {
                 return $count;
@@ -39,15 +39,17 @@ class SingleWorkScheduleService
         if (!$saveFlag && !$isBreak) {
             $this->appointmentService->deleteAppointmentsBetweenTwoDates([
                 'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
-                'start' => $data['weekend']['start'],
-                'end' => $data['weekend']['end']
+                'start' => $data['weekend']['start']['value'],
+                'end' => $data['weekend']['end']['value']
             ]);
         }
         if ($data['is_break']) {
             return $this->createBreak($data['break']);
         }
-        $output = [];
-        $dates = TimeHelper::getDateInterval($data['weekend']['start'], $data['weekend']['end']);
+        $dates = TimeHelper::getDateInterval(
+            $data['weekend']['start']['value'],
+            $data['weekend']['end']['value']
+        );
         foreach ($dates as $date) {
             $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
             $weekend = [
@@ -117,7 +119,6 @@ class SingleWorkScheduleService
      */
     public function createBreak(array $data): bool
     {
-        $data['date'] = $data['date']['value'];
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
         $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
 
