@@ -26,14 +26,16 @@ class CreateRequest extends FormRequest
         return [
             'break' => ['required', 'array', 'bail'],
             'break.time' => ['required', 'array', 'bail'],
-            'break.date' => ['array', 'nullable', 'bail'],
-            'break.date.label' => ['string', 'nullable', 'bail'],
-            'break.date.value' => ['date_format:Y-m-d', 'nullable', 'bail'],
+            'break.date' => ['date_format:Y-m-d', 'nullable', 'bail'],
             'break.time.start' => ['date_format:H:i', 'nullable', 'bail'],
             'break.time.end' => ['date_format:H:i', 'nullable', 'bail'],
             'weekend' => ['required', 'array', 'bail'],
-            'weekend.start' => ['date_format:Y-m-d', 'nullable', 'bail'],
-            'weekend.end' => ['date_format:Y-m-d', 'nullable', 'bail'],
+            'weekend.start' => ['array', 'nullable', 'bail'],
+            'weekend.start.label' => ['string', 'nullable', 'bail'],
+            'weekend.start.value' => ['date_format:Y-m-d', 'nullable', 'bail'],
+            'weekend.end' => ['array', 'nullable', 'bail'],
+            'weekend.end.label' => ['string', 'nullable', 'bail'],
+            'weekend.end.value' => ['date_format:Y-m-d', 'nullable', 'bail'],
             'is_break' => ['required', 'boolean', 'bail'],
             'save' => ['boolean', 'nullable', 'bail', 'present']
         ];
