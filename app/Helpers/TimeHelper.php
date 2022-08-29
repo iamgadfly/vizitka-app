@@ -117,7 +117,7 @@ class TimeHelper
         return in_array($needle, $haystack);
     }
 
-    public static function getFormattedTime(string $time, string $format = 'H:i'): string
+    public static function getFormattedTime(?string $time, string $format = 'H:i'): string
     {
         return Carbon::parse($time)->format($format);
     }
