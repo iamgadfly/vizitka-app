@@ -47,7 +47,8 @@ class BusinessCard extends Model
 
         static::updating(function (BusinessCard $model) {
             if (is_null($model->address)) {
-                return;
+                $model->latitude = 0;
+                $model->longitude = 0;
             }
             $coordinates = GeocodeService::fromAddress($model->address)->first()->getCoordinates();
             if ($coordinates->isEmpty()) {
@@ -59,7 +60,8 @@ class BusinessCard extends Model
 
         static::creating(function (BusinessCard $model) {
             if (is_null($model->address)) {
-                return;
+                $model->latitude = 0;
+                $model->longitude = 0;
             }
             $coordinates = GeocodeService::fromAddress($model->address);
             if ($coordinates->isEmpty()) {
