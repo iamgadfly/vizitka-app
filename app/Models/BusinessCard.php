@@ -46,15 +46,23 @@ class BusinessCard extends Model
         parent::boot();
 
         static::updating(function (BusinessCard $model) {
-           $coordinates = GeocodeService::fromAddress($model->address)->first()->getCoordinates();
-           if ($coordinates->isEmpty()) {
-               return;
-           }
-           $model->latitude = $coordinates->getLatitude();
-           $model->longitude = $coordinates->getLongitude();
+            if (is_null($model->address)) {
+                $model->latitude = 0;
+                $model->longitude = 0;
+            }
+            $coordinates = GeocodeService::fromAddress($model->address)->first()->getCoordinates();
+            if ($coordinates->isEmpty()) {
+                return;
+            }
+            $model->latitude = $coordinates->getLatitude();
+            $model->longitude = $coordinates->getLongitude();
         });
 
         static::creating(function (BusinessCard $model) {
+            if (is_null($model->address)) {
+                $model->latitude = 0;
+                $model->longitude = 0;
+            }
             $coordinates = GeocodeService::fromAddress($model->address);
             if ($coordinates->isEmpty()) {
                 return;
