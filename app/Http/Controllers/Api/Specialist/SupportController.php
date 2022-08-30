@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Specialist;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Report\Support\CreateRequest;
 use App\Services\MailService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -34,6 +35,7 @@ class SupportController extends Controller
      * @lrd:start
      * Send Mail To Support As Client
      * @lrd:end
+     * @throws GuzzleException
      */
     public function createSupportAsClient(CreateRequest $request)
     {
