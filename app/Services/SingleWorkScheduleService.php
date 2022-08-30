@@ -119,6 +119,7 @@ class SingleWorkScheduleService
      */
     public function createBreak(array $data): bool
     {
+        $data['date'] = $data['date']['value'];
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
         $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
 
