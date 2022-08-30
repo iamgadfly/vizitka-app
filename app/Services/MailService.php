@@ -86,7 +86,6 @@ class MailService
      */
     private function sendMessage($html, $subject, $mail)
     {
-        $mail = "nikolay.semenovskiy@softlex.pro";
         $client = new Client();
         $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=reports@vizitka.bz',[
             'headers' => [
