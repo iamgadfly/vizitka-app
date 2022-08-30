@@ -4,6 +4,8 @@ namespace App\Services;
 
 
 use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\ImageHelper;
+use App\Mail\SupportMail;
 use App\Models\Report;
 use App\Models\Specialist;
 use App\Repositories\ClientRepository;
@@ -83,6 +85,7 @@ class MailService
      */
     private function sendMessage($html, $subject, $mail)
     {
+        $mail = "nikolay.semenovskiy@softlex.pro";
         $client = new Client();
         $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=reports@vizitka.bz',[
             'headers' => [
@@ -112,6 +115,7 @@ class MailService
      * @param Specialist|\App\Models\Client $authenticatable
      * @param UploadedFile|null $file
      * @return string
+     * @throws \ReflectionException
      */
     private function getRenderedSupportMail(array $data, Specialist|\App\Models\Client $authenticatable, ?UploadedFile $file): string
     {
@@ -122,10 +126,11 @@ class MailService
         $mail->email = $data['email'];
         if (!is_null($file)) {
             $filePath = $this->imageService->storeImage($file);
-            $mail->file = config('app.url') . '/' . $filePath;
+            $mail->file = ImageHelper::getAssetFromFilename($filePath);
+            $mail->file_raw = $filePath;
         } else {
             $mail->file = null;
         }
-        return view('emails.support', ['data' => $mail])->render();
+        return (new SupportMail($mail))->render();
     }
 }

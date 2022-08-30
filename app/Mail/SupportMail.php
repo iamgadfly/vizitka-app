@@ -28,16 +28,6 @@ class SupportMail extends Mailable
      */
     public function build()
     {
-        $this->from(config('custom.report_mail'))
-            ->markdown('emails.support')
-            ->subject('Заявка в тех. поддержку от ' . $this->data->fullName)
-            ->with(['data' => $this->data]);
-        $file = $this->data->file;
-        if (!is_null($file)) {
-            $this->attach($file, [
-                'as' => "file.{$file->extension()}"
-            ]);
-        }
-        return $this;
+        return $this->view('emails.support', ['data' => $this->data]);
     }
 }
