@@ -54,6 +54,7 @@ class MailService
 
     /**
      * @throws GuzzleException
+     * @throws \ReflectionException
      */
     public function sendMailToSupportAsClient(array $data, UploadedFile $file = null): bool
     {
@@ -131,6 +132,6 @@ class MailService
         } else {
             $mail->file = null;
         }
-        return (new SupportMail($mail))->render();
+        return view('emails.support', ['data' => $mail])->render();
     }
 }
