@@ -83,7 +83,6 @@ class MailService
      */
     private function sendMessage($html, $subject, $mail)
     {
-        $mail = "nikolay.semenovskiy@softlex.pro";
         $client = new Client();
         $client->request('POST', 'http://smtp.mailganer.com/api/v2/stop-list/remove?mail_from=reports@vizitka.bz&email=reports@vizitka.bz',[
             'headers' => [
@@ -123,7 +122,7 @@ class MailService
         $mail->email = $data['email'];
         if (!is_null($file)) {
             $filePath = $this->imageService->storeImage($file);
-            $mail->file = config('app.url') . $filePath;
+            $mail->file = config('app.url') . '/' . $filePath;
         } else {
             $mail->file = null;
         }
