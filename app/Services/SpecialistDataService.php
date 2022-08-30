@@ -34,7 +34,9 @@ class SpecialistDataService
                 continue;
             }
             $breaks = $this->breakRepository->getBreaksForDay($date, false, $specialistId);
-            $breaks = TimeHelper::getTimeInterval($breaks[0], $breaks[1]);
+            if (!empty($breaks)) {
+                $breaks = TimeHelper::getTimeInterval($breaks[0], $breaks[1]);
+            }
             $appointments = $this->appointmentService->getAllByDay($date, $specialistId)->appointments;
             $appointmentsInterval = [];
             foreach ($appointments as $appointment) {
