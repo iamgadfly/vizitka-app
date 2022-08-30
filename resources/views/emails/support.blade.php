@@ -14,6 +14,7 @@
     <br>
     @if($data->file)
         <img src="{{ $data->file }}"/>
+        {{ $data->file }}
     @endif
 </body>
 </html>
