@@ -37,8 +37,8 @@ class ContactBookResource extends JsonResource
             'id' => $this->client->id,
             'name' => $this?->contactData?->name ?? $this->client->name,
             'surname' => $this?->contactData?->surname ?? $this->client->surname,
-            'phone' => $this?->contactData?->phone_number ?? $this->client->user->phone_number,
-            'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+            'phone_number' => $this?->contactData?->phone_number ?? $this->client->user->phone_number,
+            'avatar' => ImageHelper::getAssetFromFilename($this->client?->avatar?->url),
             'type' => $type,
             'discount' => [
                 'label' => str($this?->contactData?->discount)->value(),

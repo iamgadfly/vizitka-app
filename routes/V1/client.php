@@ -81,6 +81,7 @@ Route::controller(AppointmentController::class)
     ->middleware('auth:sanctum')->group(function () {
 
     Route::post('specialist/{id}', 'create')
+        ->middleware('blacklisted')
         ->name('client.appointment.create');
 
     Route::put('specialist/{orderNumber}', 'update')
