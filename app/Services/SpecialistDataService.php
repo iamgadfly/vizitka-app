@@ -19,7 +19,8 @@ class SpecialistDataService
         protected WorkScheduleWorkRepository $workRepository,
         protected WorkScheduleService $workScheduleService,
         protected AppointmentService $appointmentService,
-        protected MaintenanceRepository $maintenanceRepository
+        protected MaintenanceRepository $maintenanceRepository,
+        protected PillDisableService $pillDisableService
     ){}
 
     /**
@@ -42,12 +43,20 @@ class SpecialistDataService
 
             $appointments = $this->appointmentService->getAllByDay($date, $specialistId)->appointments;
             $appointmentsInterval = [];
+
+            //TODO: optimize that!
+            $pills = $this->pillDisableService->getAllByDate($date);
+            $pillsInterval = [];
+            foreach ($pills as $pill) {
+                $pillsInterval[] = TimeHelper::getFormattedTime($pill->time);
+            }
+
             foreach ($appointments as $appointment) {
                 $appointmentsInterval = array_merge($appointmentsInterval, $appointment['interval']);
             }
 
             $arrayWithoutIntersections = ArrayHelper::arrayWithoutIntersections(
-                $interval, [...$appointmentsInterval, ...$breaks]
+                $interval, [...$appointmentsInterval, ...$breaks, ...$pillsInterval]
             );
 
             $output[] = [

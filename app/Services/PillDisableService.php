@@ -51,7 +51,7 @@ class PillDisableService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getAllByDate(string $date, ?int $specialistId): ?Collection
+    public function getAllByDate(string $date, ?int $specialistId = null): ?Collection
     {
         if (is_null($specialistId)) {
             $specialistId = AuthHelper::getSpecialistIdFromAuth();
