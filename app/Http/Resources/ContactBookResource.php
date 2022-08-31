@@ -27,7 +27,9 @@ class ContactBookResource extends JsonResource
                 ],
                 'notes' => $this->dummyClient?->notes,
                 'phone_number' => $this->dummyClient?->phone_number,
-                'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+//                'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+//TODO: uncomment this in future, when we'll find solution
+                'avatar' => $this->content_url,
                 'type' => $type
             ];
         }

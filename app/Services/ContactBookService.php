@@ -81,7 +81,8 @@ class ContactBookService
                         'surname' => $item['surname'],
                         'phone_number' => $item['phone_number'],
                         'discount' => 0,
-                        'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+                        'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                        'content_url' => $item['avatar']
                     ]);
                     $output[] = $this->create([
                         'type' => 'dummy',
