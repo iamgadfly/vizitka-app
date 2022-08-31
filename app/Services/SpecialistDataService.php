@@ -9,6 +9,7 @@ use App\Http\Resources\SpecialistData\MaintenanceResource;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\WorkSchedule\WorkScheduleBreakRepository;
 use App\Repositories\WorkSchedule\WorkScheduleWorkRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SpecialistDataService
@@ -24,35 +25,33 @@ class SpecialistDataService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getFreeHours(int $specialistId, string $dateFromMonth): ?array
+    public function getFreeHours(int $specialistId, string $dateFromMonth, int $sum): ?array
     {
         $monthDates = TimeHelper::getMonthIntervalWithOutPastDates($dateFromMonth);
         $output = [];
         foreach ($monthDates as $date) {
             list($startDay, $endDay) = WorkScheduleWorkRepository::getWorkDay($date, $specialistId);
-            if (is_null($startDay) || is_null($endDay)) {
+            $interval = TimeHelper::getTimeInterval($startDay, $endDay);
+
+            if (empty($interval)) {
                 continue;
             }
+
             $breaks = $this->breakRepository->getBreaksForDay($date, false, $specialistId);
-            if (!empty($breaks)) {
-                if (is_array($breaks[0])) {
-                    $starts = [];
-                    $ends = [];
-                    foreach ($breaks as $break) {
-                        $starts[] = $break[0];
-                        $ends[] = $break[1];
-                    }
-                    $breaks = TimeHelper::getTimeInterval(min($starts), max($ends));
-                }
-            }
+            $breaks = $this->getBreaksAsInterval($breaks);
+
             $appointments = $this->appointmentService->getAllByDay($date, $specialistId)->appointments;
             $appointmentsInterval = [];
             foreach ($appointments as $appointment) {
                 $appointmentsInterval = array_merge($appointmentsInterval, $appointment['interval']);
             }
-            $interval = TimeHelper::getTimeInterval($startDay, $endDay);
+
+            $arrayWithoutIntersections = ArrayHelper::arrayWithoutIntersections(
+                $interval, [...$appointmentsInterval, ...$breaks]
+            );
+
             $output[] = [
-                $date => ArrayHelper::arrayWithoutIntersections($interval, [...$appointmentsInterval, ...$breaks])
+                $date => $this->withoutOverlapping($arrayWithoutIntersections, $sum)
             ];
         }
         return $output;
@@ -66,5 +65,39 @@ class SpecialistDataService
             $item->discount = $discount;
         });
         return MaintenanceResource::collection($maintenances);
+    }
+
+    private function getBreaksAsInterval(array $breaks): array
+    {
+        if (!empty($breaks)) {
+            if (is_array($breaks[0])) {
+                $starts = [];
+                $ends = [];
+                foreach ($breaks as $break) {
+                    $starts[] = $break[0];
+                    $ends[] = $break[1];
+                }
+                return TimeHelper::getTimeInterval(min($starts), max($ends));
+            }
+        }
+        return [];
+    }
+
+    private function withoutOverlapping(array $interval, int $sum): array {
+        foreach ($interval as $index => $item) {
+            $itemWithSumAsTime = Carbon::parse($item)->addMinutes($sum)->format('H:i');
+            $intervalWithSum = TimeHelper::getTimeInterval($item, $itemWithSumAsTime);
+            $intersection = array_intersect($interval, $intervalWithSum);
+//            dd($intervalWithSum, $intersection, $interval);
+            if (
+                empty($intersection) ||
+                (count($intervalWithSum) != count($intersection))
+            ) {
+                unset($interval[$index]);
+            }
+//            if ($index > 6) dd($intervalWithSum, $intersection, $interval);
+        }
+
+        return array_values($interval);
     }
 }
