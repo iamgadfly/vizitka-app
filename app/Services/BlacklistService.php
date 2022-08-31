@@ -31,7 +31,7 @@ class BlacklistService
      */
     public function create(array $data): bool
     {
-        $type_blacklist_id = $data['type'] == 'client' ? 'blacklisted' : 'dummy_client_id';
+        $type_blacklist_id = $data['type'] == 'client' ? 'blacklisted_id' : 'dummy_client_id';
         $type_id = $data['type'] == 'client' ? 'client_id' : 'dummy_client_id';
         $blacklistRecord = $this->repository->whereFirst([
             'specialist_id' => $data['specialist_id'],
