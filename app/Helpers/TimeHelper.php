@@ -47,10 +47,10 @@ class TimeHelper
         $last = Carbon::parse($date)->lastOfMonth();
 
         $output = [$first->format('Y-m-d')];
-        while ($first->addDay() < $last) {
+        while ($first->addDay() <= $last) {
             $output[] = $first->format('Y-m-d');
         }
-        $output[] = $last->format('Y-m-d');
+
         return $output;
     }
 
