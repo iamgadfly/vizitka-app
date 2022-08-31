@@ -32,7 +32,7 @@ class AppointmentResource extends JsonResource
                     'status' => $this->status,
                     'title' => $this->maintenance->title,
                     'price' => [
-                        'label' => str($this->maintenance->price)->value(),
+                        'label' => str($this->maintenance->price)->value() . ' ',
                         'value' => $this->maintenance->price
                     ],
                     'duration' => [
