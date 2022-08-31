@@ -48,7 +48,7 @@ class SpecialistDataService
             $appointments = $this->appointmentService->getAllByDay($date, $specialistId)->appointments;
             $appointmentsInterval = [];
             foreach ($appointments as $appointment) {
-                $appointmentsInterval[] = $appointment['interval'];
+                $appointmentsInterval = array_merge($appointmentsInterval, $appointment['interval']);
             }
             $interval = TimeHelper::getTimeInterval($startDay, $endDay);
             $output[] = [
