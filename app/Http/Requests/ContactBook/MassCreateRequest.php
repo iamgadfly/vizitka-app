@@ -28,7 +28,7 @@ class MassCreateRequest extends FormRequest
             'data.*.name' => ['required', 'string', 'bail'],
             'data.*.surname' => ["nullable",'string', 'bail'],
             'data.*.phone_number' => ['required', 'string', 'max:100', 'bail'],
-            'avatar' => ['string', 'nullable', 'bail']
+            'data.*.avatar' => ['string', 'nullable', 'bail']
         ];
     }
 }
