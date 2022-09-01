@@ -101,11 +101,6 @@ class TimeHelper
         return $dates;
     }
 
-    public static function formatDateForResponse(string $date): string
-    {
-        return Carbon::parse($date)->format('Y-m-d');
-    }
-
     public static function getTimeIntervalAsInt(string $maxDate, string $minDate): int
     {
         $diff = Carbon::parse($maxDate)->diff(Carbon::parse($minDate));
