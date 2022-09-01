@@ -11,6 +11,7 @@ use App\Helpers\TimeHelper;
 use App\Http\Resources\SpecialistResource;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
+use App\Repositories\ContactBookRepository;
 use App\Repositories\MaintenanceRepository;
 use App\Repositories\SpecialistRepository;
 use App\Services\AppointmentService as BaseAppointmentService;
@@ -24,11 +25,14 @@ class AppointmentService extends BaseAppointmentService
     /**
      * @param AppointmentRepository $repository
      * @param MaintenanceRepository $maintenanceRepository
+     * @param SpecialistRepository $specialistRepository
+     * @param ContactBookRepository $contactBookRepository
      */
     public function __construct(
         protected AppointmentRepository $repository,
         protected MaintenanceRepository $maintenanceRepository,
-        protected SpecialistRepository $specialistRepository
+        protected SpecialistRepository $specialistRepository,
+        protected ContactBookRepository $contactBookRepository
     ) {}
 
     /**
@@ -62,6 +66,21 @@ class AppointmentService extends BaseAppointmentService
             $this->isInInterval($appointment);
             $output[] = $this->repository->create($appointment);
         }
+
+        //TODO: refactor this!
+        $contactBookRecord = $this->contactBookRepository->whereFirst([
+            'client_id' => $data['client_id'],
+            'specialist_id' => $specialist->id
+        ]);
+        if ($contactBookRecord) {
+            $this->contactBookRepository->setVisible($contactBookRecord);
+        } else {
+            $this->contactBookRepository->create([
+                'specialist_id' => $specialist->id,
+                'client_id' => $data['client_id']
+            ]);
+        }
+
         return $output;
     }
 

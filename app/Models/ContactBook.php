@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property DateTime|null $deleted_at
  * @property DateTime $created_at
  * @property DateTime $updated_at
+ * @property boolean $is_visible
  *
  * Relations
  *
