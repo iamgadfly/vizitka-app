@@ -26,7 +26,7 @@ class SpecialistDataService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getFreeHours(int $specialistId, string $dateFromMonth, int $sum): ?array
+    public function getFreeHours(int $specialistId, string $dateFromMonth, int $sum, string $hour): ?array
     {
         $monthDates = TimeHelper::getMonthIntervalWithOutPastDates($dateFromMonth);
         $output = [];
@@ -38,17 +38,28 @@ class SpecialistDataService
                 continue;
             }
 
+            foreach ($interval as $index => $item) {
+                if ($date != Carbon::parse($dateFromMonth)->format('Y-m-d')) {
+                    break;
+                }
+                if ($item < $hour) {
+                    unset($interval[$index]);
+                }
+            }
+            $interval = array_values($interval);
+
             $breaks = $this->breakRepository->getBreaksForDay($date, false, $specialistId);
             $breaks = $this->getBreaksAsInterval($breaks);
 
             $appointments = $this->appointmentService->getAllByDay($date, $specialistId)->appointments;
             $appointmentsInterval = [];
 
-            //TODO: optimize that!
-            $pills = $this->pillDisableService->getAllByDate($date);
+            $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
             $pillsInterval = [];
-            foreach ($pills as $pill) {
-                $pillsInterval[] = TimeHelper::getFormattedTime($pill->time);
+            if ($pills) {
+                foreach ($pills as $pill) {
+                    $pillsInterval[] = TimeHelper::getFormattedTime($pill->time);
+                }
             }
 
             foreach ($appointments as $appointment) {

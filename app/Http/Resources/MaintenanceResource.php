@@ -19,7 +19,7 @@ class MaintenanceResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'price' => [
-                'label' => $this->price == 0 ? '' : str($this->price)->value() . '₽',
+                'label' => $this->price == 0 ? '' : str($this->price)->value() . ' ₽',
                 'value' => $this->price
             ],
             'duration' => [

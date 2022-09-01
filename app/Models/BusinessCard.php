@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Services\GeocodeService;
 use DateTime;
+use Geocoder\Collection;
+use Geocoder\Exception\Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,32 +48,36 @@ class BusinessCard extends Model
         parent::boot();
 
         static::updating(function (BusinessCard $model) {
-            if (is_null($model->address)) {
-                $model->latitude = 0;
-                $model->longitude = 0;
-                return;
-            }
-            $coordinates = GeocodeService::fromAddress($model->address)->first()->getCoordinates();
-            if ($coordinates->isEmpty()) {
-                return;
-            }
-            $model->latitude = $coordinates->getLatitude();
-            $model->longitude = $coordinates->getLongitude();
+            self::setCoordinates($model);
         });
 
         static::creating(function (BusinessCard $model) {
-            if (is_null($model->address)) {
-                $model->latitude = 0;
-                $model->longitude = 0;
-                return;
-            }
-            $coordinates = GeocodeService::fromAddress($model->address);
-            if ($coordinates->isEmpty()) {
-                return;
-            }
-            $coordinates = $coordinates->first()->getCoordinates();
-            $model->latitude = $coordinates->getLatitude();
-            $model->longitude = $coordinates->getLongitude();
+            self::setCoordinates($model);
         });
+
+    }
+
+    private static function setCoordinates(BusinessCard $model)
+    {
+        if (is_null($model->address)) {
+            $model->latitude = 0;
+            $model->longitude = 0;
+            return;
+        }
+        try {
+            $coordinates = GeocodeService::fromAddress($model->address);
+        } catch (Exception) {
+            $model->latitude = 0;
+            $model->longitude = 0;
+            return;
+        }
+        if ($coordinates->isEmpty()) {
+            $model->latitude = 0;
+            $model->longitude = 0;
+            return;
+        }
+        $coordinates = $coordinates->first()->getCoordinates();
+        $model->latitude = $coordinates->getLatitude();
+        $model->longitude = $coordinates->getLongitude();
     }
 }

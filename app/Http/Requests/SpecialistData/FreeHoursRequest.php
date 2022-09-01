@@ -13,6 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property integer $id
  * @property DateTime $date
  * @property integer $sum
+ * @property DateTime $hour
  */
 class FreeHoursRequest extends FormRequest
 {
@@ -21,7 +22,8 @@ class FreeHoursRequest extends FormRequest
         $this->merge([
             'id' => $this->route('id'),
             'date' => $this->route('date'),
-            'sum' => $this->route('sum')
+            'sum' => $this->route('sum'),
+            'hour' => $this->route('hour')
         ]);
     }
 
@@ -45,7 +47,8 @@ class FreeHoursRequest extends FormRequest
         return [
             'id' => ['required', 'exists:specialists,id'],
             'date' => ['required', 'date_format:Y-m-d'],
-            'sum' => ['required', 'integer', 'gt:0']
+            'hour' => ['required', 'date_format:H:i'],
+            'sum' => ['required', 'integer', 'gte:0']
         ];
     }
 }

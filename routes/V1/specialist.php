@@ -137,8 +137,8 @@ Route::controller(AppointmentController::class)
         Route::post('byDay', 'getAllByDay')
             ->name('specialist.appointment.byDay');
 
-        Route::post('svgByMonth', 'svgByMonth')
-            ->name('specialist.appointment.svg');
+//        Route::post('svgByMonth', 'svgByMonth')
+//            ->name('specialist.appointment.svg');
 
         Route::delete('mass', 'massDelete')
             ->name('specialist.appointment.delete.mass');

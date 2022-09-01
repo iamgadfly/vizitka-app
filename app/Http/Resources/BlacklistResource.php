@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Helpers\ImageHelper;
+use App\Models\Blacklist;
+use App\Models\Client;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BlacklistResource extends JsonResource
@@ -16,12 +18,20 @@ class BlacklistResource extends JsonResource
     public function toArray($request)
     {
         if (is_null($this->dummyClient)) {
+            /** @var Blacklist $this **/
+            $contactData = $this->client->contactData();
             return [
                 'id' => $this->client?->id,
-                'name' => $this->client?->name,
-                'surname' => $this->client?->surname,
-                'phone' => $this->client?->user->phone_number,
-                'avatar' => $this?->avatar?->url,
+                'name' => !is_null($contactData?->name) ? $contactData->name : $this->client?->name,
+                'surname' => !is_null($contactData?->surname) ? $contactData->surname : $this->client?->surname,
+                'phone_number' => !is_null($contactData?->phone_number) ? $contactData->phone_number : $this->client?->user->phone_number,
+                'avatar' => !is_null($this->client?->avatar)
+                    ? ImageHelper::getAssetFromFilename($this->client?->avatar?->url)
+                    : null,
+                'discount' => [
+                    'label' => str($contactData?->discount * 100)->value(),
+                    'value' => $contactData?->discount
+                ],
                 'type' => 'client'
             ];
         } else {

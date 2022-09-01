@@ -85,7 +85,7 @@ class AppointmentService
      */
     public function getAppointmentsInInterval(array $data): int
     {
-        if ($data['start'] >= $data['end']) {
+        if ($data['start'] > $data['end']) {
             throw new BaseException("start must be less than end", Response::HTTP_BAD_REQUEST);
         }
         return $this->repository->whereGet([
@@ -171,11 +171,9 @@ class AppointmentService
         $appointments = $this->convertToOrderType(
             collect($this->repository->getAllByDate($date, $specialistId))
         );
-
         $breaks = $this->convertBreakToOrderType(
-            collect($this->breakRepository->getBreaksForDay($date, true, $specialistId))
+            $this->breakRepository->getBreaksForDay($date, true, $specialistId)
         );
-
         $appointments = $appointments->merge($breaks);
         $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? [];
         $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
@@ -194,11 +192,14 @@ class AppointmentService
             $times = [];
         }
 
-        $smartSchedule = WorkScheduleSettings::where([
+        $settings = WorkScheduleSettings::where([
             'specialist_id' => $specialistId
-        ])->first()->smart_schedule;
+        ])->first();
 
-        return new AppointmentForCalendarData($appointments, $pills, $times, $smartSchedule);
+        $smartSchedule = $settings->smart_schedule;
+        $confirmation = $settings->confirmation;
+
+        return new AppointmentForCalendarData($appointments, $pills, $times, $smartSchedule, $confirmation);
     }
 
     /**
@@ -301,12 +302,13 @@ class AppointmentService
     }
 
     /**
-     * @param Collection $breaks
+     * @param array $breaks
      * @return Collection
      */
-    private function convertBreakToOrderType(Collection $breaks): Collection
+    private function convertBreakToOrderType(array $breaks): Collection
     {
         $output = [];
+        $breaks = collect($breaks)->flatten();
         foreach ($breaks as $break) {
             $item = [
                 'date' => $break->date,
