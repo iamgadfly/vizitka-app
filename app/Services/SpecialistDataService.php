@@ -45,7 +45,7 @@ class SpecialistDataService
             $appointmentsInterval = [];
 
             //TODO: optimize that!
-            $pills = $this->pillDisableService->getAllByDate($date);
+            $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
             $pillsInterval = [];
             foreach ($pills as $pill) {
                 $pillsInterval[] = TimeHelper::getFormattedTime($pill->time);
