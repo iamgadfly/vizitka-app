@@ -45,7 +45,7 @@ class FreeHoursRequest extends FormRequest
         return [
             'id' => ['required', 'exists:specialists,id'],
             'date' => ['required', 'date_format:Y-m-d'],
-            'sum' => ['required', 'integer', 'gt:0']
+            'sum' => ['required', 'integer', 'gte:0']
         ];
     }
 }
