@@ -47,10 +47,10 @@ class TimeHelper
         $last = Carbon::parse($date)->lastOfMonth();
 
         $output = [$first->format('Y-m-d')];
-        while ($first->addDay() < $last) {
+        while ($first->addDay() <= $last) {
             $output[] = $first->format('Y-m-d');
         }
-        $output[] = $last->format('Y-m-d');
+
         return $output;
     }
 
@@ -101,11 +101,6 @@ class TimeHelper
         return $dates;
     }
 
-    public static function formatDateForResponse(string $date): string
-    {
-        return Carbon::parse($date)->format('Y-m-d');
-    }
-
     public static function getTimeIntervalAsInt(string $maxDate, string $minDate): int
     {
         $diff = Carbon::parse($maxDate)->diff(Carbon::parse($minDate));
@@ -117,7 +112,7 @@ class TimeHelper
         return in_array($needle, $haystack);
     }
 
-    public static function getFormattedTime(string $time, string $format = 'H:i'): string
+    public static function getFormattedTime(?string $time, string $format = 'H:i'): string
     {
         return Carbon::parse($time)->format($format);
     }

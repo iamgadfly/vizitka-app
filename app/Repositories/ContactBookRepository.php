@@ -51,4 +51,16 @@ class ContactBookRepository extends Repository
     {
         return $this->model::updateOrCreate($data, $data);
     }
+
+    public function setInvisible(ContactBook $model)
+    {
+        $model->is_visible = false;
+        $model->save();
+    }
+
+    public function setVisible(ContactBook $model)
+    {
+        $model->is_visible = true;
+        $model->save();
+    }
 }

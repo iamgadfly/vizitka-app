@@ -36,7 +36,7 @@ class SpecialistService
             $data['background_image'] = CardBackgroundHelper::filenameFromActivityKind(
                 $data['background_image']['value']
             );
-            // Create specialist and his business card
+//             Create specialist and his business card
             $specialist = $this->repository->create($data);
             $data['specialist_id'] = $specialist->id;
             $this->businessCardRepository->create($data);

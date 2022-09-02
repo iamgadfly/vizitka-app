@@ -81,7 +81,8 @@ class ContactBookService
                         'surname' => $item['surname'],
                         'phone_number' => $item['phone_number'],
                         'discount' => 0,
-                        'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+                        'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+                        'content_url' => $item['avatar']
                     ]);
                     $output[] = $this->create([
                         'type' => 'dummy',
@@ -107,6 +108,11 @@ class ContactBookService
             $record = $this->repository->whereFirst([
                 'client_id' => $clientId
             ]);
+
+            if ($record) {
+                $this->repository->setInvisible($record);
+                return true;
+            }
         } else {
             $record = $this->dummyClientRepository->whereFirst([
                 'id' => $clientId
@@ -125,7 +131,8 @@ class ContactBookService
     public function get(int $specialistId): Collection
     {
         $items = $this->repository->whereGet([
-            'specialist_id' => $specialistId
+            'specialist_id' => $specialistId,
+            'is_visible' => true
         ]);
         $items->map(function ($item) {
             if (is_null($item->client)) {

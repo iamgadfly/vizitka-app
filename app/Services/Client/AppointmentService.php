@@ -11,7 +11,9 @@ use App\Helpers\TimeHelper;
 use App\Http\Resources\SpecialistResource;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
+use App\Repositories\ContactBookRepository;
 use App\Repositories\MaintenanceRepository;
+use App\Repositories\SpecialistRepository;
 use App\Services\AppointmentService as BaseAppointmentService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -23,10 +25,14 @@ class AppointmentService extends BaseAppointmentService
     /**
      * @param AppointmentRepository $repository
      * @param MaintenanceRepository $maintenanceRepository
+     * @param SpecialistRepository $specialistRepository
+     * @param ContactBookRepository $contactBookRepository
      */
     public function __construct(
         protected AppointmentRepository $repository,
-        protected MaintenanceRepository $maintenanceRepository
+        protected MaintenanceRepository $maintenanceRepository,
+        protected SpecialistRepository $specialistRepository,
+        protected ContactBookRepository $contactBookRepository
     ) {}
 
     /**
@@ -41,6 +47,7 @@ class AppointmentService extends BaseAppointmentService
         $orderNumber = $orderNumber ?? Random::generate(5, '0-9');
         $start = Carbon::parse($data['time_start']);
         $output = [];
+        $specialist = $this->specialistRepository->findById($data['specialist_id']);
         foreach ($data['maintenances'] as $maintenanceId) {
             $maintenance = $this->maintenanceRepository->whereFirst([
                 'id' => $maintenanceId
@@ -48,16 +55,32 @@ class AppointmentService extends BaseAppointmentService
             $appointment = [
                 'dummy_client_id' => null,
                 'client_id' => $data['client_id'],
-                'specialist_id' => $data['specialist_id'],
+                'specialist_id' => $specialist->id,
                 'date' => $data['date'],
                 'maintenance_id' => $maintenanceId,
                 'time_start' => $start->format('H:i'),
                 'time_end' => $start->addMinutes($maintenance->duration)->format('H:i'),
-                'order_number' => $orderNumber
+                'order_number' => $orderNumber,
+                'status' => $specialist->scheduleSettings->confirmation ? 'unconfirmed' : 'confirmed'
             ];
             $this->isInInterval($appointment);
             $output[] = $this->repository->create($appointment);
         }
+
+        //TODO: refactor this!
+        $contactBookRecord = $this->contactBookRepository->whereFirst([
+            'client_id' => $data['client_id'],
+            'specialist_id' => $specialist->id
+        ]);
+        if ($contactBookRecord) {
+            $this->contactBookRepository->setVisible($contactBookRecord);
+        } else {
+            $this->contactBookRepository->create([
+                'specialist_id' => $specialist->id,
+                'client_id' => $data['client_id']
+            ]);
+        }
+
         return $output;
     }
 

@@ -31,7 +31,7 @@ class SpecialistController extends Controller
      * @lrd:end
      * @throws SpecialistNotCreatedException
      */
-    public function create(CreateSpecialistRequest $request): JsonResponse
+    public function create(CreateSpecialistRequest $request)
     {
         if (!is_null($request->avatar['id'])) {
             $image = $this->imageService->get($request->avatar['id']);

@@ -13,7 +13,8 @@
     {{ $data->text }}
     <br>
     @if($data->file)
-        {{ $data->file}}
+        <img src="{{ $data->file }}"/>
+        {{ $data->file }}
     @endif
 </body>
 </html>

@@ -153,7 +153,7 @@ class RequestHelper
         $rules = [
             'user_id' => ['int', 'exists:users,id'],
             'name' => ['string', 'max:255'],
-            'surname' => ['string', 'max:255'],
+            'surname' => ['string', 'nullable', 'max:255'],
             'avatar_id' => ['exists:images,id', 'nullable']
         ];
         if ($request->method() == 'POST') {

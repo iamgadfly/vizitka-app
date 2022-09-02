@@ -12,9 +12,9 @@ class EnsureClientIsNotInBlacklist
     {
         $blacklisted = Blacklist::where([
             'specialist_id' => $request->id,
-            'blackilisted_id' => auth()->user()->client->id
+            'blacklisted_id' => auth()->user()->client->id
         ])->first();
-        if (is_null($blacklisted)) {
+        if (!is_null($blacklisted)) {
             return response()->json([
                 'message' => 'You are in blacklist'
             ], 403);

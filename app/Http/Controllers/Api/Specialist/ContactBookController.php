@@ -34,7 +34,7 @@ class ContactBookController extends Controller
     public function create(CreateRequest $request): JsonResponse
     {
         return $this->success(
-            new ContactBookResource($this->service->create($request->client_id)),
+            new ContactBookResource($this->service->create($request->validated())),
             Response::HTTP_CREATED
         );
     }

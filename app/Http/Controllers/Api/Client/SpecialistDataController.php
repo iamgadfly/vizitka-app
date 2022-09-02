@@ -26,7 +26,7 @@ class SpecialistDataController extends Controller
     public function getFreeHours(FreeHoursRequest $request): JsonResponse
     {
         return $this->success(
-            $this->service->getFreeHours($request->id, $request->date)
+            $this->service->getFreeHours($request->id, $request->date, $request->sum)
         );
     }
 

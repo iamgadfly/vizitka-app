@@ -27,7 +27,12 @@ class ContactBookResource extends JsonResource
                 ],
                 'notes' => $this->dummyClient?->notes,
                 'phone_number' => $this->dummyClient?->phone_number,
-                'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+//                'avatar' => ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url),
+//TODO: uncomment this in future, when we'll find solution
+                'avatar' => !is_null($this->dummyClient->avatar)
+                    ? ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url)
+                    : $this->dummyClient->content_url,
+
                 'type' => $type
             ];
         }
@@ -35,8 +40,8 @@ class ContactBookResource extends JsonResource
             'id' => $this->client->id,
             'name' => $this?->contactData?->name ?? $this->client->name,
             'surname' => $this?->contactData?->surname ?? $this->client->surname,
-            'phone' => $this?->contactData?->phone_number ?? $this->client->user->phone_number,
-            'avatar' => $this->client?->avatar?->url ?? null,
+            'phone_number' => $this?->contactData?->phone_number ?? $this->client->user->phone_number,
+            'avatar' => ImageHelper::getAssetFromFilename($this->client?->avatar?->url),
             'type' => $type,
             'discount' => [
                 'label' => str($this?->contactData?->discount)->value(),

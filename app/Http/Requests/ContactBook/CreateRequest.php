@@ -15,7 +15,10 @@ class CreateRequest extends FormRequest
 {
     protected function prepareForValidation()
     {
-        $this->merge(['client_id' => $this->route('id')]);
+        $this->merge([
+            'client_id' => $this->route('id'),
+            'type' => 'client'
+        ]);
     }
 
     /**
@@ -36,7 +39,8 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'integer', 'exists:clients,id']
+            'client_id' => ['required', 'integer', 'exists:clients,id'],
+            'type' => ['required', 'string', 'in:dummy,client']
         ];
     }
 }
