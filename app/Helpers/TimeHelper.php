@@ -44,7 +44,7 @@ class TimeHelper
     public static function getMonthIntervalWithOutPastDates($date): array
     {
 //        $first = Carbon::now();
-        $first = Carbon::parse($date);
+        $first = Carbon::parse($date)->firstOfMonth();
         $last = Carbon::parse($date)->lastOfMonth();
 
         $output = [$first->format('Y-m-d')];
