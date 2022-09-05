@@ -159,7 +159,6 @@ class RequestHelper
         if ($request->method() == 'POST') {
             $rules['user_id'][] = 'required';
             $rules['name'][] = 'required';
-            $rules['surname'][] = 'required';
         } else {
             $rules['id'] = ['required','int', 'exists:clients,id'];
         }
