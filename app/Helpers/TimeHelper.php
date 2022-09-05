@@ -26,7 +26,7 @@ class TimeHelper
      */
     public static function getMonthInterval($date): array
     {
-        $first = Carbon::parse($date)->firstOfMonth();
+        $first = Carbon::parse($date);
         $last = Carbon::parse($date)->lastOfMonth();
 
         $output = [$first->format('Y-m-d')];
