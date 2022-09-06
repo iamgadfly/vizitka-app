@@ -26,7 +26,7 @@ class SpecialistDataService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function getFreeHours(int $specialistId, string $dateFromMonth, int $sum): ?array
+    public function getFreeHours(int $specialistId, string $dateFromMonth, int $sum, string $hour): ?array
     {
         $monthDates = TimeHelper::getMonthIntervalWithOutPastDates($dateFromMonth);
         $output = [];
@@ -37,6 +37,17 @@ class SpecialistDataService
             if (empty($interval)) {
                 continue;
             }
+
+            foreach ($interval as $index => $item) {
+                if ($date != Carbon::parse($dateFromMonth)->format('Y-m-d')) {
+                    break;
+                }
+                if ($item < $hour) {
+                    unset($interval[$index]);
+                }
+            }
+            $interval = array_values($interval);
+
             $breaks = $this->breakRepository->getBreaksForDay($date, false, $specialistId);
             $breaks = $this->getBreaksAsInterval($breaks);
 
