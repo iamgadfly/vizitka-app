@@ -30,7 +30,7 @@ class SpecialistDataService
     {
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $_SERVER['REMOTE_ADDR']);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
+        $timezone = $ipInfo?->timezone ?? 'Europe/Moscow';
         $monthDates = TimeHelper::getMonthIntervalWithOutPastDates($dateFromMonth);
         $output = [];
         foreach ($monthDates as $date) {
@@ -48,9 +48,8 @@ class SpecialistDataService
                 if ($item < Carbon::now($timezone)->format('H:i')) {
                     unset($interval[$index]);
                 }
-                $interval = array_values($interval);
             }
-
+            $interval = array_values($interval);
 
             $breaks = $this->breakRepository->getBreaksForDay($date, false, $specialistId);
             $breaks = $this->getBreaksAsInterval($breaks);
@@ -60,11 +59,11 @@ class SpecialistDataService
 
             $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
             $pillsInterval = [];
-//            if ($pills) {
+            if ($pills) {
                 foreach ($pills as $pill) {
                     $pillsInterval[] = TimeHelper::getFormattedTime($pill->time);
                 }
-//            }
+            }
 
             foreach ($appointments as $appointment) {
                 $appointmentsInterval = array_merge($appointmentsInterval, $appointment['interval']);
