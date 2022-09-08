@@ -11,6 +11,7 @@ class AppointmentForCalendarData extends Data
         public Collection $appointments,
         public array $disabled,
         public array $workSchedule,
-        public bool $smartSchedule
+        public bool $smartSchedule,
+        public bool $confirmation
     ){}
 }

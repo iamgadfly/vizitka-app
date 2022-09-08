@@ -194,11 +194,14 @@ class AppointmentService
             $times = [];
         }
 
-        $smartSchedule = WorkScheduleSettings::where([
+        $settings = WorkScheduleSettings::where([
             'specialist_id' => $specialistId
-        ])->first()->smart_schedule;
+        ])->first();
 
-        return new AppointmentForCalendarData($appointments, $pills, $times, $smartSchedule);
+        $smartSchedule = $settings->smart_schedule;
+        $confirmation = $settings->confirmation;
+
+        return new AppointmentForCalendarData($appointments, $pills, $times, $smartSchedule, $confirmation);
     }
 
     /**
