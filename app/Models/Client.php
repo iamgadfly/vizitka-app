@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Exceptions\SpecialistNotFoundException;
+use App\Helpers\AuthHelper;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,5 +43,17 @@ class Client extends Model
     public function avatar(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'avatar_id', 'id');
+    }
+
+    /**
+     * @return ContactData|null
+     * @throws SpecialistNotFoundException
+     */
+    public function contactData(): ?ContactData
+    {
+        return ContactData::where([
+            'client_id' => $this->id,
+            'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+        ])->first() ?? null;
     }
 }

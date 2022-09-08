@@ -2,7 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Exceptions\SpecialistNotFoundException;
 use App\Helpers\ImageHelper;
+use App\Models\Client;
+use App\Models\ContactBook;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContactBookResource extends JsonResource
@@ -10,8 +13,9 @@ class ContactBookResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @throws SpecialistNotFoundException
      */
     public function toArray($request)
     {
@@ -36,18 +40,20 @@ class ContactBookResource extends JsonResource
                 'type' => $type
             ];
         }
+        /** @var ContactBook $this**/
+        $contactData = $this->client->contactData();
         return [
             'id' => $this->client->id,
-            'name' => $this?->contactData?->name ?? $this->client->name,
-            'surname' => $this?->contactData?->surname ?? $this->client->surname,
-            'phone_number' => $this?->contactData?->phone_number ?? $this->client->user->phone_number,
+            'name' => !is_null($contactData) ? $contactData->name : $this->client->name,
+            'surname' => !is_null($contactData) ? $contactData->surname : $this->client->surname,
+            'phone_number' => !is_null($contactData) ? $contactData?->phone_number : $this->client->user->phone_number,
             'avatar' => ImageHelper::getAssetFromFilename($this->client?->avatar?->url),
             'type' => $type,
             'discount' => [
-                'label' => str($this?->contactData?->discount)->value(),
-                'value' => (float) $this?->contactData?->discount
+                'label' => str($contactData?->discount)->value(),
+                'value' => (float) $contactData?->discount
             ],
-            'notes' => $this?->contactData?->notes,
+            'notes' => $contactData?->notes,
         ];
     }
 }
