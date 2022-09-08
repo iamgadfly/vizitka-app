@@ -21,9 +21,9 @@ class BlacklistResource extends JsonResource
                 'name' => $this->client?->name,
                 'surname' => $this->client?->surname,
                 'phone' => $this->client?->user->phone_number,
-                'avatar' => !is_null($this->dummyClient->avatar)
+                'avatar' => !is_null($this->dummyClient?->avatar)
                     ? ImageHelper::getAssetFromFilename($this->dummyClient?->avatar?->url)
-                    : $this->dummyClient->content_url,
+                    : $this->dummyClient?->content_url,
 
                 'type' => 'client'
             ];
