@@ -22,9 +22,9 @@ class BlacklistResource extends JsonResource
             $contactData = $this->client->contactData();
             return [
                 'id' => $this->client?->id,
-                'name' => !is_null($contactData) ? $contactData->name : $this->client?->name,
-                'surname' => !is_null($contactData) ? $contactData->surname : $this->client?->surname,
-                'phone' => !is_null($contactData) ? $contactData->phone_number : $this->client?->user->phone_number,
+                'name' => !is_null($contactData?->name) ? $contactData->name : $this->client?->name,
+                'surname' => !is_null($contactData?->surname) ? $contactData->surname : $this->client?->surname,
+                'phone' => !is_null($contactData?->phone_number) ? $contactData->phone_number : $this->client?->user->phone_number,
                 'avatar' => !is_null($this->client?->avatar)
                     ? ImageHelper::getAssetFromFilename($this->client?->avatar?->url)
                     : null,
