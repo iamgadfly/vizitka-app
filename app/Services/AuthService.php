@@ -39,7 +39,7 @@ class AuthService
             $output['user'] = true;
             $output['device'] = !is_null($device);
             $output['pin'] = !is_null($device?->pin);
-            $output['specialist'] = !is_null($user->specialist);
+            $output['specialist'] = !is_null($user->specialist) && $user->specialist->is_registered;
             $output['client'] = !is_null($user->client);
             $output['face'] = !is_null($device) ? $device?->face : false;
         } else {
@@ -138,7 +138,7 @@ class AuthService
 
         throw new VerificationCodeIsntValidException;
     }
-    
+
     /**
      * @param string $phoneNumber
      * @param string $deviceId
