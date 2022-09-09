@@ -26,6 +26,7 @@ class ContactDataService
         if (is_null($item)) {
             return $this->repository->create($data);
         }
-        return $this->repository->update($item->id, $data);
+        $this->repository->update($item->id, $data);
+        return $item;
     }
 }
