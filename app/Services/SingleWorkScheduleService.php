@@ -116,6 +116,7 @@ class SingleWorkScheduleService
      * @return bool
      * @throws RecordIsAlreadyExistsException
      * @throws SpecialistNotFoundException
+     * @throws BaseException
      */
     public function createBreak(array $data): bool
     {
@@ -131,17 +132,17 @@ class SingleWorkScheduleService
             if ($item['status'] != 'break') {
                 if (
                     !(
-                        (Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
-                            Carbon::parse($data['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
-                        Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
+                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
+                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
+                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
                     ) ||
                     !(
-                        (Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
-                            Carbon::parse($data['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
-                        Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
+                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
+                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
+                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
                     )
                 ) {
-                    throw new \Exception('Есть запись в данный период времени', 422);
+                    throw new BaseException('Есть запись в данный период времени', 422);
                 }
             }
             if ($item['status'] == 'break') {
@@ -157,7 +158,7 @@ class SingleWorkScheduleService
                         Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')
                     )
                 ) {
-                    throw new \Exception('Есть запись в данный период времени', 422);
+                    throw new BaseException('Есть запись в данный период времени', 422);
                 }
             }
         }
