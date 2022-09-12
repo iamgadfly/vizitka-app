@@ -37,7 +37,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'discount' => ['numeric', 'min:0', 'max:1', 'bail'],
+            'discount' => ['array', 'bail'],
+            'discount.label' => ['string', 'nullable', 'bail'],
+            'discount.value' => ['numeric', 'min:0', 'max:1', 'bail'],
             'notes' => ['string', 'nullable', 'bail'],
             'name' => ['string', 'nullable', 'bail'],
             'surname' => ['string', 'nullable', 'bail'],

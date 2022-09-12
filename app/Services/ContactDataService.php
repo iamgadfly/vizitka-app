@@ -21,6 +21,7 @@ class ContactDataService
      */
     public function update(array $data): ContactData
     {
+        $data['discount'] = $data['discount']['value'];
         $item = $this->repository->whereFirst([
             'client_id' => $data['client_id'],
             'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
