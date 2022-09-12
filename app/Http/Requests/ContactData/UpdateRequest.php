@@ -16,7 +16,6 @@ class UpdateRequest extends FormRequest
         $this->merge([
             'client_id' => $this->route('id'),
             'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
-            'type' => $this->route('type')
         ]);
     }
 

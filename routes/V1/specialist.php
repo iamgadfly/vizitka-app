@@ -215,7 +215,7 @@ Route::controller(ClientController::class)
     Route::get('{id}/{type}/history', 'getClientHistory')
         ->name('specialist.client.data.history');
 
-        Route::put('{type}/{id}', 'update')
+        Route::put('{id}', 'update')
             ->name('specialist.client.data.update');
 });
 
