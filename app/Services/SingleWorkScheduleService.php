@@ -145,22 +145,22 @@ class SingleWorkScheduleService
                     throw new BaseException('Есть запись в данный период времени', 422);
                 }
             }
-            if ($item['status'] == 'break') {
-                if (
-                    !(
-                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i') &&
-                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')) ||
-                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')
-                    ) ||
-                    !(
-                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i') &&
-                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')) ||
-                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')
-                    )
-                ) {
-                    throw new BaseException('Есть запись в данный период времени', 422);
-                }
-            }
+//            if ($item['status'] == 'break') {
+//                if (
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')
+//                    ) ||
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')
+//                    )
+//                ) {
+//                    throw new BaseException('Есть запись в данный период времени', 422);
+//                }
+//            }
         }
         //TODO KOLYA
         if (isset($data['time']['start']) && isset($data['time']['end']) ) {
