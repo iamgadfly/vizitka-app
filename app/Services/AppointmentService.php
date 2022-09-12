@@ -85,7 +85,7 @@ class AppointmentService
      */
     public function getAppointmentsInInterval(array $data): int
     {
-        if ($data['start'] >= $data['end']) {
+        if ($data['start'] > $data['end']) {
             throw new BaseException("start must be less than end", Response::HTTP_BAD_REQUEST);
         }
         return $this->repository->whereGet([

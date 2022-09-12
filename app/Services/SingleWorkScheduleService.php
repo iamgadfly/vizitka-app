@@ -122,7 +122,7 @@ class SingleWorkScheduleService
     {
         $data['date'] = $data['date']['value'];
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
-        $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
+//        $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
 
         $data['is_break'] = true;
         $data['day_id'] = WorkScheduleDayRepository::getDayFromString($weekday)?->id
