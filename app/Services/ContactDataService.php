@@ -22,7 +22,7 @@ class ContactDataService
     /**
      * @throws SpecialistNotFoundException
      */
-    public function update(array $data): ContactData
+    public function update(array $data)
     {
         $data['discount'] = $data['discount']['value'];
         if ($data['type'] == 'client') {
