@@ -128,23 +128,23 @@ class SingleWorkScheduleService
         $data['day_id'] = WorkScheduleDayRepository::getDayFromString($weekday)?->id
             ?? WorkScheduleDayRepository::getDayIndexFromDate($data['date'])?->id;
 
-        foreach ($appo as $item) {
-            if ($item['status'] != 'break') {
-                if (
-                    !(
-                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
-                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
-                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
-                    ) ||
-                    !(
-                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
-                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
-                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
-                    )
-                ) {
-                    throw new BaseException('Есть запись в данный период времени', 422);
-                }
-            }
+//        foreach ($appo as $item) {
+//            if ($item['status'] != 'break') {
+//                if (
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
+//                    ) ||
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
+//                    )
+//                ) {
+//                    throw new BaseException('Есть запись в данный период времени', 422);
+//                }
+//            }
 //            if ($item['status'] == 'break') {
 //                if (
 //                    !(
@@ -161,7 +161,7 @@ class SingleWorkScheduleService
 //                    throw new BaseException('Есть запись в данный период времени', 422);
 //                }
 //            }
-        }
+//        }
         //TODO KOLYA
         if (isset($data['time']['start']) && isset($data['time']['end']) ) {
             $data['start'] = $data['time']['start'];
