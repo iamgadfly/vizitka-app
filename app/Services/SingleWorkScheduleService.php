@@ -46,10 +46,14 @@ class SingleWorkScheduleService
         if ($data['is_break']) {
             return $this->createBreak($data['break']);
         }
-        $dates = TimeHelper::getDateInterval(
-            $data['weekend']['start']['value'],
-            $data['weekend']['end']['value']
-        );
+        if ($data['weekend']['start']['value'] != $data['weekend']['end']['value']) {
+            $dates = TimeHelper::getDateInterval(
+                $data['weekend']['start']['value'],
+                $data['weekend']['end']['value']
+            );
+        } else {
+            $dates = [$data['weekend']['start']['value']];
+        }
         foreach ($dates as $date) {
             $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
             $weekend = [
