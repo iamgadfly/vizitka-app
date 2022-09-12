@@ -15,7 +15,8 @@ class UpdateRequest extends FormRequest
     {
         $this->merge([
             'client_id' => $this->route('id'),
-            'specialist_id' => AuthHelper::getSpecialistIdFromAuth()
+            'specialist_id' => AuthHelper::getSpecialistIdFromAuth(),
+            'type' => $this->route('type')
         ]);
     }
 
@@ -44,8 +45,9 @@ class UpdateRequest extends FormRequest
             'name' => ['string', 'nullable', 'bail'],
             'surname' => ['string', 'nullable', 'bail'],
             'phone_number' => ['string', 'max:15', 'bail'],
-            'client_id' => ['required', 'exists:clients,id', 'bail'],
-            'specialist_id' => ['required', 'exists:specialists,id', 'bail']
+            'client_id' => ['required', 'bail'],
+            'specialist_id' => ['required', 'exists:specialists,id', 'bail'],
+            'type' => ['required', 'in:dummy,client', 'bail']
         ];
     }
 }
