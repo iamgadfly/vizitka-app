@@ -28,7 +28,10 @@ class BlacklistResource extends JsonResource
                 'avatar' => !is_null($this->client?->avatar)
                     ? ImageHelper::getAssetFromFilename($this->client?->avatar?->url)
                     : null,
-
+                'discount' => [
+                    'label' => str($contactData?->discount)->value(),
+                    'value' => $contactData?->discount
+                ],
                 'type' => 'client'
             ];
         } else {

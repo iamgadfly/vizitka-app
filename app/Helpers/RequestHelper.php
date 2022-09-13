@@ -82,13 +82,8 @@ class RequestHelper
             'client.surname' => ['nullable', 'string', 'bail'],
             'client.phone_number' => ['nullable', 'string', 'bail'],
             'client.type' => ['required', 'in:client,dummy', 'bail'],
+            'client.id' => ['nullable', 'bail']
         ];
-
-        if ($request->type == 'client') {
-            $rules['client.id'] = ['nullable', 'exists:clients,id', 'bail'];
-        } else {
-            $rules['client.id'] = ['nullable', 'exists:dummy_clients,id', 'bail'];
-        }
 
         if ($request->method() == 'PUT') {
             $rules['order_number'] = ['required', 'exists:appointments,order_number', 'bail'];
