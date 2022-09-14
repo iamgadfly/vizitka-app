@@ -171,11 +171,9 @@ class AppointmentService
         $appointments = $this->convertToOrderType(
             collect($this->repository->getAllByDate($date, $specialistId))
         );
-
         $breaks = $this->convertBreakToOrderType(
-            collect($this->breakRepository->getBreaksForDay($date, true, $specialistId))
+            $this->breakRepository->getBreaksForDay($date, true, $specialistId)
         );
-
         $appointments = $appointments->merge($breaks);
         $times = WorkScheduleWorkRepository::getWorkDay($date, $specialistId) ?? [];
         $pills = $this->pillDisableService->getAllByDate($date, $specialistId);
@@ -304,12 +302,13 @@ class AppointmentService
     }
 
     /**
-     * @param Collection $breaks
+     * @param array $breaks
      * @return Collection
      */
-    private function convertBreakToOrderType(Collection $breaks): Collection
+    private function convertBreakToOrderType(array $breaks): Collection
     {
         $output = [];
+        $breaks = collect($breaks)->flatten();
         foreach ($breaks as $break) {
             $item = [
                 'date' => $break->date,

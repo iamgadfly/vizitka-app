@@ -75,12 +75,13 @@ class WorkScheduleBreakRepository extends Repository
         if ($single->isNotEmpty()) {
             if ($forCalendar) {
                 $result[] = $single;
-            }
-            foreach ($single as $break) {
-                $result[] = [
-                    Carbon::parse($break->start)->format('H:i'),
-                    Carbon::parse($break->end)->format('H:i'),
-                ];
+            } else {
+                foreach ($single as $break) {
+                    $result[] = [
+                        Carbon::parse($break->start)->format('H:i'),
+                        Carbon::parse($break->end)->format('H:i'),
+                    ];
+                }
             }
         }
         // If not found single work schedule
@@ -88,7 +89,6 @@ class WorkScheduleBreakRepository extends Repository
 
         if ($forCalendar) {
             $result[] = $breaks;
-
             return $result;
         }
         foreach ($breaks as $break) {
@@ -97,7 +97,6 @@ class WorkScheduleBreakRepository extends Repository
                 Carbon::parse($break->end)->format('H:i'),
             ];
         }
-
         return $result;
     }
 
