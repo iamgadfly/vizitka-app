@@ -74,7 +74,7 @@ class WorkScheduleBreakRepository extends Repository
 
         if ($single->isNotEmpty()) {
             if ($forCalendar) {
-                return $single;
+                $result[] = $single;
             }
             foreach ($single as $break) {
                 $result[] = [
@@ -82,14 +82,14 @@ class WorkScheduleBreakRepository extends Repository
                     Carbon::parse($break->end)->format('H:i'),
                 ];
             }
-
-            return $result;
         }
         // If not found single work schedule
         $breaks = WorkScheduleBreak::where(['day_id' => $day_id])->get();
 
         if ($forCalendar) {
-            return $breaks;
+            $result[] = $breaks;
+
+            return $result;
         }
         foreach ($breaks as $break) {
             $result[] = [
