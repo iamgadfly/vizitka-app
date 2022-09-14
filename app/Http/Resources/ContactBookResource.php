@@ -50,7 +50,7 @@ class ContactBookResource extends JsonResource
             'avatar' => ImageHelper::getAssetFromFilename($this->client?->avatar?->url),
             'type' => $type,
             'discount' => [
-                'label' => str($contactData?->discount)->value(),
+                'label' => str($contactData?->discount * 100)->value(),
                 'value' => (float) $contactData?->discount
             ],
             'notes' => $contactData?->notes,
