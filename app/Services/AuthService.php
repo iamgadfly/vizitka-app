@@ -62,7 +62,7 @@ class AuthService
         $verification_code = Random::generate(4, '0-9');
 
         try {
-            $this->SMSService->sendSms("Код верификации: $verification_code", $phoneNumber);
+            $this->SMSService->sendSms("$verification_code - код для входа в приложение Визитка.", $phoneNumber);
         } catch (SMSNotSentException $e) {
             throw new SMSNotSentException;
         }
@@ -86,7 +86,7 @@ class AuthService
         $verification_code = Random::generate(4, '0-9');
 
         try {
-            $this->SMSService->sendSms("Код для сброса PIN: $verification_code", $phoneNumber);
+            $this->SMSService->sendSms(" $verification_code - код для сброса PIN Визитка.\nНикому не сообщайте код", $phoneNumber);
         } catch (SMSNotSentException $e) {
             throw new SMSNotSentException;
         }
@@ -159,7 +159,7 @@ class AuthService
         if (is_null($device)) {
             $verification_code = Random::generate(4, '0-9');
             $this->SMSService->sendSms(
-                "Код для входа с нового устройства: $verification_code", $user->phone_number
+                "$verification_code - код для входа в приложение Визитка.", $user->phone_number
             );
             $user->verification_code = $verification_code;
             $user->save();
