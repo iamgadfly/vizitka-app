@@ -58,6 +58,9 @@ class ContactBookForClientService
     {
         $output = [];
         foreach ($data['data'] as $item) {
+            if (!isset($data['phone_number'])) {
+                continue;
+            }
             try {
                 $specialist = $this->specialistRepository->findByPhoneNumber($item['phone_number']);
             } catch (SpecialistNotFoundException $e) {

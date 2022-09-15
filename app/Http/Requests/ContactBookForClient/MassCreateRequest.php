@@ -27,7 +27,7 @@ class MassCreateRequest extends FormRequest
             'data' => ['required', 'array', 'bail'],
             'data.*.name' => ['required', 'string', 'bail'],
             'data.*.surname' => ['string', 'nullable', 'bail'],
-            'data.*.phone_number' => ['required', 'string', 'max:15']
+            'data.*.phone_number' => ['string', 'max:15']
         ];
     }
 }
