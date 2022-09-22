@@ -34,7 +34,7 @@ class SignInRequest extends FormRequest
     {
         return [
             'phone_number' => ['required', 'string', 'max:15', 'exists:users,phone_number' , 'bail'],
-            'device_id' => ['required', 'string', 'bail'],
+            'device_id' => ['string', 'bail'],
             'pin' => ['nullable', 'string', 'size:4', 'bail']
         ];
     }
