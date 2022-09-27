@@ -59,7 +59,11 @@ class AuthService
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new InvalidLoginException;
 
-        $verification_code = Random::generate(4, '0-9');
+        if ($phoneNumber == config('custom.test_phone_number')) {
+            $verification_code = '0000';
+        } else {
+            $verification_code = Random::generate(4, '0-9');
+        }
 
         try {
             $this->SMSService->sendSms("$verification_code - код для входа в приложение Визитка.", $phoneNumber);
@@ -83,7 +87,11 @@ class AuthService
     public function forget(string $phoneNumber): bool
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber, false) ?? throw new InvalidLoginException;
-        $verification_code = Random::generate(4, '0-9');
+        if ($phoneNumber == config('custom.test_phone_number')) {
+            $verification_code = '0000';
+        } else {
+            $verification_code = Random::generate(4, '0-9');
+        }
 
         try {
             $this->SMSService->sendSms(" $verification_code - код для сброса PIN Визитка.\nНикому не сообщайте код", $phoneNumber);
@@ -153,11 +161,17 @@ class AuthService
     public function signIn(string $phoneNumber, string $deviceId, ?string $pin = null): string
     {
         $user = $this->service->searchByPhoneNumber($phoneNumber) ?? throw new InvalidLoginException;
+
         $device = $this->deviceService->getDevice($deviceId, $user->id);
 
 
         if (is_null($device)) {
-            $verification_code = Random::generate(4, '0-9');
+            if ($phoneNumber == config('custom.test_phone_number')) {
+                $verification_code = '0000';
+            } else {
+                $verification_code = Random::generate(4, '0-9');
+            }
+
             $this->SMSService->sendSms(
                 "$verification_code - код для входа в приложение Визитка.", $user->phone_number
             );

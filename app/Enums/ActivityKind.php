@@ -5,25 +5,33 @@ namespace App\Enums;
 enum ActivityKind: int
 {
     case Hairdresser = 1;
-    case MakeupArtist = 2;
-    case Psychologist = 3;
-    case MassageTherapist = 4;
-    case SpeechTherapist = 5;
-    case Nutritionist = 6;
-    case FitnessTrainer = 7;
-    case Other = 8;
+    case Manicurist = 2;
+    case DepilationMastert = 3;
+    case Visagiste = 4;
+    case Browist = 5;
+    case Lashmaker = 6;
+    case Masseur = 7;
+    case Psychologist = 8;
+    case Fitness trainer = 9;
+    case Photographer = 10;
+    case Tutor = 11;
+    case Other = 12;
 
     public static function fromInt(int $id): string
     {
         return match($id) {
             1 => 'Парикмахер',
-            2 => 'Визажист',
-            3 => 'Психолог',
-            4 => 'Массажист',
-            5 => 'Логопед',
-            6 => 'Диетолог',
-            7 => 'Фитнес-тренер',
-            8 => 'Другое',
+            2 => 'Мастер маникюра',
+            3 => 'Мастер депиляции',
+            4 => 'Визажист',
+            5 => 'Бровист',
+            6 => 'Лэшмейкер',
+            7 => 'Массажист',
+            8 => 'Психолог ',
+            9 => 'Фитнес-тренер',
+            10 => 'Фотограф',
+            11 => 'Репетитор',
+            12 => 'Другое',
         };
     }
 }
