@@ -68,7 +68,7 @@ Route::controller(SpecialistDataController::class)
     ->prefix('client/specialist')
     ->middleware('auth:sanctum')->group(function () {
 
-    Route::get('{id}/freeHours/{sum}/{date}', 'getFreeHours')
+    Route::get('{id}/freeHours/{sum}/{date}/{hour}', 'getFreeHours')
         ->name('specialistData.freeHours');
 
     Route::get('{id}/maintenances', 'getMaintenances')
