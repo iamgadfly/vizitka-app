@@ -46,10 +46,14 @@ class SingleWorkScheduleService
         if ($data['is_break']) {
             return $this->createBreak($data['break']);
         }
-        $dates = TimeHelper::getDateInterval(
-            $data['weekend']['start']['value'],
-            $data['weekend']['end']['value']
-        );
+        if ($data['weekend']['start']['value'] != $data['weekend']['end']['value']) {
+            $dates = TimeHelper::getDateInterval(
+                $data['weekend']['start']['value'],
+                $data['weekend']['end']['value']
+            );
+        } else {
+            $dates = [$data['weekend']['start']['value']];
+        }
         foreach ($dates as $date) {
             $weekday = str(Carbon::parse($date)->shortEnglishDayOfWeek)->lower();
             $weekend = [
@@ -116,51 +120,52 @@ class SingleWorkScheduleService
      * @return bool
      * @throws RecordIsAlreadyExistsException
      * @throws SpecialistNotFoundException
+     * @throws BaseException
      */
     public function createBreak(array $data): bool
     {
         $data['date'] = $data['date']['value'];
         $weekday = str(Carbon::parse($data['date'])->shortEnglishDayOfWeek)->lower();
-        $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
+//        $appo = $this->appointmentService->getAllByDay($data['date'])->appointments;
 
         $data['is_break'] = true;
         $data['day_id'] = WorkScheduleDayRepository::getDayFromString($weekday)?->id
             ?? WorkScheduleDayRepository::getDayIndexFromDate($data['date'])?->id;
 
-        foreach ($appo as $item) {
-            if ($item['status'] != 'break') {
-                if (
-                    !(
-                        (Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
-                            Carbon::parse($data['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
-                        Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
-                    ) ||
-                    !(
-                        (Carbon::parse($data['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
-                            Carbon::parse($data['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
-                        Carbon::parse($data['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
-                    )
-                ) {
-                    throw new \Exception('Есть запись в данный период времени', 422);
-                }
-            }
-            if ($item['status'] == 'break') {
-                if (
-                    !(
-                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i') &&
-                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')) ||
-                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')
-                    ) ||
-                    !(
-                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i') &&
-                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')) ||
-                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')
-                    )
-                ) {
-                    throw new \Exception('Есть запись в данный период времени', 422);
-                }
-            }
-        }
+//        foreach ($appo as $item) {
+//            if ($item['status'] != 'break') {
+//                if (
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')
+//                    ) ||
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse($item['time']['end'])->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['time']['start'])->format('H:i')
+//                    )
+//                ) {
+//                    throw new BaseException('Есть запись в данный период времени', 422);
+//                }
+//            }
+//            if ($item['status'] == 'break') {
+//                if (
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')
+//                    ) ||
+//                    !(
+//                        (Carbon::parse($data['time']['start'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i') &&
+//                            Carbon::parse($data['time']['end'])->format('H:i') > Carbon::parse(end($item['interval']))->format('H:i')) ||
+//                        Carbon::parse($data['time']['start'])->format('H:i') < Carbon::parse($item['interval'][0])->format('H:i')
+//                    )
+//                ) {
+//                    throw new BaseException('Есть запись в данный период времени', 422);
+//                }
+//            }
+//        }
         //TODO KOLYA
         if (isset($data['time']['start']) && isset($data['time']['end']) ) {
             $data['start'] = $data['time']['start'];

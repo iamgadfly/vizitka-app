@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Client;
+use App\Models\Specialist;
 use Illuminate\Support\Collection;
 
 /**
@@ -12,7 +13,6 @@ use Illuminate\Support\Collection;
  *
  * @extends Repository
  *
- * @method Client create(array $data)
  * @method Collection<Client> all()
  * @method Client getById(int $id)
  * @method bool update($id, array $data)
@@ -46,5 +46,13 @@ class ClientRepository extends Repository
         return $this->model::whereHas('user', function ($q) use ($phoneNumber) {
             return $q->where(['phone_number' => $phoneNumber]);
         })->first();
+    }
+
+    public function create(array $data): Client
+    {
+        return $this->model::updateOrCreate(
+            ['user_id' => auth()->id()],
+            $data
+        );
     }
 }

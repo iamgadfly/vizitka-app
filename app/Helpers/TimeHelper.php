@@ -43,7 +43,8 @@ class TimeHelper
      */
     public static function getMonthIntervalWithOutPastDates($date): array
     {
-        $first = Carbon::now();
+//        $first = Carbon::now();
+        $first = Carbon::parse($date);
         $last = Carbon::parse($date)->lastOfMonth();
 
         $output = [$first->format('Y-m-d')];
@@ -112,8 +113,11 @@ class TimeHelper
         return in_array($needle, $haystack);
     }
 
-    public static function getFormattedTime(?string $time, string $format = 'H:i'): string
+    public static function getFormattedTime(?string $time, string $format = 'H:i'): ?string
     {
+        if (is_null($time)) {
+            return null;
+        }
         return Carbon::parse($time)->format($format);
     }
 }

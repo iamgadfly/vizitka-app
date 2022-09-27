@@ -114,7 +114,7 @@ class AuthController extends Controller
     {
         $user = $this->service->create($request->validated());
 
-        $this->SMSService->sendSms("Код верификации: $user->verification_code", $request->phone_number);
+        $this->SMSService->sendSms("$user->verification_code - код для входа в приложение Визитка.", $request->phone_number);
 
         return $this->success([
             'code' => $user->verification_code

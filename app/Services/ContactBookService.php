@@ -63,6 +63,9 @@ class ContactBookService
     {
         $output = [];
         foreach ($data['data'] as $item) {
+            if (!isset($item['phone_number'])) {
+                continue;
+            }
             $client = $this->clientRepository->findByPhoneNumber($item['phone_number']);
 
             if (!is_null($client)) {
