@@ -22,7 +22,6 @@ class UserSeeder extends Seeder
             [
                 'phone_number' => '+79000000000',
                 'phone_number_verified_at' => Carbon::now(),
-                'verification_code' => '0000',
                 'is_verified' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),

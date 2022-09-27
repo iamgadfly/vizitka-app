@@ -15,7 +15,5 @@ return [
     'from_mail' => env('FROM_EMAIL'),
 
     'vizitnica_deep_link' => env('VIZITNICA_DEEP_LINK'),
-    'vizitka_deep_link' => env('VIZITKA_DEEP_LINK'),
-
-    'test_phone_number' => env('TEST_PHONE_NUMBER')
+    'vizitka_deep_link' => env('VIZITKA_DEEP_LINK')
 ];
