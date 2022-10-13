@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 // Share routes
 
+$app_url = config("app.url");
+if (app()->environment('local') && !empty($app_url)) {
+    URL::forceRootUrl($app_url);
+    $schema = explode(':', $app_url)[0];
+    URL::forceScheme($schema);
+}
+
+
 Route::get('/shares/{hash}', [ShareController::class, 'get'])
     ->name('share.link');
 
